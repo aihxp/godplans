@@ -1,0 +1,30 @@
+name: lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: meta-linter
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run meta-linter
+        run: bash scripts/lint.sh --all --verbose
+
+      - name: Installer smoke test
+        run: |
+          tmp_home=$(mktemp -d)
+          HOME="$tmp_home" AGENTS_SKILLS_DIR="$tmp_home/.agents/skills" CLAUDE_SKILLS_DIR="$tmp_home/.claude/skills" sh install.sh --tools agents,claude
+          test -f "$tmp_home/.agents/skills/godplans/SKILL.md"
+          test -f "$tmp_home/.claude/skills/godplans/SKILL.md"
+          HOME="$tmp_home" AGENTS_SKILLS_DIR="$tmp_home/.agents/skills" CLAUDE_SKILLS_DIR="$tmp_home/.claude/skills" sh install.sh --tools agents,claude --uninstall
+          test ! -e "$tmp_home/.agents/skills/godplans"

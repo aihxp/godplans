@@ -1,0 +1,10 @@
+{
+  "name": "godplans",
+  "description": "Produce a complete, agent-executable master plan (PLAN.mdx) for a software project before any code is written. One command runs discovery, forces every hard-to-reverse decision, and plans product, architecture, roadmap, stack, repo, build, deploy, observability, launch, security, code quality, style genome, database, LLM integration, SEO, UI, UX, and agent memory upfront, with every after-the-fact audit inverted into plan-time acceptance criteria. Emits checkbox tasks with verify commands any coding agent can execute. Descends from aihxp arc-ready, ready-suite, the seven aihxp auditors (code, sec, db, llm, seo, ui, ux), pillars, codedna, and BuilderIO visual-plan. Refuses plan theater, vague tasks without verification, and policy-violating projects.",
+  "version": "1.0.0",
+  "author": { "name": "aihxp", "url": "https://github.com/aihxp" },
+  "homepage": "https://github.com/aihxp/godplans",
+  "repository": "https://github.com/aihxp/godplans",
+  "license": "MIT",
+  "keywords": ["godplans", "planning", "master-plan", "agent-skills", "plan-first", "spec-driven-development", "prd", "architecture", "roadmap", "security", "audit-inversion", "mdx", "checkbox-plan"]
+}

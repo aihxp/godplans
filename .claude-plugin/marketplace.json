@@ -1,0 +1,19 @@
+{
+  "name": "godplans",
+  "owner": {
+    "name": "aihxp",
+    "url": "https://github.com/aihxp"
+  },
+  "metadata": {
+    "description": "godplans: plan everything before anything. A single-command planning superskill emitting audit-proof, agent-executable master plans.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "godplans",
+      "source": "./plugins/godplans",
+      "description": "Produce a complete, agent-executable master plan (PLAN.mdx) for a software project before any code is written: discovery, hard-to-reverse decisions, and 18 planning domains with every after-the-fact audit inverted into plan-time acceptance criteria.",
+      "category": "planning"
+    }
+  ]
+}

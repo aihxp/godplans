@@ -1,0 +1,151 @@
+---
+name: PROJECT-SLUG
+plan_version: 1
+status: planning
+created: YYYY-MM-DD
+updated: YYYY-MM-DD
+mode: greenfield
+archetype: ARCHETYPE
+domains_applicable: []
+domains_excluded: []
+progress:
+  phases_total: 0
+  phases_done: 0
+  tasks_total: 0
+  tasks_done: 0
+---
+
+# PROJECT-NAME master plan
+
+One paragraph: what this project is, for whom, and the observable definition
+of done ("done means: a new user can X, Y is deployed at Z, the suite passes").
+
+## Scope and non-goals
+
+In scope: the smallest first cut that proves the approach.
+Non-goals: named exclusions with a word on why (deferred, out of scope, or rejected).
+
+## Compliance gate
+
+Result: pass
+Screened: YYYY-MM-DD against anthropic.com/legal/aup.
+Account safety: unattended runs use ANTHROPIC_API_KEY; no subscription OAuth outside official clients.
+
+## Applicability matrix
+
+| Domain | Status | Reason |
+|---|---|---|
+| product | applicable | |
+| architecture | applicable | |
+| stack | applicable | |
+| database | applicable-or-excluded | reason |
+| security | applicable | never excluded, scales with calibration |
+| llm | applicable-or-excluded | reason |
+| ux | applicable-or-excluded | reason |
+| ui | applicable-or-excluded | reason |
+| seo | applicable-or-excluded | reason |
+| code-quality | applicable | never excluded, scales with calibration |
+| style-genome | applicable | |
+| agent-memory | applicable | |
+| repo | applicable | |
+| build | applicable | |
+| roadmap | applicable | |
+| deploy | applicable | |
+| observe | applicable-or-excluded | reason |
+| launch | applicable-or-excluded | reason |
+
+Scale calibration: weekend | side-project | funded-product | enterprise.
+
+## Decisions
+
+Hard-to-reverse bets first. Each entry: the decision with rationale and rejected
+alternatives, or a hypothesis with its validation task, or a pointer to Open Questions.
+
+### D1: (data-model shape / tenancy)
+### D2: (auth and ownership boundary)
+### D3: (wire format and public identifiers)
+### Assumptions ledger
+Defaults taken without asking, each flagged as a hypothesis with the task that validates it.
+
+## Requirements
+
+### Story 1: (role) can (capability)
+R-1.1: WHEN (trigger) THE SYSTEM SHALL (observable behavior).
+R-1.2: IF (condition) WHEN (trigger) THE SYSTEM SHALL (observable behavior).
+
+## Architecture
+
+Prose plus the diagrams that carry decisions (mermaid: graph TD with trust
+boundaries, erDiagram, sequenceDiagram for the load-bearing flow). No decorative
+diagrams; each one sits next to the claim it supports.
+
+## Style genome
+
+Naming, file organization, error-handling idiom, comment policy, formatting
+authority. Brownfield: extracted from the codebase, with file citations.
+
+## Agent memory
+
+The AGENTS.md and pillar files the scaffold task emits, listed with their
+one-line purposes.
+
+## Phases
+
+## Phase 1: NAME
+
+Goal: one sentence. Blocks: what this phase gates.
+
+### Wave 1.1
+
+- [ ] GP-101 [W1.1] Imperative title
+  - Files: exact/paths.ext
+  - Depends on: none
+  - Reuses: what exists already
+  - Acceptance: 2-4 grep-verifiable conditions
+  - Verify: `exact command`
+  - Requirements: R-1.1, R-DOM-n
+
+Checkpoint: the independently observable outcome of Phase 1.
+
+Must-haves:
+- Truth: observable behavior with its manual check
+- Artifact: path that must exist with what it exports
+- Link: proof the pieces are wired (import, route registration, config reference)
+
+## Phase N: Verification
+
+Goal: prove the built system satisfies the plan end to end.
+
+### Wave N.1
+
+- [ ] GP-N01 [WN.1] Full suite, lint, build, end-to-end smoke
+  - Files: none (runs existing checks)
+  - Depends on: every prior phase's checkpoint
+  - Acceptance: suite green, lint clean, build succeeds, smoke exercises the primary journey by its real command or manual path
+  - Verify: `exact command chain, e.g. npm test && npm run lint && npm run build && npm run smoke`
+  - Requirements: R-1.1, R-CODE-n, R-SEC-n (list the load-bearing IDs; never write "all")
+
+Checkpoint: a fresh clone passes every check with one command sequence.
+
+## Open Questions
+
+The only enumeration of open decisions. Each: why it matters, options,
+recommended default, and what happens if unanswered.
+
+## Rules for executing agents
+
+> [!IMPORTANT]
+> This plan is the source of truth. The chat is not.
+>
+> 1. Before any work: read the frontmatter, then find the first unchecked task in wave order. Re-derive state from checkboxes; trust nothing remembered.
+> 2. One task at a time. Respect Depends on. Run tasks marked [P] concurrently only when their Files lists are disjoint.
+> 3. Run the task's Verify command. Only after it passes, flip [ ] to [x] and update the frontmatter counters and `updated:` date in the same edit. Never batch check-offs.
+> 4. If Verify fails: the box stays unchecked. Append an indented `- Note (YYYY-MM-DD):` line under the task saying what happened.
+> 5. Scope changes are not improvised. Patch the plan first (new task IDs, struck-through superseded tasks with a reason), then execute the patch.
+> 6. Never renumber, reword, or uncheck a completed task.
+> 7. At session end: append one line to `## Session log`: date, tasks completed, where you stopped, what is next.
+> 8. Re-read the current phase before starting it; re-read Decisions before touching anything they govern.
+
+## Session log
+
+- YYYY-MM-DD plan created (godplans v1.0.0)

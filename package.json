@@ -1,0 +1,42 @@
+{
+  "name": "godplans",
+  "version": "1.0.0",
+  "description": "Plan everything before anything. A single-command AI agent skill that produces a complete, audit-proof, agent-executable master plan (PLAN.mdx) for a software project before any code is written.",
+  "keywords": [
+    "agent-skills",
+    "ai-agents",
+    "planning",
+    "claude-code",
+    "codex",
+    "cursor",
+    "opencode",
+    "spec-driven-development",
+    "mdx",
+    "prd",
+    "architecture",
+    "project-planning"
+  ],
+  "homepage": "https://github.com/aihxp/godplans",
+  "bugs": "https://github.com/aihxp/godplans/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aihxp/godplans.git"
+  },
+  "license": "MIT",
+  "author": "aihxp (https://github.com/aihxp)",
+  "files": [
+    "skills",
+    "install.sh",
+    "scripts",
+    "PROMPT.md",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "lint": "bash scripts/lint.sh --all --verbose",
+    "build:prompt": "bash scripts/build-prompt.sh",
+    "install:skill": "sh install.sh",
+    "postpack": "echo 'Install the skill with: sh install.sh (or npx skills add aihxp/godplans)'"
+  }
+}
