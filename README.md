@@ -3,7 +3,7 @@
 [![lint](https://github.com/aihxp/godplans/actions/workflows/lint.yml/badge.svg)](https://github.com/aihxp/godplans/actions/workflows/lint.yml)
 [![version](https://img.shields.io/badge/version-1.0.0-blue)](CHANGELOG.md)
 [![agent skills](https://img.shields.io/badge/Agent%20Skills-compatible-2f6fed)](skills/godplans/SKILL.md)
-[![license](https://img.shields.io/github/license/aihxp/godplans)](LICENSE)
+[![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 Plan everything before anything. godplans is a single-command AI agent skill that produces a complete, audit-proof, agent-executable master plan (`.godplans/PLAN.mdx`) for a software project before any code is written.
 
