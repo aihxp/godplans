@@ -10,7 +10,11 @@ SemVer value.
 2. Update the version in SKILL.md frontmatter and body, package.json,
    marketplace metadata, plugin metadata, and the PLAN template.
 3. Run `npm run build:prompt` after every inlined source is final.
-4. Run `npm run check` and `npm pack --dry-run --json` from a clean checkout.
+4. Install the pinned official validator in an isolated environment, then run
+   `npm run release:check` from a clean checkout. It includes `npm run check`,
+   deterministic evaluation contracts, official validation of the canonical
+   `skills/godplans` package, immutable action
+   pins, tag-to-release parity, and a package dry run.
 5. Open a ready pull request and wait for the `release quality` workflow.
 6. Merge the pull request to `main` without bypassing a failed required check.
 7. Pull the merged `main`, create annotated tag `vX.Y.Z`, and push the tag.
@@ -22,11 +26,25 @@ SemVer value.
 
 ```bash
 npm run build:prompt
-npm run check
-npm pack --dry-run --json
-git tag -a vX.Y.Z -m "godplans vX.Y.Z"
-git push origin vX.Y.Z
-gh release create vX.Y.Z --verify-tag --title "godplans vX.Y.Z" --notes-file RELEASE-NOTES.md
+python3 -m venv .venv-skills-ref
+.venv-skills-ref/bin/pip install -r requirements/skills-ref.txt
+SKILLS_REF_BIN="$PWD/.venv-skills-ref/bin/skills-ref" npm run release:check
+version=X.Y.Z
+release_notes=$(mktemp)
+trap 'rm -f "$release_notes"' EXIT HUP INT TERM
+awk -v version="$version" '
+  index($0, "## [" version "] - ") == 1 { capture = 1; next }
+  capture && /^## \[/ { exit }
+  capture { print }
+' CHANGELOG.md > "$release_notes"
+test -s "$release_notes"
+git tag -a "v$version" -m "godplans v$version"
+git push origin "v$version"
+gh release create "v$version" --verify-tag --title "godplans v$version" --notes-file "$release_notes"
+rm -f "$release_notes"
+trap - EXIT HUP INT TERM
 ```
 
-Do not reuse or move a published tag. A failed release gets a new patch version.
+Run the release check again after the release is published so the new tag and
+GitHub release enter the parity set. Do not reuse or move a published tag. A
+failed release gets a new patch version.

@@ -3,6 +3,39 @@
 All notable changes to godplans are documented here. The format follows
 Keep a Changelog; versioning follows SemVer.
 
+## [1.2.0] - 2026-07-13
+
+### Added
+
+- Product-form routing before archetype and domain composition, with distinct
+  vertical slices, build concerns, and completion evidence for web, API or
+  service, CLI or SDK, mobile or desktop, data or ML, and infrastructure or
+  IaC plans.
+- Plan provenance fields for source revision, SHA-256 input digest, and UTC
+  validation time, plus resume rules that return materially stale completed or
+  imported evidence to planning.
+- Conditional public-release gates bound to current hardening evidence, with
+  complete, expiring Critical-risk acceptance records and invalidation after
+  any later hardening change.
+- Pinned official Agent Skills validation, a release-check entry point,
+  immutable GitHub Action pin enforcement, and tag-to-release version parity.
+- Behavioral cases and blocking gate invariants for product forms, Pillars 1.1
+  nested scopes, stale source and prepublication evidence, and observability
+  evidence labels.
+
+### Changed
+
+- Agent-memory planning now targets Pillars 1.1.0: 11 Core and 11 Common
+  concerns, five evidence states, optional local absent catalogs, path-derived
+  sub-pillar identities, deterministic ASCII token routing, nested-scope
+  precedence, context budgets, recursive validation, and routing fixtures.
+- Observability plans now separate `installation-ready` controlled-fire
+  evidence from `operationally-mature` real-event evidence and forbid treating
+  synthetic signals as incident history.
+- The portable validator now checks provenance, product form, and conditional
+  public-release gate structure while retaining Bash 3.2 and stock Perl
+  portability on macOS and Linux.
+
 ## [1.1.0] - 2026-07-13
 
 ### Added

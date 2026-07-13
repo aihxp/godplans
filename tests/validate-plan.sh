@@ -21,7 +21,12 @@ status: PLAN_STATUS
 created: 2026-07-13
 updated: 2026-07-13
 mode: greenfield
+product_form: cli-or-sdk
 archetype: cli-tool
+public_release: false
+source_revision: none
+input_digest: sha256:1c7ca1006bb3157ad989c1f1dd1cd1d6e8e2a44d9509821ffa43f3be205a12d5
+validated_at: 2026-07-13T12:00:00Z
 domains_applicable: [product, code-quality]
 domains_excluded: []
 progress:
@@ -38,6 +43,18 @@ Done means the validator fixture passes every structural check.
 ## Scope and non-goals
 
 In scope: validator behavior. Non-goals: application code.
+
+## Plan provenance
+
+Source revision: none
+Input digest: sha256:1c7ca1006bb3157ad989c1f1dd1cd1d6e8e2a44d9509821ffa43f3be205a12d5
+Validated at: 2026-07-13T12:00:00Z
+Evidence inventory:
+- `intake` = `sha256:1111111111111111111111111111111111111111111111111111111111111111`
+
+## Product form
+
+Primary: CLI or SDK. A vertical slice runs from command parsing through deterministic output and a consumer fixture.
 
 ## Compliance gate
 
@@ -349,6 +366,139 @@ expect_fail "invalid lifecycle status" "invalid status 'paused'" --allow-plannin
 new_case
 perl -0pi -e 's/mode: greenfield/mode: rewrite/' "$CASE_FILE"
 expect_fail "invalid plan mode" "invalid mode 'rewrite'" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/product_form: cli-or-sdk/product_form: website/' "$CASE_FILE"
+expect_fail "invalid product form" "invalid product_form 'website'" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/public_release: false/public_release: maybe/' "$CASE_FILE"
+expect_fail "invalid public release flag" "public_release must be true or false" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/R-1\.1, R-CODE-21/R-1.1, R-SEC-26/' "$CASE_FILE"
+expect_fail "non-public plan with hardening role marker" "public_release false must not cite R-SEC-26" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/R-1\.1, R-CODE-21/R-1.1, R-ROAD-21/' "$CASE_FILE"
+expect_fail "non-public plan with prepublication gate role marker" "public_release false must not cite R-ROAD-21" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/R-1\.1, R-CODE-21/R-1.1, R-LAUNCH-22/' "$CASE_FILE"
+expect_fail "non-public plan with activation role marker" "public_release false must not cite R-LAUNCH-22" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/^source_revision:.*\n//m' "$CASE_FILE"
+expect_fail "missing source revision" "missing frontmatter field: source_revision" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/input_digest: sha256:[0-9a-f]+/input_digest: latest/' "$CASE_FILE"
+expect_fail "invalid input digest" "input_digest must be sha256" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/input_digest: sha256:[0-9a-f]+/input_digest: sha256:0000000000000000000000000000000000000000000000000000000000000000/' "$CASE_FILE"
+expect_fail "placeholder input digest" "input_digest must not use the all-zero placeholder" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/validated_at: 2026-07-13T12:00:00Z/validated_at: yesterday/' "$CASE_FILE"
+expect_fail "invalid validation timestamp" "validated_at must use UTC ISO-8601" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/## Plan provenance\n\n/## Evidence\n\n/' "$CASE_FILE"
+expect_fail "missing Plan provenance" "expected exactly one ## Plan provenance section, found 0" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/Evidence inventory:/Evidence list:/' "$CASE_FILE"
+expect_fail "incomplete Plan provenance" "Plan provenance is missing Evidence inventory:" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/Source revision: none/Source revision: 0123456789abcdef0123456789abcdef01234567/' "$CASE_FILE"
+expect_fail "mismatched provenance source revision" "Plan provenance Source revision does not match frontmatter source_revision" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/Input digest: sha256:[0-9a-f]{64}/Input digest: sha256:cf2597de8c02e80d716a6c4a97d4c03cd75a566771121170be7c46bcf3b709e5/' "$CASE_FILE"
+expect_fail "mismatched provenance input digest" "Plan provenance Input digest does not match frontmatter input_digest" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/Validated at: 2026-07-13T12:00:00Z/Validated at: 2026-07-14T12:00:00Z/' "$CASE_FILE"
+expect_fail "mismatched provenance validation timestamp" "Plan provenance Validated at does not match frontmatter validated_at" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/^- `intake` = `sha256:[0-9a-f]{64}`\n//m' "$CASE_FILE"
+expect_fail "empty provenance inventory" "Plan provenance Evidence inventory must contain at least one item" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/`intake`/`readme`/' "$CASE_FILE"
+expect_fail "provenance inventory missing intake" "Plan provenance Evidence inventory must contain exactly one intake item" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/- `intake` = `sha256:([0-9a-f]{64})`/- intake = sha256:$1/' "$CASE_FILE"
+expect_fail "malformed provenance inventory" "malformed Plan provenance inventory item" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/(- `intake` = `sha256:[0-9a-f]{64}`)/$1\n$1/' "$CASE_FILE"
+expect_fail "duplicate provenance inventory label" "duplicate Plan provenance inventory label: intake" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/(Source revision: none)/$1\n$1/' "$CASE_FILE"
+expect_fail "duplicate provenance field label" "Plan provenance has duplicate Source revision label" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/sha256:1111111111111111111111111111111111111111111111111111111111111111`/sha256:2222222222222222222222222222222222222222222222222222222222222222`/' "$CASE_FILE"
+expect_fail "mismatched provenance aggregate digest" "Plan provenance Input digest does not match the Evidence inventory aggregate" --allow-planning "$CASE_FILE"
+
+PROVENANCE_PLAN="$TMP_DIR/valid-multi-item-provenance.mdx"
+cp "$BASE_PLAN" "$PROVENANCE_PLAN"
+perl -0pi -e '
+  s/1c7ca1006bb3157ad989c1f1dd1cd1d6e8e2a44d9509821ffa43f3be205a12d5/cf2597de8c02e80d716a6c4a97d4c03cd75a566771121170be7c46bcf3b709e5/g;
+  s/- `intake` = `sha256:1111111111111111111111111111111111111111111111111111111111111111`/- `readme` = `sha256:2222222222222222222222222222222222222222222222222222222222222222`\n- `intake` = `sha256:1111111111111111111111111111111111111111111111111111111111111111`/
+' "$PROVENANCE_PLAN"
+expect_pass "valid provenance inventory aggregate" --allow-planning "$PROVENANCE_PLAN"
+
+new_case
+perl -0pi -e 's/## Product form\n/## Delivery form\n/' "$CASE_FILE"
+expect_fail "missing Product form" "expected exactly one ## Product form section, found 0" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/public_release: false/public_release: true/' "$CASE_FILE"
+expect_fail "public release requires prepublication gate" "public release requires a prepublication gate task" --allow-planning "$CASE_FILE"
+
+PUBLIC_PLAN="$TMP_DIR/valid-public-release.mdx"
+cp "$BASE_PLAN" "$PUBLIC_PLAN"
+perl -0pi -e '
+  s/public_release: false/public_release: true/;
+  s/(- \[ \] GP-101.*?  - Requirements: )[^\n]+/$1R-1.1, R-SEC-26/s;
+  s/(- \[ \] GP-102.*?  - Acceptance: )[^\n]+/$1fresh prepublication check records checked_at, hardening_revision, finding_counts, policy, verdict, owner, justification, accepted_at, and expires_at after current hardening evidence; any later change invalidates the pass/s;
+  s/(- \[ \] GP-102.*?  - Requirements: )[^\n]+/$1R-1.1, R-ROAD-21/s;
+  s/(- \[ \] GP-201.*?  - Depends on: )[^\n]+/$1GP-102/s;
+  s/(- \[ \] GP-201.*?  - Requirements: )[^\n]+/$1R-1.1, R-LAUNCH-22/s
+' "$PUBLIC_PLAN"
+expect_pass "public release with ordered hardening gate activation chain" --allow-planning "$PUBLIC_PLAN"
+
+GATE_BEFORE_HARDENING_PLAN="$TMP_DIR/gate-before-hardening.mdx"
+cp "$PUBLIC_PLAN" "$GATE_BEFORE_HARDENING_PLAN"
+perl -0pi -e 's/R-SEC-26/R-TEMP-1/; s/R-ROAD-21/R-SEC-26/; s/R-TEMP-1/R-ROAD-21/' "$GATE_BEFORE_HARDENING_PLAN"
+expect_fail "prepublication gate before hardening" "prepublication gate must follow the latest hardening task" --allow-planning "$GATE_BEFORE_HARDENING_PLAN"
+
+GATE_WITHOUT_HARDENING_DEPENDENCY_PLAN="$TMP_DIR/gate-without-hardening-dependency.mdx"
+cp "$PUBLIC_PLAN" "$GATE_WITHOUT_HARDENING_DEPENDENCY_PLAN"
+perl -0pi -e 's/(- \[ \] GP-102.*?  - Depends on: )GP-101/$1none/s' "$GATE_WITHOUT_HARDENING_DEPENDENCY_PLAN"
+expect_fail "prepublication gate without hardening dependency" "prepublication gate must depend on the latest hardening task GP-101" --allow-planning "$GATE_WITHOUT_HARDENING_DEPENDENCY_PLAN"
+
+ACTIVATION_WITHOUT_GATE_DEPENDENCY_PLAN="$TMP_DIR/activation-without-gate-dependency.mdx"
+cp "$PUBLIC_PLAN" "$ACTIVATION_WITHOUT_GATE_DEPENDENCY_PLAN"
+perl -0pi -e 's/(- \[ \] GP-201.*?  - Depends on: )GP-102/$1GP-101/s' "$ACTIVATION_WITHOUT_GATE_DEPENDENCY_PLAN"
+expect_fail "public activation without gate dependency" "public activation must depend on the prepublication gate GP-102" --allow-planning "$ACTIVATION_WITHOUT_GATE_DEPENDENCY_PLAN"
+
+INTERVENING_TASK_PLAN="$TMP_DIR/intervening-task-before-activation.mdx"
+cp "$PUBLIC_PLAN" "$INTERVENING_TASK_PLAN"
+perl -0pi -e 's/tasks_total: 3/tasks_total: 4/; s/(Checkpoint: malformed plans fail with a diagnostic\.)/- [ ] GP-103 [W1.1] Intervene after the prepublication gate\n  - Files: docs\/release\/notes.md\n  - Depends on: GP-102\n  - Reuses: release fixture\n  - Acceptance: release notes exist\n  - Verify: `test -s docs\/release\/notes.md`\n  - Requirements: R-1.1, R-CODE-21\n\n$1/' "$INTERVENING_TASK_PLAN"
+expect_fail "task between prepublication gate and activation" "public activation must immediately follow the prepublication gate GP-102" --allow-planning "$INTERVENING_TASK_PLAN"
+
+DUPLICATE_ACTIVATION_PLAN="$TMP_DIR/duplicate-public-activation.mdx"
+cp "$PUBLIC_PLAN" "$DUPLICATE_ACTIVATION_PLAN"
+perl -0pi -e 's/R-1\.1, R-ROAD-21/R-1.1, R-ROAD-21, R-LAUNCH-22/' "$DUPLICATE_ACTIVATION_PLAN"
+expect_fail "duplicate public activation markers" "public release requires exactly one first activation task citing R-LAUNCH-22, found 2" --allow-planning "$DUPLICATE_ACTIVATION_PLAN"
 
 if [ "$FAIL_COUNT" -ne 0 ]; then
   printf '\n%d passed, %d failed\n' "$PASS_COUNT" "$FAIL_COUNT" >&2

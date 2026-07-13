@@ -1,0 +1,10 @@
+outcome|plan|
+frontmatter|public_release|true
+contains|hardening_revision|
+contains|checked_at|
+contains|accepted_at|
+contains|expires_at|
+contains-ci|invalidates|
+gate|prepublication-race|R-ROAD-21
+gate|prepublication-risk|justification
+max-count|## Open Questions|1

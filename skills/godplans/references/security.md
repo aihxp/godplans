@@ -67,6 +67,9 @@ Descends from secauditor (an 11-dimension read-only vulnerability audit anchored
 25. R-SEC-25: The plan's final verification phase includes hardening checks in the harden-ready mold: reproduced-attack verification (a real cross-tenant request, a JWT alg:none rejection check, an RLS check via the anon-key endpoint where applicable), a disclosure baseline (SECURITY.md plus /.well-known/security.txt with a named inbox owner for deployed apps), class-level regression guards for any finding class fixed during the build, and a continuous cadence with a next execution date.
     Criterion: WHEN the Verification phase is emitted THE PLAN SHALL name the exact commands or requests that reproduce each check, and SHALL not accept scanner output alone as the posture.
 
+26. R-SEC-26: For `public_release: true`, hardening emits revision-bound evidence that a later prepublication gate can verify. Every Critical finding has a status; a permitted acceptance has owner, justification, accepted_at, and expires_at; regulated hard gates remain non-bypassable. Any hardening evidence change invalidates a prior pass. Projects without a public release surface do not inherit a public-activation requirement.
+    Criterion: WHEN public release is planned THE PLAN SHALL schedule a fresh content hash or immutable hardening revision after all findings work and SHALL block activation on mismatched evidence, unresolved Criticals, incomplete or expired acceptance, or a regulated hard gate.
+
 ## Task seeds
 
 - [ ] GP-xxx Central deny-by-default authorization layer
@@ -105,6 +108,12 @@ Descends from secauditor (an 11-dimension read-only vulnerability audit anchored
   - Verify: npm test -- tests/security/
   - Requirements: R-SEC-3, R-SEC-4, R-SEC-16, R-SEC-24, R-SEC-25
 
+- [ ] GP-xxx Seal hardening evidence for prepublication verification
+  - Files: docs/security/HARDENING.md
+  - Acceptance: every Critical records status; permitted acceptances include owner, justification, accepted_at, and expires_at; file records its content hash or immutable revision and regulated hard-gate policy; later changes require a new prepublication check
+  - Verify: git hash-object docs/security/HARDENING.md
+  - Requirements: R-SEC-25, R-SEC-26
+
 ## Self-audit rubric
 
 - Threat model and surface declaration (10): entry points, enforced trust boundaries, assets, principals, STRIDE notes, deployment context, and every conditional surface declared present or absent with reasons.
@@ -117,7 +126,7 @@ Descends from secauditor (an 11-dimension read-only vulnerability audit anchored
 - Supply chain and CI/CD (8): integrity installs, SHA-pinned actions, digest-pinned images, SCA gate without soft-fail, SBOM, least-privilege tokens, environment gates, no PPE patterns.
 - Logging, privacy, and API residue (6): event enumeration, formatter-level redaction, alerting to a monitored channel; regulated-data controls mapped to code paths; API Top 10 residue covered where applicable.
 - Conditional surfaces (4): IaC and LLM requirements carried onto tasks when present, or excluded with a stated reason; never silently omitted.
-- Anti-paper-control and verification handoff (6): every control paired with mount point and firing test; automatic-Critical conditions designed out; final phase reproduces attacks with exact commands, disclosure baseline and cadence dated.
+- Anti-paper-control and verification handoff (6): every control has a mount point and firing test; automatic-Critical conditions are designed out; public release gets sealed hardening evidence and complete risk records for a fresh downstream check.
 
 Total: 100. Any plan scoring below 85 on this rubric gets revised before emission.
 
@@ -133,3 +142,4 @@ Total: 100. Any plan scoring below 85 on this rubric gets revised before emissio
 - Vague-recommendation ban (secauditor): "validate input", "harden the config", "improve security". Refusal: every requirement names the safe pattern, the file it lands in, and the command that confirms it.
 - Silent surface exclusion (secauditor conditional dimensions): skipping uploads, IaC, or LLM controls because nobody declared the surface. Refusal: the applicability matrix records every surface as present or absent with a reason before any section is written.
 - Automatic-Critical blindness (secauditor): shipping a design where one condition caps the audit at 79. Refusal: the R-SEC-24 design-out list is checked against the draft plan before emission, and any hit forces a revision.
+- Late-Critical race: launch preparation finishes, hardening changes, and publication trusts the old pass. Refusal: seal current evidence, invalidate stale passes on any change, and require the fresh prepublication task only when a public release surface exists.

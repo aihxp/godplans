@@ -82,6 +82,9 @@ Criterion: WHEN post-mortem process is planned THE PLAN SHALL bind action items 
 R-OBS-20: PLAN.mdx must scope observability at the bright line against product analytics: "are signups failing more than the SLO allows" is in scope, "did signup conversion go up" is not, and must carry the paper-SLO watchlist forward so any SLO missing its policy or measurement query stays visible until fixed.
 Criterion: IF a planned metric measures business conversion rather than promise compliance THE PLAN SHALL exclude it from the observability section, and WHEN any SLO lacks a policy or query THE PLAN SHALL list it on the paper-SLO watchlist in the Open Questions section.
 
+R-OBS-21: PLAN.mdx must separate `installation-ready` from `operationally-mature`. Installation requires telemetry, SLOs, policies, dashboards, routes, and runbooks plus one controlled production-equivalent signal labeled synthetic. Operational maturity requires evidence from a real recent service event and tuning outcome, or remains `not-yet-evidenced`. A controlled fire is never rewritten as real incident history.
+Criterion: WHEN observability completion evidence is planned THE PLAN SHALL record the two states independently, SHALL allow a synthetic controlled fire to prove installation only, and SHALL require real-event evidence before claiming operational maturity.
+
 ## Task seeds
 
 - [ ] GP-xxx Define user journeys, service topology, and SLO table
@@ -132,6 +135,12 @@ Criterion: IF a planned metric measures business conversion rather than promise 
   - Verify: grep -q 'SEV-1' observability/INCIDENTS.md && grep -q 'due_date' observability/templates/post-mortem.md
   - Requirements: R-OBS-18, R-OBS-19
 
+- [ ] GP-xxx Prove installation readiness without fabricating maturity
+  - Files: observability/STATE.md, observability/CONTROLLED-FIRE.md
+  - Acceptance: STATE.md records installation-ready with a controlled production-equivalent signal labeled synthetic; operational maturity is not-yet-evidenced unless a real recent service event and tuning result are cited; controlled-fire evidence is never listed as incident history
+  - Verify: grep -q '^installation_status: installation-ready$' observability/STATE.md && grep -q '^signal_type: synthetic$' observability/CONTROLLED-FIRE.md && ! grep -q 'operational_maturity: operationally-mature' observability/STATE.md
+  - Requirements: R-OBS-17, R-OBS-21
+
 ## Self-audit rubric
 
 Derived from observe-ready's 4-tier model (Instrumented, Promised, Traceable, Rehearsed) with its have-nots list applied as deductions. 100 points total.
@@ -140,7 +149,7 @@ Derived from observe-ready's 4-tier model (Instrumented, Promised, Traceable, Re
 - Alert derivation and severity (20): full marks when all PAGE alerts are multi-window burn-rate on SLIs, the three-tier ladder is defined, every PAGE has a runbook URL and owner, deadman switches cover silent paths, routing is out-of-band, and a prune cadence exists.
 - Logging, tracing, and error tracking (20): full marks when one JSON schema with the five mandatory fields spans all services, correlation IDs propagate across every call type in the graph, PII is scrubbed at the collector, SLO services get tail-based or error-biased sampling with retention covering the SLO window, and error tracking carries release tags.
 - Dashboard discipline and independence (15): full marks when the primary dashboard has at most 7 bound charts led by the burn-rate gauge, every artifact carries owner and last_reviewed, the 3-dashboard cap holds, and the 6-row independence table is complete with remediations.
-- Runbook and incident loop (15): full marks when every PAGE has an executable out-of-band runbook with a 90-day tabletop cadence, the SEV ladder and IC rotation are defined, and the post-mortem template forces one sprint-bounded observability-gap action item.
+- Runbook and incident loop (15): full marks when every PAGE has an executable out-of-band runbook, controlled production-equivalent evidence proves installation and stays labeled synthetic, operational maturity is backed only by real-event tuning evidence, and the post-mortem loop is scheduled.
 - Cost and cardinality (5): full marks when the cardinality budget names excluded labels matched to the backend pricing model and states retention and sampling costs.
 
 Any gate hit (paper SLO, blind dashboard chart, PAGE without runbook, single-window burn alert, in-band surface row without remediation) caps the domain score at 84 regardless of points, forcing revision.
@@ -162,3 +171,4 @@ Any gate hit (paper SLO, blind dashboard chart, PAGE without runbook, single-win
 - Untagged errors: error-tracking config with no release tag, making "did vX.Y.Z cause this" unanswerable. The planner wires release tagging to the deploy identifier.
 - Silent heartbeat: a scheduled job or queue consumer with no deadman switch, failing silently. The planner adds a deadman task for every worker, batch, scheduled, or pipeline service.
 - Analytics scope creep: conversion and engagement metrics smuggled into the observability section. The planner applies the bright line and moves them out; only promise compliance stays.
+- Synthetic incident laundering: a controlled fire is presented as real incident history or operational maturity. The planner labels it synthetic, uses it only for installation-ready evidence, and leaves maturity not-yet-evidenced until a real event produces tuning evidence.

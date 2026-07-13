@@ -1,7 +1,7 @@
 # godplans
 
 [![lint](https://github.com/hannsxpeter/godplans/actions/workflows/lint.yml/badge.svg)](https://github.com/hannsxpeter/godplans/actions/workflows/lint.yml)
-[![version](https://img.shields.io/badge/version-1.1.0-blue)](CHANGELOG.md)
+[![version](https://img.shields.io/badge/version-1.2.0-blue)](CHANGELOG.md)
 [![agent skills](https://img.shields.io/badge/Agent%20Skills-compatible-2f6fed)](skills/godplans/SKILL.md)
 [![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
@@ -40,6 +40,8 @@ One canonical plan document, `.godplans/PLAN.mdx`, containing:
 
 - An objective with an observable definition of done, scope, and named non-goals.
 - The compliance gate result and the applicability matrix (every domain planned or excluded with a reason).
+- A primary product form selected before archetype, with form-specific vertical slices and completion evidence for web, API or service, CLI or SDK, mobile or desktop, data or ML, and infrastructure or IaC work.
+- Plan provenance bound to source revision, a SHA-256 input digest, and a UTC validation timestamp, with stale completed or imported evidence returning the plan to `planning`.
 - Decisions, hard-to-reverse bets first, each with rationale and rejected alternatives; assumptions flagged as hypotheses with validation tasks.
 - Numbered requirements with EARS acceptance criteria (WHEN ... THE SYSTEM SHALL ...).
 - Architecture as mermaid diagrams (components with trust boundaries, data model, load-bearing flows) placed next to the claims they support.
@@ -47,7 +49,7 @@ One canonical plan document, `.godplans/PLAN.mdx`, containing:
 - Phases and waves of checkbox tasks. Every task: a stable GP-number, exact files, dependencies, what it reuses, grep-verifiable acceptance criteria, one verify command whose exit code proves it, and requirement traceability.
 - Goal-backward must-haves per phase, a mandatory final verification phase, exactly one Open Questions section with recommended defaults, embedded rules for executing agents, and a session log.
 
-The skill also emits `.godplans/validate-plan.sh`, a self-contained companion that validates lifecycle state, counters, phase and task grammar, ordered dependency and requirement references, banned characters, and final-phase structure. The plan remains the only source of product and execution truth; the validator contains no separate decisions.
+The skill also emits `.godplans/validate-plan.sh`, a self-contained companion that validates lifecycle state, provenance formats, product form, conditional public-release gates, counters, phase and task grammar, ordered dependency and requirement references, banned characters, and final-phase structure. The plan remains the only source of product and execution truth; the validator contains no separate decisions.
 
 The plan is the handoff: any coding agent (the same one, or a different tool entirely) executes it checkbox by checkbox. Interrupted work resumes by re-reading the file, not the chat.
 
@@ -65,11 +67,16 @@ bash .godplans/validate-plan.sh .godplans/PLAN.mdx
 
 ## Evidence and evaluation
 
-Repository tests cover installer collisions and aliases, portable-prompt parity, plan-validator failure modes, JSON and shell validity, version parity, and the behavioral evaluation harness. The behavioral matrix covers greenfield SaaS, a calibrated weekend library, brownfield CLI extension, history-preserving replan, and a compliance hard stop.
+Repository tests cover installer collisions and aliases, portable-prompt parity, plan-validator failure modes, JSON and shell validity, version parity, immutable action pins, and the behavioral evaluation harness. The behavioral matrix also covers product-form routing, Pillars 1.1 nested scopes and catalogs, stale source evidence, stale prepublication evidence, and observability evidence labels.
 
 ```bash
 npm test
 npm run lint
+
+# release-grade validation with the pinned official Agent Skills validator
+python3 -m venv .venv-skills-ref
+.venv-skills-ref/bin/pip install -r requirements/skills-ref.txt
+SKILLS_REF_BIN="$PWD/.venv-skills-ref/bin/skills-ref" npm run release:check
 
 # run real cases through an authenticated Codex CLI
 GODPLANS_EVAL_RUNNER="$PWD/evals/runners/codex.sh" npm run eval
@@ -83,7 +90,7 @@ Model-backed results are release evidence, not a blanket guarantee. The raw outp
 ```mermaid
 graph TD
   A[idea or codebase] --> B[compliance gate]
-  B --> C[intake: mode, archetype, applicability]
+  B --> C[intake: mode, product form, archetype, applicability]
   C --> D[discovery: one question batch]
   D --> E[18 domain passes]
   E --> F[inversion: audit checks -> task acceptance criteria]
@@ -110,7 +117,7 @@ godplans consolidates and inverts twelve skills into one command:
 | [seoauditor](https://github.com/hannsxpeter/seoauditor) | Search and AI-answer-engine visibility decided at architecture time |
 | [uiauditor](https://github.com/hannsxpeter/uiauditor) | Accessibility, semantics, design-system consistency as acceptance criteria |
 | [uxauditor](https://github.com/hannsxpeter/uxauditor) | Journeys, workflows, error states designed before build |
-| [pillars](https://github.com/hannsxpeter/pillars) | The agent-memory standard the plan tells the scaffold to emit |
+| [pillars](https://github.com/hannsxpeter/pillars) | Pillars 1.1 agent memory: nested scopes, local absent catalogs, deterministic routing, and context budgets |
 | [codedna](https://github.com/hannsxpeter/codedna) | The style genome: prescribed for greenfield, fingerprinted for brownfield |
 | [BuilderIO visual-plan](https://github.com/BuilderIO/skills) | Plan discipline: hard-to-reverse bets first, reuse-first steps, one Open Questions section, the standalone-plan rule, the visual layer |
 
@@ -118,7 +125,7 @@ godplans consolidates and inverts twelve skills into one command:
 
 - **Greenfield**: the full arc from idea to plan.
 - **Brownfield**: fingerprints the existing codebase first (stack, structure, style genome, conventions); the plan extends what exists and cites real files.
-- **Replan**: `.godplans/PLAN.mdx` already exists; state is re-derived from checkboxes, completed work is never rewritten, new work gets new task IDs, superseded tasks are struck through with reasons.
+- **Replan**: `.godplans/PLAN.mdx` already exists; state and provenance are re-derived from disk, material evidence drift returns the plan to `planning`, completed work is never rewritten, new work gets new task IDs, and superseded tasks are struck through with reasons.
 
 ## Tool support
 
@@ -165,6 +172,8 @@ Details in [references/compliance.md](skills/godplans/references/compliance.md).
 | `install.sh` | Ownership-safe installer; `--project`, `--tools`, `--copy`, `--uninstall`, `--force` |
 | `PROMPT.md` | Generated portable fallback |
 | `scripts/lint.sh` | Meta-linter: unicode cleanliness, version parity, module contracts, PROMPT freshness |
+| `scripts/release-check.sh` | Release-grade checks: pinned official validator, full suite, eval contract, tag/release parity, package dry run |
+| `requirements/skills-ref.txt` | Pinned official Agent Skills validator dependency |
 | `evals/` | Behavioral case matrix and real-agent runner contract |
 | `tests/` | Regression suite for product contracts |
 | `docs/ABOUT.md` | The long-form writeup: why godplans exists and how it was designed |

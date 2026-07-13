@@ -77,6 +77,9 @@ Criterion: IF the audience is mixed, THE PLAN SHALL include a task producing the
 R-ROAD-20. Sign-off and retrospective are scheduled work: stakeholder attestations (product owner, eng lead, design if applicable, exec sponsor for launches, legal if regulated) appear as tasks before commitments harden, and a post-cycle retrospective task closes each cycle.
 Criterion: WHEN a grounded commitment appears, THE PLAN SHALL schedule the sign-off attestation before it, and WHEN a cycle ends THE PLAN SHALL contain its retrospective task.
 
+R-ROAD-21. If `public_release: true`, exactly one prepublication gate task cites this requirement. It follows and depends on the latest hardening task citing R-SEC-26, and the first public activation task citing R-LAUNCH-22 follows it immediately and depends on it. The gate records `checked_at`, a matching `hardening_revision` content hash or immutable revision, finding counts, policy, and verdict; every permitted Critical risk carries owner, justification, accepted_at, and expires_at. A later hardening change invalidates the pass. Projects with `public_release: false` state the absence of a public surface and do not receive this gate.
+Criterion: WHEN public activation is scheduled THE PLAN SHALL use distinct R-SEC-26, R-ROAD-21, and R-LAUNCH-22 task markers for hardening evidence, the prepublication gate, and first activation; SHALL place and link them in that order with no task between the last two; and SHALL block if the gate timestamp is not later than hardening, its revision does not match disk, a Critical is unresolved without a complete unexpired acceptance, or hardening changed after the check.
+
 ## Task seeds
 
 - [ ] GP-xxx [W1.1] Validate riskiest hypothesis H-1 with a timeboxed spike
@@ -96,6 +99,13 @@ Criterion: WHEN a grounded commitment appears, THE PLAN SHALL schedule the sign-
   - Acceptance: runbook contains the exact rollback command and a drill date within the launch window matching "Last drilled: 20"
   - Verify: grep -E '^Last drilled: 20[0-9]{2}-[0-9]{2}-[0-9]{2}$' docs/runbooks/rollback.md
   - Requirements: R-ROAD-12, R-ROAD-13
+
+- [ ] GP-xxx Fresh prepublication check against current hardening evidence
+  - Files: docs/release/PREPUBLICATION.md
+  - Depends on: GP-HARDENING
+  - Acceptance: records checked_at later than hardening, hardening_revision matching current content, finding_counts, policy, and verdict; validates owner, justification, accepted_at, and expires_at for every permitted Critical risk; states that any later hardening change invalidates the pass
+  - Verify: test "$(git hash-object docs/security/HARDENING.md)" = "$(awk '/^hardening_revision:/ {print $2}' docs/release/PREPUBLICATION.md)" && test "$(awk '/^verdict:/ {print $2}' docs/release/PREPUBLICATION.md)" = pass
+  - Requirements: R-ROAD-13, R-ROAD-21
 
 - [ ] GP-xxx Produce redacted public roadmap derivative
   - Files: docs/ROADMAP-PUBLIC.md
@@ -124,7 +134,7 @@ Criterion: WHEN a grounded commitment appears, THE PLAN SHALL schedule the sign-
 | Sequencing correctness | 20 | Task queue topologically sorted and cycle-free; hypothesis validations in the earliest legal wave; [P] tasks file-disjoint; tracks within capacity; Amdahl note present |
 | Phase anatomy and gates | 15 | Every phase has a binary Checkpoint, Must-haves block, anchored in-scope list, non-empty out-of-scope with reasons, rabbit holes, and dependencies |
 | Precision gradient and ceiling | 10 | Current cycle fully decomposed; later horizons decay to themes then outcomes; ceiling matches upstream section quality; no day-level dates beyond cycle one |
-| Launch and hardening gates | 10 | Launch block complete with dated readiness-gate tasks, D-calendar, slip protocol, and the critical-finding dependency; or launch excluded with a stated reason |
+| Launch and hardening gates | 10 | Public release has a fresh revision-bound prepublication task after hardening with complete risk-acceptance checks; non-public work records the exemption; launch block otherwise has its D-calendar and slip protocol |
 | Executor handoff | 10 | An agent can start from the first unchecked task with no questions; every Verify line is an exact runnable command; final phase is Verification naming the real e2e command |
 | Governance and freshness | 5 | Review cadence, authority map, re-plan triggers, freeze conditions, archive rule, and audience declared with the public-derivative decision |
 
@@ -138,6 +148,7 @@ Criterion: WHEN a grounded commitment appears, THE PLAN SHALL schedule the sign-
 - Feature-factory rows: bare feature names with no outcome, appetite, or commitment label. Refusal: rewrite under the three-label test or delete.
 - Dependency cycles: A depends on B depends on A anywhere in the task queue. Refusal: split a task to break the cycle; never emit an unsortable queue.
 - Paper launch gate: a launch date with no observability-live, rollback-tested, or runbooks-reviewed tasks behind it. Refusal: schedule the gate tasks or remove the date.
+- Stale prepublication pass: public activation trusts a check that predates or does not match current hardening evidence. Refusal: invalidate the pass and rerun the revision-bound gate immediately before activation.
 - Ghost handoff: a phase scheduled before its upstream artifacts exist and verify. Refusal: add the upstream dependency line and a verification task ahead of the phase.
 - Rubber-stamp done: a checkbox flipped without its Verify command run. Refusal: the executor rules bind check-off to a zero exit code in the same edit as the updated: bump.
 - Phantom resume: a session acting on chat memory instead of the plan file. Refusal: executor rules require re-reading frontmatter and the first unchecked task before acting.

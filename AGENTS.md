@@ -20,6 +20,9 @@ If you are an agent working on this repository itself:
   ASCII punctuation only, no em or en dashes,
   no Unicode arrows (write ASCII `->`), no emojis, no smart quotes, no
   box-drawing characters, in every authored file.
+- Release-grade validation uses `npm run release:check` with the pinned
+  official Agent Skills validator from `requirements/skills-ref.txt` and an
+  authenticated GitHub CLI. Ordinary `npm run check` remains offline-friendly.
 - Reference modules under `skills/godplans/references/` follow a fixed
   six-section contract (Lineage, Decisions to force, Plan requirements,
   Task seeds, Self-audit rubric, Anti-patterns refused); the linter checks it.

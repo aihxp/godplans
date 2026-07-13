@@ -81,6 +81,9 @@ validate_expectations() {
       frontmatter|domain)
         [ -n "$arg" ] && [ -n "$value" ] || return 1
         ;;
+      gate)
+        [ -n "$arg" ] && [ -n "$value" ] || return 1
+        ;;
       contains|contains-ci|not-contains)
         [ -n "$arg" ] || return 1
         ;;
@@ -195,6 +198,9 @@ while IFS= read -r dir; do
       max-count)
         count=$(grep -Fc -- "$arg" "$artifact" || true)
         [ "$count" -le "$value" ] && ok=1
+        ;;
+      gate)
+        grep -Fq -- "$value" "$artifact" && ok=1
         ;;
     esac
 

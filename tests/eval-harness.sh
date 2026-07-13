@@ -32,6 +32,7 @@ printf '%s\n' \
   'frontmatter|archetype|cli-tool' \
   'domain|security|applicable' \
   'contains|GP-101|' \
+  'gate|prepublication|fresh-prepublication' \
   'not-contains|PLACEHOLDER|' \
   'max-count|## Open Questions|1' \
   > "$TMP/cases/plan-case/EXPECTATIONS"
@@ -81,6 +82,7 @@ printf '%s\n' \
   'archetype: cli-tool' \
   '---' \
   '| security | applicable | scaled baseline |' \
+  'fresh-prepublication' \
   '- [ ] GP-101 [W1.1] Example task' \
   '## Open Questions' \
   > "$TMP/PLAN.mdx"
@@ -92,7 +94,7 @@ GODPLANS_TEST_PLAN="$TMP/PLAN.mdx" \
 GODPLANS_TEST_VALIDATOR="$TMP/bin/validator" \
   "$ROOT/scripts/eval.sh" --output "$TMP/output" > "$TMP/run.out"
 
-grep -q '^plan-case[[:space:]]PASS[[:space:]]7/7$' "$TMP/run.out" || fail "plan case did not pass all expectations"
+grep -q '^plan-case[[:space:]]PASS[[:space:]]8/8$' "$TMP/run.out" || fail "plan case did not pass all expectations"
 grep -q '^refusal-case[[:space:]]PASS[[:space:]]3/3$' "$TMP/run.out" || fail "refusal case did not pass all expectations"
 test -f "$TMP/output/plan-case/PLAN.mdx" || fail "plan output was not retained"
 test -f "$TMP/output/refusal-case/RESPONSE.md" || fail "refusal output was not retained"
@@ -100,13 +102,21 @@ test -f "$TMP/output/refusal-case/RESPONSE.md" || fail "refusal output was not r
 GODPLANS_EVAL_CASES="$TMP/cases" \
 GODPLANS_VALIDATOR="$TMP/bin/validator" \
   "$ROOT/scripts/eval.sh" --score-only --output "$TMP/output" > "$TMP/rescore.out"
-grep -q '^plan-case[[:space:]]PASS[[:space:]]7/7$' "$TMP/rescore.out" || fail "saved plan did not rescore"
+grep -q '^plan-case[[:space:]]PASS[[:space:]]8/8$' "$TMP/rescore.out" || fail "saved plan did not rescore"
 grep -q '^refusal-case[[:space:]]PASS[[:space:]]3/3$' "$TMP/rescore.out" || fail "saved refusal did not rescore"
 
 rm "$TMP/output/plan-case/validate-plan.sh"
 if GODPLANS_EVAL_CASES="$TMP/cases" GODPLANS_VALIDATOR="$TMP/bin/validator" \
   "$ROOT/scripts/eval.sh" --score-only --output "$TMP/output" >/dev/null 2>&1; then
   fail "score-only accepted a missing validator companion"
+fi
+
+cp "$TMP/bin/validator" "$TMP/output/plan-case/validate-plan.sh"
+chmod +x "$TMP/output/plan-case/validate-plan.sh"
+perl -0pi -e 's/fresh-prepublication/stale-prepublication/' "$TMP/output/plan-case/PLAN.mdx"
+if GODPLANS_EVAL_CASES="$TMP/cases" GODPLANS_VALIDATOR="$TMP/bin/validator" \
+  "$ROOT/scripts/eval.sh" --score-only --output "$TMP/output" >/dev/null 2>&1; then
+  fail "score-only accepted a violated gate invariant"
 fi
 
 printf '%s\n' 'outcome|unknown|' > "$TMP/cases/plan-case/EXPECTATIONS"

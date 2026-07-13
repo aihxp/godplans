@@ -3,7 +3,7 @@ name: godplans
 description: "Produce an audit-aware, agent-executable master plan (PLAN.mdx) for a software project before application code is written. One command runs discovery, forces hard-to-reverse decisions, and plans product, architecture, roadmap, stack, repo, build, deploy, observability, launch, security, code quality, style genome, database, LLM integration, SEO, UI, UX, and agent memory upfront. After-the-fact audit checks become plan-time acceptance criteria, and a self-contained validator enforces task structure and approval state. Use when the user says: plan this project, godplans, master plan, plan everything upfront, idea to plan, plan before code, audit-aware plan, replan, or starts a greenfield project or major feature. Refuses plan theater (sections filled, decisions absent), vague tasks without verification, unsupported quality guarantees, and projects whose core purpose violates the Anthropic Usage Policy."
 license: MIT
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
   author: aihxp
   homepage: https://github.com/hannsxpeter/godplans
 ---
@@ -42,7 +42,7 @@ Detect what exists. Look for:
 - Source code (manifests like `package.json`, `pyproject.toml`, `go.mod`, `Cargo.toml`) -> **brownfield mode**.
 - Neither -> **greenfield mode**.
 
-Record the mode. In brownfield mode, fingerprint before planning: read the manifests, entry points, directory shape, and enough representative source to capture the existing stack, structure, and style genome (naming, idioms, formatting habits). The plan must extend what exists, not fight it. This pass is read-only.
+Record the mode. Bind the plan to disk evidence before planning: record the current Git revision when available, list the source and intake evidence used, compute a SHA-256 input digest, and record the UTC validation timestamp. In brownfield mode, fingerprint before planning: read the manifests, entry points, directory shape, and enough representative source to capture the existing stack, structure, and style genome (naming, idioms, formatting habits). The plan must extend what exists, not fight it. This pass is read-only.
 
 ### Phase 1: Compliance gate
 
@@ -64,9 +64,10 @@ stop creates neither artifact.
 
 Read `references/discovery.md`. Establish:
 
-1. **Archetype**: cli-tool, api-service, saas-dashboard, marketing-site, library, mobile-app, ml-pipeline, extension, game, or hybrid (see the module for the detection rules).
-2. **Applicability matrix**: every planning domain in the table below is either applicable or excluded with a stated reason. A CLI tool excludes seo and ui with reasons; it does not get empty SEO sections. The matrix goes into the plan verbatim.
-3. **Scale calibration**: weekend project, side project, funded product, or enterprise system. Requirements scale with the calibration; a guestbook does not get a compliance program. Weekend plans have at most 3 phases and 8 tasks. Treat that as a hard ceiling, not a target, and fit the total task appetites inside the user's stated capacity.
+1. **Product form**: web application, API or service, CLI or SDK, mobile or desktop, data or ML, or infrastructure or IaC. Pick this before archetype and domain composition because it defines vertical slices and completion evidence. Record secondary forms only when they have independent users, contracts, distribution paths, and deliverables.
+2. **Archetype**: cli-tool, api-service, saas-dashboard, marketing-site, library, mobile-app, ml-pipeline, extension, game, or hybrid (see the module for the detection rules).
+3. **Applicability matrix**: every planning domain in the table below is either applicable or excluded with a stated reason. A CLI tool excludes seo and ui with reasons; it does not get empty SEO sections. The matrix goes into the plan verbatim.
+4. **Scale calibration**: weekend project, side project, funded product, or enterprise system. Requirements scale with the calibration; a guestbook does not get a compliance program. Weekend plans have at most 3 phases and 8 tasks. Treat that as a hard ceiling, not a target, and fit the total task appetites inside the user's stated capacity.
 
 ### Phase 3: Discovery
 
@@ -112,7 +113,7 @@ Read `references/exemplar.md` first; it is the calibration for what full marks m
 ### Phase 7: Emit and hand off
 
 1. Read `references/plan-format.md` and `templates/PLAN.template.mdx`. Assemble `.godplans/PLAN.mdx` per that contract: frontmatter machine state, mermaid visuals where they carry weight, phases and waves, GP-numbered checkbox tasks with Files, Depends on, Reuses, Acceptance, Verify, and Requirements lines, one Open Questions section at the bottom, executor rules, session log.
-2. Complete the two-artifact emission gate before any response: re-copy `scripts/validate-plan.sh` from this skill byte-for-byte to the pre-created `.godplans/validate-plan.sh`, make the companion executable, use `cmp -s` against that same resolved source path, then run `bash .godplans/validate-plan.sh --allow-planning .godplans/PLAN.mdx`. The emission is incomplete if the plan exists without its executable companion. The validator embeds its requirement catalog and must work without access to the installed skill. It is the machine gate; do not recreate its checks with grep. Fix every failure before presenting.
+2. Complete the two-artifact emission gate before any response: re-copy `scripts/validate-plan.sh` from this skill byte-for-byte to the pre-created `.godplans/validate-plan.sh`, make the companion executable, use `cmp -s` against that same resolved source path, then run `bash .godplans/validate-plan.sh --allow-planning .godplans/PLAN.mdx`. The emission is incomplete if the plan exists without its executable companion. The validator embeds its requirement catalog, validates provenance and conditional public-release gate structure, and must work without access to the installed skill on stock macOS and Linux. It is the machine gate; do not recreate its checks with grep. Fix every failure before presenting.
 3. Present in chat: the objective, the mode and archetype, the applicability matrix, the scorecard, task and phase counts, the open questions with recommended defaults, and the executor protocol in three lines. Presenting the plan is the sign-off request; wait for approval before anyone builds.
 4. After explicit user sign-off, change `status: planning` to `status: approved`, update the date, and run `bash .godplans/validate-plan.sh .godplans/PLAN.mdx`. Do not start application work as part of approval.
 
@@ -122,7 +123,7 @@ Final artifact check: `test -f .godplans/PLAN.mdx && test -x .godplans/validate-
 
 - **Greenfield**: the full method above.
 - **Brownfield**: Phase 0 fingerprints the existing codebase first. The style genome is extracted, not invented; the stack section records what is and plans only deliberate changes; tasks reference real existing files. The plan extends the codebase, never restarts it.
-- **Replan**: `.godplans/PLAN.mdx` exists. Re-derive state from disk: count checked and unchecked tasks, read the session log, then reconcile. Completed tasks are never renumbered, reworded, or unchecked. New and changed work gets new task IDs. Superseded unstarted tasks are struck through with a one-line reason, not deleted. Return status to `planning`, bump the plan version, record the delta in the session log, and require fresh approval before execution resumes.
+- **Replan**: `.godplans/PLAN.mdx` exists. Re-derive state from disk: count checked and unchecked tasks, read the session log, and recompute the recorded source and completed-or-imported evidence. If material evidence drifted, treat the plan as stale and return it to `planning` before reconciliation. Completed tasks are never renumbered, reworded, or unchecked. New and changed work gets new task IDs. Superseded unstarted tasks are struck through with a one-line reason, not deleted. Refresh provenance, bump the plan version, record the delta in the session log, and require fresh approval before execution resumes.
 
 ## After the plan: execution
 
@@ -151,4 +152,4 @@ godplans plans; it does not build. The status lifecycle is `planning -> approved
 | `templates/PLAN.template.mdx` | The skeleton PLAN.mdx |
 | `scripts/validate-plan.sh` | Self-contained validator copied beside each emitted plan |
 
-## Skill version: 1.1.0
+## Skill version: 1.2.0
