@@ -105,19 +105,20 @@ Read `references/exemplar.md` first; it is the calibration for what full marks m
 
 ### Phase 7: Emit and hand off
 
-1. Read `references/plan-format.md` and `templates/PLAN.template.mdx`. Assemble `.godplans/PLAN.mdx` per that contract: frontmatter machine state, mermaid visuals where they carry weight, phases and waves, GP-numbered checkbox tasks with Files, Depends on, Acceptance, Verify, and Requirements lines, one Open Questions section at the bottom, executor rules, session log.
-2. Validate mechanically before presenting: every task has a Verify command; every requirement ID cited on a task exists in a module; checkbox count matches the frontmatter counters; no banned characters (see plan-format.md).
+1. Read `references/plan-format.md` and `templates/PLAN.template.mdx`. Assemble `.godplans/PLAN.mdx` per that contract: frontmatter machine state, mermaid visuals where they carry weight, phases and waves, GP-numbered checkbox tasks with Files, Depends on, Reuses, Acceptance, Verify, and Requirements lines, one Open Questions section at the bottom, executor rules, session log.
+2. Copy `scripts/validate-plan.sh` byte-for-byte to `.godplans/validate-plan.sh`, make the companion executable, then run `bash .godplans/validate-plan.sh --allow-planning .godplans/PLAN.mdx`. The validator embeds its requirement catalog and must work without access to the installed skill. It is the machine gate; do not recreate its checks with grep. Fix every failure before presenting.
 3. Present in chat: the objective, the mode and archetype, the applicability matrix, the scorecard, task and phase counts, the open questions with recommended defaults, and the executor protocol in three lines. Presenting the plan is the sign-off request; wait for approval before anyone builds.
+4. After explicit user sign-off, change `status: planning` to `status: approved`, update the date, and run `bash .godplans/validate-plan.sh .godplans/PLAN.mdx`. Do not start application work as part of approval.
 
 ## Modes
 
 - **Greenfield**: the full method above.
 - **Brownfield**: Phase 0 fingerprints the existing codebase first. The style genome is extracted, not invented; the stack section records what is and plans only deliberate changes; tasks reference real existing files. The plan extends the codebase, never restarts it.
-- **Replan**: `.godplans/PLAN.mdx` exists. Re-derive state from disk: count checked and unchecked tasks, read the session log, then reconcile. Completed tasks are never renumbered, reworded, or unchecked. New and changed work gets new task IDs. Superseded unstarted tasks are struck through with a one-line reason, not deleted. Bump the plan version and record the delta in the session log.
+- **Replan**: `.godplans/PLAN.mdx` exists. Re-derive state from disk: count checked and unchecked tasks, read the session log, then reconcile. Completed tasks are never renumbered, reworded, or unchecked. New and changed work gets new task IDs. Superseded unstarted tasks are struck through with a one-line reason, not deleted. Return status to `planning`, bump the plan version, record the delta in the session log, and require fresh approval before execution resumes.
 
 ## After the plan: execution
 
-godplans plans; it does not build. The emitted PLAN.mdx is self-sufficient: it carries its own executor rules, so any coding agent (this one, or another tool entirely) can execute it by reading the file. When the user asks you to execute a godplans plan, follow the "Rules for executing agents" section inside PLAN.mdx itself, not this skill. When execution drifts from the plan, the plan is patched (replan mode), because the document, not the chat, is the source of truth.
+godplans plans; it does not build. The status lifecycle is `planning -> approved -> executing -> done`. A material replan restarts at `planning` and requires fresh approval. The emitted PLAN.mdx and `.godplans/validate-plan.sh` companion are self-sufficient: the plan carries its own executor rules and machine gate, so any coding agent (this one, or another tool entirely) can execute it without godplans installed. When the user asks you to execute a godplans plan, refuse unless frontmatter status is `approved` or `executing`, run `bash .godplans/validate-plan.sh .godplans/PLAN.mdx`, then follow the "Rules for executing agents" section inside PLAN.mdx itself. The first executor changes `approved` to `executing`; only a successful final Verification phase changes `executing` to `done`. When execution drifts from the plan, return it to `planning` and patch it (replan mode), because the document, not the chat, is the source of truth.
 
 ## What godplans refuses
 
@@ -140,5 +141,6 @@ godplans plans; it does not build. The emitted PLAN.mdx is self-sufficient: it c
 | `references/exemplar.md` | Worked GOOD and BAD plan fragments; the quality bar |
 | `references/<domain>.md` | 18 domain modules (see Phase 4 table) |
 | `templates/PLAN.template.mdx` | The skeleton PLAN.mdx |
+| `scripts/validate-plan.sh` | Self-contained validator copied beside each emitted plan |
 
 ## Skill version: 1.0.0

@@ -1,6 +1,6 @@
 # PLAN.mdx format contract
 
-The single output of godplans is `.godplans/PLAN.mdx`. This module is the binding contract for that file: structure, task grammar, visual layer, MDX safety, and the executor rules embedded in every plan. Read this whole file before assembling a plan; do not author the plan from memory of it.
+The canonical output of godplans is `.godplans/PLAN.mdx`. Every emission also copies the self-contained validator to `.godplans/validate-plan.sh`, so a standalone plan carries its machine gate without requiring godplans to remain installed. This module is the binding contract for the plan: structure, task grammar, visual layer, MDX safety, and the executor rules embedded in every plan. Read this whole file before assembling a plan; do not author the plan from memory of it.
 
 ## Why MDX, and the GFM-safe rule
 
@@ -21,10 +21,10 @@ Also banned everywhere in the plan, matching godplans house style: em dashes, en
 ---
 name: <project-slug>
 plan_version: 1
-status: planning        # planning | approved | executing | done
+status: planning
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
-mode: greenfield        # greenfield | brownfield | replan
+mode: greenfield
 archetype: saas-dashboard
 domains_applicable: [product, architecture, stack, database, security, ...]
 domains_excluded:
@@ -38,7 +38,16 @@ progress:
 ---
 ```
 
-Frontmatter is the digest, not the truth. The truth is the checkboxes; `progress` counters are derived from them and updated in the same edit that flips a box. If they ever disagree, recount from the checkboxes.
+Allowed modes are `greenfield`, `brownfield`, and `replan`. Frontmatter is the digest, not the truth. The truth is the checkboxes; `progress` counters are derived from them and updated in the same edit that flips a box. `tasks_total` and `tasks_done` count active task definition header lines. `phases_total` counts numbered phase headings, and a phase contributes to `phases_done` only when every active task in it is checked. If counters disagree, recount from the task definitions.
+
+The status lifecycle is `planning -> approved -> executing -> done`:
+
+1. A new or materially replanned document has `status: planning`. Validate it with `--allow-planning`, present it, and wait.
+2. Only explicit user sign-off changes `planning` to `approved`. Update the date in the same edit.
+3. The first executor runs `.godplans/validate-plan.sh` without `--allow-planning`, then changes `approved` to `executing` before starting GP work. An already `executing` plan may resume.
+4. Change `executing` to `done` only after every task is checked and the final Verification phase passes. Use `--allow-planning` for the final structural validation because default mode is an execution gate.
+
+A material replan restarts this lifecycle at `planning`, increments `plan_version`, and requires fresh sign-off. No executor may work from a `planning` or `done` plan.
 
 ## Document skeleton, in order
 
@@ -78,6 +87,7 @@ Goal: a user can sign up, log in, and own their data. Blocks Phase 3.
 - [ ] GP-202 [P] [W2.1] Add password hashing helper
   - Files: src/auth/hash.ts, src/auth/hash.test.ts
   - Depends on: none
+  - Reuses: shared error types from src/errors.ts
   - Acceptance: uses argon2id; test vector passes; no plaintext ever logged
   - Verify: `npm test -- hash.test.ts`
   - Requirements: R-SEC-6
@@ -92,7 +102,7 @@ Must-haves:
 
 Grammar rules:
 
-- **IDs**: `GP-<phase><two digits>`, zero-padded, unique, stable forever. Never renumber. Grep-unique: `grep -n "GP-201" PLAN.mdx` finds exactly the task and its references.
+- **IDs**: `GP-<phase><two digits>`, zero-padded, unique, stable forever. Never renumber. Uniqueness applies to checkbox task definition headers; dependency references do not create duplicate definitions.
 - **`[P]`**: parallel-safe. Only when the task touches files disjoint from every other unchecked task in the same wave.
 - **`[W<phase>.<wave>]`**: the wave tag. Waves within a phase run in order; tasks within a wave marked `[P]` may run concurrently.
 - **Files**: exact paths. Brownfield plans name real existing files.
@@ -125,32 +135,27 @@ This block is copied verbatim into every emitted plan, under `## Rules for execu
 > [!IMPORTANT]
 > This plan is the source of truth. The chat is not.
 >
-> 1. Before any work: read the frontmatter, then find the first unchecked task in wave order. Re-derive state from checkboxes; trust nothing remembered.
-> 2. One task at a time. Respect Depends on. Run tasks marked [P] concurrently only when their Files lists are disjoint.
-> 3. Run the task's Verify command. Only after it passes, flip [ ] to [x] and update the frontmatter counters and `updated:` date in the same edit. Never batch check-offs.
-> 4. If Verify fails: the box stays unchecked. Append an indented `- Note (YYYY-MM-DD):` line under the task saying what happened.
-> 5. Scope changes are not improvised. Patch the plan first (new task IDs, struck-through superseded tasks with a reason), then execute the patch.
-> 6. Never renumber, reword, or uncheck a completed task.
-> 7. At session end: append one line to `## Session log`: date, tasks completed, where you stopped, what is next.
-> 8. Re-read the current phase before starting it; re-read Decisions before touching anything they govern.
+> 1. Before any work: read the frontmatter and refuse unless `status` is `approved` or `executing`. `planning` awaits sign-off; `done` is closed. Run `bash .godplans/validate-plan.sh .godplans/PLAN.mdx`. If status is `approved`, change it to `executing` and update the date before the first task.
+> 2. Find the first unchecked task in wave order. Re-derive state from checkboxes; trust nothing remembered.
+> 3. One task at a time. Respect Depends on. Run tasks marked [P] concurrently only when their Files lists are disjoint.
+> 4. Run the task's Verify command. Only after it passes, flip [ ] to [x] and update the frontmatter counters and `updated:` date in the same edit. Never batch check-offs.
+> 5. If Verify fails: the box stays unchecked. Append an indented `- Note (YYYY-MM-DD):` line under the task saying what happened.
+> 6. Scope changes are not improvised. Return status to `planning`, patch the plan (new task IDs, struck-through superseded tasks with a reason), increment `plan_version`, and obtain fresh approval before more execution.
+> 7. Never renumber, reword, or uncheck a completed task.
+> 8. At session end: append one line to `## Session log`: date, tasks completed, where you stopped, what is next.
+> 9. Re-read the current phase before starting it; re-read Decisions before touching anything they govern.
+> 10. After every task is checked and the final Verification phase passes, change status from `executing` to `done`, update the date, and run `bash .godplans/validate-plan.sh --allow-planning .godplans/PLAN.mdx` for a final structural check.
 ```
 
 ## Machine checks
 
-An emitted plan must pass these before it is presented:
+The emitted companion is the only machine-check entry point. Copy it byte-for-byte from the skill before the first validation, then run:
 
 ```bash
-# progress counters match reality
-open=$(grep -c '^- \[ \] GP-' PLAN.mdx); done=$(grep -c '^- \[x\] GP-' PLAN.mdx)
-# every task has a Verify line
-grep -A6 '^- \[ \] GP-' PLAN.mdx | grep -c 'Verify:'
-# no banned characters
-LC_ALL=C grep -nP '[\x{2013}\x{2014}\x{2018}\x{2019}\x{201C}\x{201D}\x{2026}\x{2192}\x{FE0F}\x{1F300}-\x{1FAFF}]' PLAN.mdx && exit 1
-# task IDs unique
-grep -o 'GP-[0-9]*' PLAN.mdx | sort | uniq -d
+bash .godplans/validate-plan.sh --allow-planning .godplans/PLAN.mdx
 ```
 
-Duplicate IDs, tasks without Verify lines, counter drift, or banned characters block emission.
+The companion embeds the domain requirement catalog and reads no skill files at runtime. `--allow-planning` performs structural validation for a draft or closed plan. Without it, the validator is also an execution gate and accepts only `approved` or `executing`. It checks essential frontmatter and lifecycle values; derived task and phase counters; unique IDs on task definition headers; all required task fields; dependency targets; local and module-catalog requirement references; banned Unicode through portable Perl; exactly one Open Questions section; and a final Verification phase. Any failure blocks emission. Do not replace this command with ad hoc grep pipelines.
 
 ## Size discipline
 
