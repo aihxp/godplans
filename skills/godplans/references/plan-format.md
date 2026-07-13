@@ -1,6 +1,6 @@
 # PLAN.mdx format contract
 
-The canonical output of godplans is `.godplans/PLAN.mdx`. Every emission also copies the self-contained validator to `.godplans/validate-plan.sh`, so a standalone plan carries its machine gate without requiring godplans to remain installed. This module is the binding contract for the plan: structure, task grammar, visual layer, MDX safety, and the executor rules embedded in every plan. Read this whole file before assembling a plan; do not author the plan from memory of it.
+The canonical output of godplans is `.godplans/PLAN.mdx`. Every emission also copies the self-contained validator to `.godplans/validate-plan.sh`, so a standalone plan carries its machine gate without requiring godplans to remain installed. A PLAN without that executable, byte-identical companion is an incomplete emission and must not be presented. This module is the binding contract for the plan: structure, task grammar, visual layer, MDX safety, and the executor rules embedded in every plan. Read this whole file before assembling a plan; do not author the plan from memory of it.
 
 ## Why MDX, and the GFM-safe rule
 
@@ -52,11 +52,11 @@ A material replan restarts this lifecycle at `planning`, increments `plan_versio
 ## Document skeleton, in order
 
 1. `# <Project> master plan` and a one-paragraph objective ending with an observable definition of done.
-2. `## Scope and non-goals`. Non-goals are named, not implied.
+2. `## Scope and non-goals`. Non-goals are named, not implied. State the scale calibration, available capacity, phase and task ceiling, and the sum of task appetites. A weekend plan has at most 3 phases and 8 tasks.
 3. `## Compliance gate`. One short section: pass, or the mitigations injected (with task IDs).
-4. `## Applicability matrix`. The full table: every domain, applicable or excluded, with reason.
+4. `## Applicability matrix`. The full table: every domain, applicable or excluded, with reason. After the table, add a compact module disposition that lists landed requirement IDs and groups scale-excluded IDs by module with a specific reason.
 5. `## Decisions`. Hard-to-reverse bets first: wire formats, public identifiers, data-model shape, auth and ownership boundaries. Each entry is a decision with rationale, a hypothesis with a validation plan, or a pointer to Open Questions. Where options were weighed, show the comparison in a small table.
-6. `## Requirements`. Numbered user stories with EARS acceptance criteria: `R-1.1: WHEN <trigger> THE SYSTEM SHALL <observable behavior>`. Task `Requirements:` lines point here and at module IDs (R-SEC-4 style).
+6. `## Requirements`. Numbered user stories with EARS acceptance criteria: `R-1.1: WHEN <trigger> THE SYSTEM SHALL <observable behavior>`. A compact table is also valid when the requirement ID is the first cell of each row. Task `Requirements:` lines point here and at module IDs (R-SEC-4 style).
 7. `## Architecture`. The mermaid visuals (see Visual layer) plus the prose that the diagrams support.
 8. `## Style genome`. Naming, idioms, structure conventions the first commit must already follow.
 9. `## Agent memory`. The AGENTS.md and pillar files the scaffold phase will emit.
@@ -155,7 +155,7 @@ The emitted companion is the only machine-check entry point. Copy it byte-for-by
 bash .godplans/validate-plan.sh --allow-planning .godplans/PLAN.mdx
 ```
 
-The companion embeds the domain requirement catalog and reads no skill files at runtime. `--allow-planning` performs structural validation for a draft or closed plan. Without it, the validator is also an execution gate and accepts only `approved` or `executing`. It checks essential frontmatter and lifecycle values; derived task and phase counters; unique IDs on task definition headers; all required task fields; dependency targets; local and module-catalog requirement references; banned Unicode through portable Perl; exactly one Open Questions section; and a final Verification phase. Any failure blocks emission. Do not replace this command with ad hoc grep pipelines.
+The companion embeds the domain requirement catalog and reads no skill files at runtime. Before this command, verify `test -x .godplans/validate-plan.sh` and compare the companion byte-for-byte with the installed source. `--allow-planning` performs structural validation for a draft or closed plan. Without it, the validator is also an execution gate and accepts only `approved` or `executing`. It checks essential frontmatter and lifecycle values; derived task and phase counters; sequential phase numbers and matching wave tags; unique IDs on task definition headers; all required task fields; earlier dependency targets; local and module-catalog requirement references; banned Unicode through portable Perl; exactly one Open Questions section; and a final Verification phase. Any failure blocks emission. Do not replace this command with ad hoc grep pipelines.
 
 ## Size discipline
 

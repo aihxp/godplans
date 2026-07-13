@@ -2,11 +2,12 @@
 
 ## What this project is
 
-godplans is a prompt-engineering package: markdown instructions plus three
-shell scripts (a POSIX sh installer, `install.sh`, and two bash maintenance
-scripts, `scripts/build-prompt.sh` and `scripts/lint.sh`). It executes no
-network calls, collects no data, and the skill itself instructs agents to
-treat planning as read-only.
+godplans is a prompt-engineering package: markdown instructions, a POSIX sh
+installer, Bash maintenance and validation scripts, and an optional behavioral
+evaluation runner. The skill, installer, linter, validator, and prompt builder
+make no network calls and collect no data. `evals/runners/codex.sh` invokes the
+user's authenticated Codex CLI only when the user explicitly runs a model-backed
+evaluation. The skill itself instructs agents to treat planning as read-only.
 
 ## Threat model relevant to users
 
@@ -15,11 +16,11 @@ treat planning as read-only.
   installing, as you should for any skill; this repository never asks the
   agent to bypass safety, exfiltrate data, or edit source during planning.
 - **Installer.** `install.sh` writes only into skill directories
-  (`~/.agents/skills`, `~/.claude/skills`, and equivalents) and removes only
-  the `godplans` entries it created. It never elevates, never curls, never
-  evaluates remote content.
+  (`~/.agents/skills`, `~/.claude/skills`, and equivalents), marks what it
+  created, and refuses to replace or remove an unowned destination unless the
+  user supplies `--force`. It never elevates, curls, or evaluates remote content.
 - **Supply chain.** Install from a pinned release tag or commit if your
-  environment requires reproducibility: `git clone --branch v1.0.0`.
+  environment requires reproducibility: `git clone --branch v1.1.0`.
 
 ## Reporting a vulnerability
 

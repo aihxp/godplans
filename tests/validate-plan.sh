@@ -187,6 +187,11 @@ write_valid_plan "$BASE_PLAN" planning
 expect_pass "planning validation mode" --allow-planning "$BASE_PLAN"
 expect_fail "planning execution gate" "requires status approved or executing" "$BASE_PLAN"
 
+TABLE_PLAN="$TMP_DIR/valid-requirements-table.mdx"
+cp "$BASE_PLAN" "$TABLE_PLAN"
+perl -0pi -e 's/R-1\.1: WHEN validation runs THE SYSTEM SHALL return a reliable exit code\./| ID | Acceptance |\n|---|---|\n| R-1.1 | WHEN validation runs THE SYSTEM SHALL return a reliable exit code. |/' "$TABLE_PLAN"
+expect_pass "local requirement in Markdown table" --allow-planning "$TABLE_PLAN"
+
 ISOLATED_DIR="$TMP_DIR/standalone-companion"
 mkdir "$ISOLATED_DIR"
 cp "$VALIDATOR" "$ISOLATED_DIR/validate-plan.sh"
@@ -263,6 +268,18 @@ new_case
 perl -0pi -e 's/GP-102 \[W1\.1\]/GP-101 [W1.1]/' "$CASE_FILE"
 expect_fail "duplicate task definitions" "duplicate task definition ID GP-101" --allow-planning "$CASE_FILE"
 
+new_case
+perl -0pi -e 's/## Phase 2: Verification/## Phase 3: Verification/' "$CASE_FILE"
+expect_fail "non-sequential phase numbers" "expected Phase 2, found Phase 3" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/GP-101 \[W1\.1\]/GP-101/' "$CASE_FILE"
+expect_fail "missing task wave" "GP-101 has malformed task heading" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/GP-101 \[W1\.1\]/GP-101 [W2.1]/' "$CASE_FILE"
+expect_fail "task wave phase mismatch" "GP-101 wave phase 2 does not match Phase 1" --allow-planning "$CASE_FILE"
+
 for field in Files "Depends on" Reuses Acceptance Verify Requirements; do
   new_case
   FIELD="$field" perl -0pi -e 's/^  - \Q$ENV{FIELD}\E:.*\n//m' "$CASE_FILE"
@@ -272,6 +289,10 @@ done
 new_case
 perl -0pi -e 's/Depends on: GP-101/Depends on: GP-999/' "$CASE_FILE"
 expect_fail "unknown dependency" "GP-102 depends on undefined task GP-999" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/Depends on: none/Depends on: GP-201/' "$CASE_FILE"
+expect_fail "forward dependency" "GP-101 depends on later task GP-201" --allow-planning "$CASE_FILE"
 
 new_case
 perl -0pi -e 's/Depends on: GP-101/Depends on: sometimes GP-101/' "$CASE_FILE"

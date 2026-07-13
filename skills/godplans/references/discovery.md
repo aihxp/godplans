@@ -32,12 +32,12 @@ Signals beat labels: a "CLI tool" with a companion web dashboard is a hybrid and
 
 State it in the plan; every module's requirements scale with it.
 
-- **weekend**: throwaway or personal utility. Plan depth: decisions and a short task list; security still applies (secrets, injection), compliance still applies; observability collapses to logs.
+- **weekend**: throwaway or personal utility. Plan depth: decisions and a short task list. Weekend plans have at most 3 phases and 8 tasks. Sum task appetites to the user's stated capacity, combine related implementation and documentation work, and keep only requirements that materially alter behavior, public compatibility, security, or verification. Security still applies (secrets, injection), compliance still applies, and observability collapses to local error reporting or logs.
 - **side-project**: real users possible, one maintainer. Deploy, backups, and error tracking are planned; SOC 2 is not.
 - **funded-product**: paying users, a team, uptime matters. The full applicable matrix, honest SLOs, launch plan.
 - **enterprise**: compliance regimes, multiple teams, audits. Everything, plus the compliance mapping the security module demands.
 
-Calibration is a ceiling-setter, not an excuse: a weekend project with user passwords still hashes them with argon2id. Cheap corners are cut openly, in the plan, as named decisions ("no staging environment: acceptable for side-project scale, revisit at 100 users"), never silently.
+Calibration is a ceiling-setter, not an excuse: a weekend project with user passwords still hashes them with argon2id. It is also a scope ceiling: rubric coverage cannot manufacture work that exceeds the declared capacity. Cheap corners are cut openly, in the plan, as named decisions ("no staging environment: acceptable for side-project scale, revisit at 100 users"), never silently.
 
 ## The applicability matrix
 

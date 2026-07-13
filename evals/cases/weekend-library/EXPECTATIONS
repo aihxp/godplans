@@ -1,0 +1,15 @@
+outcome|plan|
+frontmatter|mode|greenfield
+frontmatter|archetype|library
+domain|security|applicable
+domain|code-quality|applicable
+domain|database|excluded
+domain|llm|excluded
+domain|ui|excluded
+domain|seo|excluded
+contains-ci|public API|
+contains|deterministic|
+contains|8 focused hours|
+max-count|- [ ] GP-|8
+max-count|## Phase |3
+max-count|## Open Questions|1

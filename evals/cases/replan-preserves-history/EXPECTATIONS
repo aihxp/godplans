@@ -1,0 +1,9 @@
+outcome|plan|
+frontmatter|mode|replan
+frontmatter|plan_version|2
+frontmatter|status|planning
+contains|- [x] GP-101 [W1.1] Preserve text output|
+contains|--format json|
+contains|GP-202|
+contains|alias|
+max-count|## Open Questions|1

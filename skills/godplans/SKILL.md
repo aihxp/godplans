@@ -1,22 +1,22 @@
 ---
 name: godplans
-description: "Produce a complete, agent-executable master plan (PLAN.mdx) for a software project before any code is written. One command runs discovery, forces every hard-to-reverse decision, and plans product, architecture, roadmap, stack, repo, build, deploy, observability, launch, security, code quality, style genome, database, LLM integration, SEO, UI, UX, and agent memory upfront, with every after-the-fact audit inverted into plan-time acceptance criteria so the finished project passes those audits on first run. Emits checkbox tasks with verify commands any coding agent can execute. Use when the user says: plan this project, godplans, master plan, plan everything upfront, idea to plan, plan before code, audit-proof plan, replan, or starts a greenfield project or major feature. Refuses plan theater (sections filled, decisions absent), vague tasks without verification, and projects whose core purpose violates the Anthropic Usage Policy."
+description: "Produce an audit-aware, agent-executable master plan (PLAN.mdx) for a software project before application code is written. One command runs discovery, forces hard-to-reverse decisions, and plans product, architecture, roadmap, stack, repo, build, deploy, observability, launch, security, code quality, style genome, database, LLM integration, SEO, UI, UX, and agent memory upfront. After-the-fact audit checks become plan-time acceptance criteria, and a self-contained validator enforces task structure and approval state. Use when the user says: plan this project, godplans, master plan, plan everything upfront, idea to plan, plan before code, audit-aware plan, replan, or starts a greenfield project or major feature. Refuses plan theater (sections filled, decisions absent), vague tasks without verification, unsupported quality guarantees, and projects whose core purpose violates the Anthropic Usage Policy."
 license: MIT
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   author: aihxp
-  homepage: https://github.com/aihxp/godplans
+  homepage: https://github.com/hannsxpeter/godplans
 ---
 
 > Invocation: `/godplans` in Claude Code, Cursor, VS Code, Zed, and Factory; `$godplans` in Codex; `@godplans` in Windsurf; auto-triggered elsewhere. Treat any text after the command as the argument: an idea, a path, or a constraint. There are no sub-commands.
 
 # godplans
 
-Plan everything before anything. godplans is a planning superskill: it runs the entire decision arc of a software project upfront and emits one master plan, `.godplans/PLAN.mdx`, that a coding agent can execute task by task, checkbox by checkbox, without needing anything else decided along the way.
+Plan everything before anything. godplans is a planning superskill: it runs the decision arc of a software project upfront and emits one master plan, `.godplans/PLAN.mdx`, whose decisions, hypotheses, open questions, tasks, and verification commands are explicit enough for a coding agent to execute checkbox by checkbox.
 
-The core move is inversion. Auditors run after the work exists and tell you what is wrong. godplans takes every dimension those auditors check (code quality, security, database, LLM integration, SEO, UI, UX) and every discipline the arc tiers enforce (PRD, architecture, roadmap, stack, repo, build, deploy, observability, launch, hardening) and converts each check into a plan-time requirement with an acceptance criterion on a concrete task. A project built from a godplans plan passes its audits on the first run because the audit was satisfied by design, not by remediation.
+The core move is inversion. Auditors run after the work exists and tell you what is wrong. godplans takes the dimensions those auditors check (code quality, security, database, LLM integration, SEO, UI, UX) and the disciplines the arc tiers enforce (PRD, architecture, roadmap, stack, repo, build, deploy, observability, launch, hardening) and converts applicable checks into plan-time requirements with acceptance criteria on concrete tasks. This is designed to prevent avoidable findings and rewrites; it does not replace runtime verification or an independent final audit.
 
-godplans descends from: aihxp/arc-ready and aihxp/ready-suite (the tier disciplines), aihxp/codeauditor, secauditor, dbauditor, llmauditor, seoauditor, uiauditor, and uxauditor (the inverted audit dimensions), aihxp/pillars (agent memory), aihxp/codedna (style genome), and BuilderIO visual-plan (plan discipline and the visual layer).
+godplans descends from: hannsxpeter/arc-ready and hannsxpeter/ready-suite (the tier disciplines), hannsxpeter/codeauditor, secauditor, dbauditor, llmauditor, seoauditor, uiauditor, and uxauditor (the inverted audit dimensions), hannsxpeter/pillars (agent memory), hannsxpeter/codedna (style genome), and BuilderIO visual-plan (plan discipline and the visual layer).
 
 ## Ground rules (non-negotiable)
 
@@ -54,13 +54,19 @@ Read `references/compliance.md` and screen the project idea against it before in
 
 The result, one short section, goes into the plan.
 
+For a mitigate or pass result, create `.godplans/` and copy this skill's
+`scripts/validate-plan.sh` into it immediately, before discovery or plan
+authoring. Make it executable and confirm it is byte-identical to the resolved
+skill source. Create the validator companion before drafting the plan. A hard
+stop creates neither artifact.
+
 ### Phase 2: Intake and applicability
 
 Read `references/discovery.md`. Establish:
 
 1. **Archetype**: cli-tool, api-service, saas-dashboard, marketing-site, library, mobile-app, ml-pipeline, extension, game, or hybrid (see the module for the detection rules).
 2. **Applicability matrix**: every planning domain in the table below is either applicable or excluded with a stated reason. A CLI tool excludes seo and ui with reasons; it does not get empty SEO sections. The matrix goes into the plan verbatim.
-3. **Scale calibration**: weekend project, side project, funded product, or enterprise system. Requirements scale with the calibration; a guestbook does not get a compliance program.
+3. **Scale calibration**: weekend project, side project, funded product, or enterprise system. Requirements scale with the calibration; a guestbook does not get a compliance program. Weekend plans have at most 3 phases and 8 tasks. Treat that as a hard ceiling, not a target, and fit the total task appetites inside the user's stated capacity.
 
 ### Phase 3: Discovery
 
@@ -91,24 +97,26 @@ For each applicable domain, in this order, read its module and author that plan 
 | 17 | Observability | `references/observe.md` | observe-ready |
 | 18 | Launch | `references/launch.md` | launch-ready |
 
-Each module gives you: the decisions to force (answer them all), the plan requirements (satisfy them all or mark them excluded with reason), task seeds (instantiate the relevant ones), a self-audit rubric (used in Phase 6), and the anti-patterns it refuses (do not commit them).
+Each module gives you: the decisions to force, plan requirements, task seeds, a self-audit rubric (used in Phase 6), and anti-patterns. Apply them at the selected scale. Satisfy load-bearing requirements and record a compact module-level disposition for requirements excluded by archetype or scale. Do not instantiate a task seed merely because it exists. Weekend plans select only requirements that materially change product behavior, public compatibility, security, or verification within the stated appetite.
 
 Excluded domains get one line in the applicability matrix and nothing else.
 
 ### Phase 5: Inversion pass
 
-Walk every applicable module's Plan requirements section and verify each requirement landed somewhere concrete: a decision in the Decisions section, an acceptance criterion on a task, or an entry in Open Questions with a recommended default. Distribute requirement IDs (R-PRD-3, R-SEC-12, R-DB-4) onto tasks via their `Requirements:` lines so traceability is grep-able. A requirement that landed nowhere is a hole; fix it before Phase 6.
+Walk every applicable module's Plan requirements section and give it one of two dispositions: landed somewhere concrete, or excluded with a specific archetype or scale reason in the compact module disposition. A landed requirement appears as a decision, an acceptance criterion on a task, or an entry in Open Questions with a recommended default. Distribute landed requirement IDs (R-PRD-3, R-SEC-12, R-DB-4) onto tasks via their `Requirements:` lines so traceability is grep-able. An applicable requirement with neither disposition is a hole; fix it before Phase 6. Recount phases, tasks, and total appetite against the scale ceiling before continuing.
 
 ### Phase 6: Self-audit gate
 
-Read `references/exemplar.md` first; it is the calibration for what full marks mean. Then score the draft plan against every applicable module's rubric, 0 to 100 per domain. Any domain below 85: revise that section and rescore. Do not lower the bar; raise the plan. Print the scorecard in chat when done. A plan that would not survive its own descendant auditors does not ship.
+Read `references/exemplar.md` first; it is the calibration for what full marks mean. Then score the draft plan against the landed requirement set for every applicable module, 0 to 100 per domain. Excluded rubric items do not enter the denominator only when their module disposition names a specific archetype or scale reason. Any scored domain below 85: revise that section and rescore. Do not raise a score by adding work that breaks the scale ceiling; cut or consolidate first. Print the scorecard in chat when done. A plan that would not survive its own descendant auditors does not ship.
 
 ### Phase 7: Emit and hand off
 
 1. Read `references/plan-format.md` and `templates/PLAN.template.mdx`. Assemble `.godplans/PLAN.mdx` per that contract: frontmatter machine state, mermaid visuals where they carry weight, phases and waves, GP-numbered checkbox tasks with Files, Depends on, Reuses, Acceptance, Verify, and Requirements lines, one Open Questions section at the bottom, executor rules, session log.
-2. Copy `scripts/validate-plan.sh` byte-for-byte to `.godplans/validate-plan.sh`, make the companion executable, then run `bash .godplans/validate-plan.sh --allow-planning .godplans/PLAN.mdx`. The validator embeds its requirement catalog and must work without access to the installed skill. It is the machine gate; do not recreate its checks with grep. Fix every failure before presenting.
+2. Complete the two-artifact emission gate before any response: re-copy `scripts/validate-plan.sh` from this skill byte-for-byte to the pre-created `.godplans/validate-plan.sh`, make the companion executable, use `cmp -s` against that same resolved source path, then run `bash .godplans/validate-plan.sh --allow-planning .godplans/PLAN.mdx`. The emission is incomplete if the plan exists without its executable companion. The validator embeds its requirement catalog and must work without access to the installed skill. It is the machine gate; do not recreate its checks with grep. Fix every failure before presenting.
 3. Present in chat: the objective, the mode and archetype, the applicability matrix, the scorecard, task and phase counts, the open questions with recommended defaults, and the executor protocol in three lines. Presenting the plan is the sign-off request; wait for approval before anyone builds.
 4. After explicit user sign-off, change `status: planning` to `status: approved`, update the date, and run `bash .godplans/validate-plan.sh .godplans/PLAN.mdx`. Do not start application work as part of approval.
+
+Final artifact check: `test -f .godplans/PLAN.mdx && test -x .godplans/validate-plan.sh`. Never present a plan until this command and the structural validator both exit zero.
 
 ## Modes
 
@@ -143,4 +151,4 @@ godplans plans; it does not build. The status lifecycle is `planning -> approved
 | `templates/PLAN.template.mdx` | The skeleton PLAN.mdx |
 | `scripts/validate-plan.sh` | Self-contained validator copied beside each emitted plan |
 
-## Skill version: 1.0.0
+## Skill version: 1.1.0

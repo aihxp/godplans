@@ -171,6 +171,8 @@ for my $line (@lines) {
     }
     if ($in_requirements && $line =~ /^(R-[0-9]+\.[0-9]+):/) {
         $local_requirements{$1} = 1;
+    } elsif ($in_requirements && $line =~ /^\|\s*(R-[0-9]+\.[0-9]+)\s*\|/) {
+        $local_requirements{$1} = 1;
     }
 }
 
@@ -220,6 +222,12 @@ for (my $index = 0; $index <= $#lines; $index++) {
 
     if ($line =~ /^- \[([ x])\] (GP-[1-9][0-9]{2,})\b/) {
         my ($box, $id) = ($1, $2);
+        my $wave_phase;
+        if ($line =~ /^- \[[ x]\] \Q$id\E (?:\[P\] )?\[W([1-9][0-9]*)\.([1-9][0-9]*)\] \S/) {
+            $wave_phase = $1;
+        } else {
+            fail("$id has malformed task heading");
+        }
         my $task = {
             id => $id,
             done => $box eq 'x' ? 1 : 0,
@@ -230,6 +238,10 @@ for (my $index = 0; $index <= $#lines; $index++) {
         push @tasks, $task;
         push @{$phases[$current_phase]{tasks}}, $#tasks if $current_phase >= 0;
         fail("$id is not inside a numbered phase") if $current_phase < 0;
+        if (defined $wave_phase && $current_phase >= 0
+                && $wave_phase != $phases[$current_phase]{number}) {
+            fail("$id wave phase $wave_phase does not match Phase $phases[$current_phase]{number}");
+        }
         if (exists $task_definitions{$id}) {
             fail("duplicate task definition ID $id on lines $task_definitions{$id} and " . ($index + 1));
         } else {
@@ -247,6 +259,13 @@ for (my $index = 0; $index <= $#lines; $index++) {
     } elsif ($line =~ /^- \[[^]]*\] GP-/) {
         fail('malformed task definition on line ' . ($index + 1));
     }
+}
+
+for my $index (0 .. $#phases) {
+    my $expected = $index + 1;
+    my $found = $phases[$index]{number};
+    fail("phase numbers must be sequential: expected Phase $expected, found Phase $found")
+        if $found != $expected;
 }
 
 my @required_fields = ('Files', 'Depends on', 'Reuses', 'Acceptance', 'Verify', 'Requirements');
@@ -270,9 +289,13 @@ for my $task (@tasks) {
                 fail("$task->{id} has malformed Depends on value '$depends'");
             } else {
                 for my $dependency (@dependencies) {
-                    fail("$task->{id} depends on itself") if $dependency eq $task->{id};
-                    fail("$task->{id} depends on undefined task $dependency")
-                        unless exists $task_definitions{$dependency};
+                    if ($dependency eq $task->{id}) {
+                        fail("$task->{id} depends on itself");
+                    } elsif (!exists $task_definitions{$dependency}) {
+                        fail("$task->{id} depends on undefined task $dependency");
+                    } elsif ($task_definitions{$dependency} > $task->{line}) {
+                        fail("$task->{id} depends on later task $dependency");
+                    }
                 }
             }
         }

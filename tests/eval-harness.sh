@@ -1,0 +1,117 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+TMP="$(mktemp -d)"
+trap 'rm -rf "$TMP"' EXIT
+
+fail() {
+  echo "FAIL [eval-harness] $*" >&2
+  exit 1
+}
+
+test -x "$ROOT/scripts/eval.sh" || fail "scripts/eval.sh is not executable"
+test -x "$ROOT/evals/runners/codex.sh" || fail "Codex runner is not executable"
+bash -n "$ROOT/evals/runners/codex.sh"
+
+help_output=$("$ROOT/scripts/eval.sh" --help)
+printf '%s\n' "$help_output" | grep -q '^Usage:' || fail "help is missing a Usage line"
+if printf '%s\n' "$help_output" | grep -q 'set -euo pipefail'; then
+  fail "help leaked shell implementation"
+fi
+
+"$ROOT/scripts/eval.sh" --check-cases >/dev/null
+
+mkdir -p "$TMP/cases/plan-case" "$TMP/cases/refusal-case" "$TMP/bin"
+
+printf '%s\n' '# plan request' > "$TMP/cases/plan-case/REQUEST.md"
+printf '%s\n' \
+  'outcome|plan|' \
+  'frontmatter|mode|greenfield' \
+  'frontmatter|archetype|cli-tool' \
+  'domain|security|applicable' \
+  'contains|GP-101|' \
+  'not-contains|PLACEHOLDER|' \
+  'max-count|## Open Questions|1' \
+  > "$TMP/cases/plan-case/EXPECTATIONS"
+
+printf '%s\n' '# refusal request' > "$TMP/cases/refusal-case/REQUEST.md"
+printf '%s\n' \
+  'outcome|refusal|' \
+  'contains-ci|Usage Policy|' \
+  'not-contains|GP-101|' \
+  > "$TMP/cases/refusal-case/EXPECTATIONS"
+
+printf '%s\n' 'Produce PLAN.mdx only.' > "$TMP/cases/plan-case/REQUEST.md"
+if GODPLANS_EVAL_CASES="$TMP/cases" "$ROOT/scripts/eval.sh" --check-cases >/dev/null 2>&1; then
+  fail "plan-only request contradicted the companion artifact contract"
+fi
+printf '%s\n' '# plan request' > "$TMP/cases/plan-case/REQUEST.md"
+
+cp -R "$TMP/cases" "$TMP/cases with space"
+if ! GODPLANS_EVAL_CASES="$TMP/cases with space" "$ROOT/scripts/eval.sh" --check-cases >/dev/null 2>&1; then
+  fail "case validation failed when the case path contained spaces"
+fi
+
+printf '%s\n' '#!/usr/bin/env sh' \
+  'set -eu' \
+  'case "$1" in' \
+  '  */plan-case/REQUEST.md)' \
+  '    cp "$GODPLANS_TEST_PLAN" "$2"' \
+  '    cp "$GODPLANS_TEST_VALIDATOR" "$(dirname "$2")/validate-plan.sh"' \
+  '    chmod +x "$(dirname "$2")/validate-plan.sh"' \
+  '    ;;' \
+  '  */refusal-case/REQUEST.md)' \
+  '    printf "%s\n" "Refused under the usage policy." > "$2"' \
+  '    ;;' \
+  '  *) exit 9 ;;' \
+  'esac' \
+  > "$TMP/bin/runner"
+chmod +x "$TMP/bin/runner"
+
+printf '%s\n' '#!/usr/bin/env sh' 'exit 0' > "$TMP/bin/validator"
+chmod +x "$TMP/bin/validator"
+
+printf '%s\n' \
+  '---' \
+  'name: example' \
+  'status: planning' \
+  'mode: greenfield' \
+  'archetype: cli-tool' \
+  '---' \
+  '| security | applicable | scaled baseline |' \
+  '- [ ] GP-101 [W1.1] Example task' \
+  '## Open Questions' \
+  > "$TMP/PLAN.mdx"
+
+GODPLANS_EVAL_CASES="$TMP/cases" \
+GODPLANS_EVAL_RUNNER="$TMP/bin/runner" \
+GODPLANS_VALIDATOR="$TMP/bin/validator" \
+GODPLANS_TEST_PLAN="$TMP/PLAN.mdx" \
+GODPLANS_TEST_VALIDATOR="$TMP/bin/validator" \
+  "$ROOT/scripts/eval.sh" --output "$TMP/output" > "$TMP/run.out"
+
+grep -q '^plan-case[[:space:]]PASS[[:space:]]7/7$' "$TMP/run.out" || fail "plan case did not pass all expectations"
+grep -q '^refusal-case[[:space:]]PASS[[:space:]]3/3$' "$TMP/run.out" || fail "refusal case did not pass all expectations"
+test -f "$TMP/output/plan-case/PLAN.mdx" || fail "plan output was not retained"
+test -f "$TMP/output/refusal-case/RESPONSE.md" || fail "refusal output was not retained"
+
+GODPLANS_EVAL_CASES="$TMP/cases" \
+GODPLANS_VALIDATOR="$TMP/bin/validator" \
+  "$ROOT/scripts/eval.sh" --score-only --output "$TMP/output" > "$TMP/rescore.out"
+grep -q '^plan-case[[:space:]]PASS[[:space:]]7/7$' "$TMP/rescore.out" || fail "saved plan did not rescore"
+grep -q '^refusal-case[[:space:]]PASS[[:space:]]3/3$' "$TMP/rescore.out" || fail "saved refusal did not rescore"
+
+rm "$TMP/output/plan-case/validate-plan.sh"
+if GODPLANS_EVAL_CASES="$TMP/cases" GODPLANS_VALIDATOR="$TMP/bin/validator" \
+  "$ROOT/scripts/eval.sh" --score-only --output "$TMP/output" >/dev/null 2>&1; then
+  fail "score-only accepted a missing validator companion"
+fi
+
+printf '%s\n' 'outcome|unknown|' > "$TMP/cases/plan-case/EXPECTATIONS"
+if GODPLANS_EVAL_CASES="$TMP/cases" "$ROOT/scripts/eval.sh" --check-cases >/dev/null 2>&1; then
+  fail "invalid expectation operation was accepted"
+fi
+
+echo "ok   [eval-harness]"

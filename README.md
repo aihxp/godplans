@@ -1,26 +1,30 @@
 # godplans
 
-[![lint](https://github.com/aihxp/godplans/actions/workflows/lint.yml/badge.svg)](https://github.com/aihxp/godplans/actions/workflows/lint.yml)
-[![version](https://img.shields.io/badge/version-1.0.0-blue)](CHANGELOG.md)
+[![lint](https://github.com/hannsxpeter/godplans/actions/workflows/lint.yml/badge.svg)](https://github.com/hannsxpeter/godplans/actions/workflows/lint.yml)
+[![version](https://img.shields.io/badge/version-1.1.0-blue)](CHANGELOG.md)
 [![agent skills](https://img.shields.io/badge/Agent%20Skills-compatible-2f6fed)](skills/godplans/SKILL.md)
 [![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-Plan everything before anything. godplans is a single-command AI agent skill that produces a complete, audit-proof, agent-executable master plan (`.godplans/PLAN.mdx`) for a software project before any code is written.
+Plan everything before anything. godplans is a single-command AI agent skill that produces an audit-aware, agent-executable master plan (`.godplans/PLAN.mdx`) before application code is written.
+
+It is built for AI-native solo developers and small engineering teams planning a greenfield product, a major brownfield feature, or a material replan. It is most valuable when an incomplete decision about tenancy, public APIs, data shape, permissions, deployment, or operations would be expensive to reverse after implementation starts.
 
 Two kinds of tools already help you build software with AI, and they sit at opposite ends. Planning tools write specs, architectures, and roadmaps before you start. Auditors scan the finished code and report what slipped through: security holes, slow or unsafe database queries, fragile AI-model integrations, pages search engines cannot index, inaccessible or inconsistent UI, broken user journeys, and accumulating code-quality problems. The catch is timing. An audit runs at the end, when a missing decision has already hardened into a rewrite.
 
-godplans merges the two by moving the audit forward. Every check an auditor would run at the end becomes a requirement in the plan, attached to a concrete task with an acceptance criterion and a command that proves it, before any code exists. The up-front disciplines are settled the same way: what to build and for whom, how the parts fit together, in what order to build them, on what technology stack, how the repository and the app itself are set up, and how the result deploys, gets monitored, launches, and is hardened against attack. Each decision is made while it still costs a sentence instead of a sprint. A project built from a godplans plan passes its audits on the first run, because the audit was satisfied by design rather than patched afterward. The specific auditor and planner skills godplans draws from are named under [Lineage](#lineage) below.
+godplans merges the two by moving audit concerns forward. Checks an auditor would run at the end become requirements in the plan, attached to concrete tasks with acceptance criteria and verification commands. The up-front disciplines are settled the same way: what to build and for whom, how the parts fit together, in what order to build them, on what technology stack, how the repository and application are set up, and how the result deploys, gets monitored, launches, and is hardened. This is designed to prevent avoidable findings and rewrites. It does not replace end-of-build tests, security review, or an independent audit. The specific auditor and planner skills godplans draws from are named under [Lineage](#lineage) below.
 
 ## Quickstart
 
 ```bash
 # recommended: the skills package manager (installs for your tools)
-npx skills add aihxp/godplans
+npx skills add hannsxpeter/godplans
 
 # or: clone and run the installer
-git clone https://github.com/aihxp/godplans
+git clone https://github.com/hannsxpeter/godplans
 cd godplans && sh install.sh
 ```
+
+The installer refuses to overwrite or uninstall an unowned destination. Use `--force` only when replacement is intentional. Tool names such as `codex` and `copilot` are normalized to their shared Agent Skills destinations; unknown names fail instead of reporting a no-op success.
 
 Then, in your coding agent, in any project directory:
 
@@ -32,7 +36,7 @@ One command. godplans screens the idea against the Anthropic Usage Policy, asks 
 
 ## What you get
 
-One file, `.godplans/PLAN.mdx`, containing:
+One canonical plan document, `.godplans/PLAN.mdx`, containing:
 
 - An objective with an observable definition of done, scope, and named non-goals.
 - The compliance gate result and the applicability matrix (every domain planned or excluded with a reason).
@@ -43,7 +47,38 @@ One file, `.godplans/PLAN.mdx`, containing:
 - Phases and waves of checkbox tasks. Every task: a stable GP-number, exact files, dependencies, what it reuses, grep-verifiable acceptance criteria, one verify command whose exit code proves it, and requirement traceability.
 - Goal-backward must-haves per phase, a mandatory final verification phase, exactly one Open Questions section with recommended defaults, embedded rules for executing agents, and a session log.
 
-The plan is the handoff: any coding agent (the same one, or a different tool entirely) executes it checkbox by checkbox. Progress is machine-checkable with grep. Interrupted work resumes by re-reading the file, not the chat.
+The skill also emits `.godplans/validate-plan.sh`, a self-contained companion that validates lifecycle state, counters, phase and task grammar, ordered dependency and requirement references, banned characters, and final-phase structure. The plan remains the only source of product and execution truth; the validator contains no separate decisions.
+
+The plan is the handoff: any coding agent (the same one, or a different tool entirely) executes it checkbox by checkbox. Interrupted work resumes by re-reading the file, not the chat.
+
+## Approval and execution
+
+Plans have an enforced lifecycle: `planning -> approved -> executing -> done`. A new or materially changed plan remains `planning` until the user explicitly approves it. Executors validate the plan and refuse to begin from `planning` or `done`; the first executor moves `approved` to `executing`, and only a passing final Verification phase may move it to `done`.
+
+```bash
+# validate a draft before approval
+bash .godplans/validate-plan.sh --allow-planning .godplans/PLAN.mdx
+
+# validate the execution gate after approval
+bash .godplans/validate-plan.sh .godplans/PLAN.mdx
+```
+
+## Evidence and evaluation
+
+Repository tests cover installer collisions and aliases, portable-prompt parity, plan-validator failure modes, JSON and shell validity, version parity, and the behavioral evaluation harness. The behavioral matrix covers greenfield SaaS, a calibrated weekend library, brownfield CLI extension, history-preserving replan, and a compliance hard stop.
+
+```bash
+npm test
+npm run lint
+
+# run real cases through an authenticated Codex CLI
+GODPLANS_EVAL_RUNNER="$PWD/evals/runners/codex.sh" npm run eval
+
+# rescore retained outputs after expectation changes
+bash scripts/eval.sh --score-only
+```
+
+Model-backed results are release evidence, not a blanket guarantee. The raw outputs, agent and model identifier, validator version, and source commit belong together in any published baseline.
 
 ```mermaid
 graph TD
@@ -67,16 +102,16 @@ godplans consolidates and inverts twelve skills into one command:
 
 | Source | What carries over |
 |---|---|
-| [arc-ready](https://github.com/aihxp/arc-ready) / [ready-suite](https://github.com/aihxp/ready-suite) | The tier disciplines: PRD, architecture, roadmap, stack, repo, build, deploy, observe, launch, harden; the decision-hypothesis-question rule; the substitution test |
-| [codeauditor](https://github.com/aihxp/codeauditor) | 9 code-quality lenses, inverted into plan requirements |
-| [secauditor](https://github.com/aihxp/secauditor) | 11 OWASP/CWE-grounded dimensions, inverted; paper-control refusals |
-| [dbauditor](https://github.com/aihxp/dbauditor) | Schema, indexing, transactions, migrations, data protection, planned upfront |
-| [llmauditor](https://github.com/aihxp/llmauditor) | 12 LLM-integration dimensions: prompts, routing, cost, evals, guardrails |
-| [seoauditor](https://github.com/aihxp/seoauditor) | Search and AI-answer-engine visibility decided at architecture time |
-| [uiauditor](https://github.com/aihxp/uiauditor) | Accessibility, semantics, design-system consistency as acceptance criteria |
-| [uxauditor](https://github.com/aihxp/uxauditor) | Journeys, workflows, error states designed before build |
-| [pillars](https://github.com/aihxp/pillars) | The agent-memory standard the plan tells the scaffold to emit |
-| [codedna](https://github.com/aihxp/codedna) | The style genome: prescribed for greenfield, fingerprinted for brownfield |
+| [arc-ready](https://github.com/hannsxpeter/arc-ready) / [ready-suite](https://github.com/hannsxpeter/ready-suite) | The tier disciplines: PRD, architecture, roadmap, stack, repo, build, deploy, observe, launch, harden; the decision-hypothesis-question rule; the substitution test |
+| [codeauditor](https://github.com/hannsxpeter/codeauditor) | 9 code-quality lenses, inverted into plan requirements |
+| [secauditor](https://github.com/hannsxpeter/secauditor) | 11 OWASP/CWE-grounded dimensions, inverted; paper-control refusals |
+| [dbauditor](https://github.com/hannsxpeter/dbauditor) | Schema, indexing, transactions, migrations, data protection, planned upfront |
+| [llmauditor](https://github.com/hannsxpeter/llmauditor) | 12 LLM-integration dimensions: prompts, routing, cost, evals, guardrails |
+| [seoauditor](https://github.com/hannsxpeter/seoauditor) | Search and AI-answer-engine visibility decided at architecture time |
+| [uiauditor](https://github.com/hannsxpeter/uiauditor) | Accessibility, semantics, design-system consistency as acceptance criteria |
+| [uxauditor](https://github.com/hannsxpeter/uxauditor) | Journeys, workflows, error states designed before build |
+| [pillars](https://github.com/hannsxpeter/pillars) | The agent-memory standard the plan tells the scaffold to emit |
+| [codedna](https://github.com/hannsxpeter/codedna) | The style genome: prescribed for greenfield, fingerprinted for brownfield |
 | [BuilderIO visual-plan](https://github.com/BuilderIO/skills) | Plan discipline: hard-to-reverse bets first, reuse-first steps, one Open Questions section, the standalone-plan rule, the visual layer |
 
 ## Modes
@@ -87,7 +122,7 @@ godplans consolidates and inverts twelve skills into one command:
 
 ## Tool support
 
-The canonical skill lives at `skills/godplans/` in the Agent Skills format and works in every Agent Skills client. `install.sh` exploits path convergence, so six destinations cover the ecosystem:
+The canonical skill lives at `skills/godplans/` in the Agent Skills format. `install.sh` exploits path convergence, so six destinations cover the clients listed below:
 
 | Tool | Install path | Invoke |
 |---|---|---|
@@ -106,14 +141,14 @@ The canonical skill lives at `skills/godplans/` in the Agent Skills format and w
 | Aider | `aider --read PROMPT.md` | manual |
 | Any chat UI | paste [PROMPT.md](PROMPT.md) as the system prompt | manual |
 
-`PROMPT.md` is the generated single-file fallback (SKILL.md plus the load-bearing references, flattened). Regenerate with `bash scripts/build-prompt.sh`.
+`PROMPT.md` is the generated full-fidelity fallback: the orchestrator, all reference modules, exemplar, validator, and PLAN template flattened in workflow order. It is intentionally large and should be used only on chat surfaces whose context limit can hold the prompt plus the resulting plan. Regenerate with `bash scripts/build-prompt.sh`.
 
 ## Anthropic policy awareness
 
 godplans is built to keep accounts clean, per the [Anthropic Usage Policy](https://www.anthropic.com/legal/aup):
 
 - A compliance gate screens every project before planning: prohibited purposes (fake engagement, phishing, scraping that evades safeguards, undisclosed AI passing as human) are refused with the policy category named; legitimate projects with risky components get mandatory mitigation tasks (AI disclosure, robots.txt respect, rate limiting, professional review in high-risk consumer domains).
-- The skill never coaches a model past a refusal and never suggests routing subscription OAuth outside official clients, the two behaviors most correlated with real-world account bans. Anything a plan schedules unattended specifies API-key auth.
+- The skill never coaches a model past a refusal and never suggests extracting or reusing subscription credentials. Anything a plan schedules unattended specifies supported API-key or cloud-provider authentication.
 - The same screening logic applies in non-Claude harnesses; every provider has an equivalent policy.
 
 Details in [references/compliance.md](skills/godplans/references/compliance.md).
@@ -125,10 +160,13 @@ Details in [references/compliance.md](skills/godplans/references/compliance.md).
 | `skills/godplans/SKILL.md` | The orchestrator: ground rules, the 8-phase method, modes, refusals |
 | `skills/godplans/references/` | 22 modules: 18 domain playbooks plus plan-format, discovery, compliance, exemplar |
 | `skills/godplans/templates/PLAN.template.mdx` | The plan skeleton |
+| `skills/godplans/scripts/validate-plan.sh` | Self-contained PLAN.mdx validator copied beside every plan |
 | `.agents/skills/`, `.claude/skills/` | Symlink projections of the canonical skill |
-| `install.sh` | Six-destination installer; `--project`, `--tools`, `--copy`, `--uninstall` |
+| `install.sh` | Ownership-safe installer; `--project`, `--tools`, `--copy`, `--uninstall`, `--force` |
 | `PROMPT.md` | Generated portable fallback |
 | `scripts/lint.sh` | Meta-linter: unicode cleanliness, version parity, module contracts, PROMPT freshness |
+| `evals/` | Behavioral case matrix and real-agent runner contract |
+| `tests/` | Regression suite for product contracts |
 | `docs/ABOUT.md` | The long-form writeup: why godplans exists and how it was designed |
 
 ## FAQ
@@ -136,6 +174,8 @@ Details in [references/compliance.md](skills/godplans/references/compliance.md).
 **Why MDX?** The plan drops into MDX pipelines (Docusaurus, Nextra, Fumadocs) and MDX-native plan viewers, but the body is written GFM-safe: plain GitHub-flavored markdown that is simultaneously valid MDX. Rename to `PLAN.md` any time for GitHub rich rendering; nothing is lost.
 
 **Does godplans build the project?** No. It plans. The emitted PLAN.mdx carries its own executor rules, so any coding agent can build from it. That separation is deliberate: plans survive tool switches; chat context does not.
+
+**Does audit-aware mean guaranteed audit-clean?** No. The plan moves known audit checks into requirements and task acceptance criteria, which reduces preventable findings. Execution quality, runtime behavior, changing dependencies, and previously unknown risks still require tests and independent review.
 
 **What if my project does not need SEO / a database / a launch?** Every domain is either planned or excluded with a stated reason in the applicability matrix. A CLI tool excludes seo with a reason; it never gets a hollow SEO section.
 

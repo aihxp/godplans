@@ -68,8 +68,20 @@ template_title_count=$(marker_count "$template_title")
 template_line=$(grep -Fnx "$template_marker" "$PROMPT" | cut -d: -f1)
 [ "$template_line" -gt "$previous_line" ] || fail "template does not follow plan-format"
 
-unresolved=$(sed '/^# INLINED REFERENCE: /d; /^# INLINED TEMPLATE: /d' "$PROMPT" |
-  grep -En 'references/([a-z-]+|<domain>)\.md|references/|templates/PLAN\.template\.mdx|(^|[^[:alnum:]-])plan-format\.md([^[:alnum:]-]|$)' || true)
+validator_marker="# INLINED VALIDATOR: scripts/validate-plan.sh"
+assert_marker_once "$validator_marker"
+validator_line=$(grep -Fnx "$validator_marker" "$PROMPT" | cut -d: -f1)
+[ "$validator_line" -gt "$template_line" ] || fail "validator does not follow the template"
+validator_shebangs=$(grep -Fxc '#!/usr/bin/env bash' "$PROMPT" || true)
+[ "$validator_shebangs" -eq 1 ] || fail "expected one inlined validator shebang, found $validator_shebangs"
+
+grep -Fq 'Weekend plans have at most 3 phases and 8 tasks.' "$PROMPT" ||
+  fail "portable prompt is missing the weekend scale ceiling"
+grep -Fq 'Create the validator companion before drafting the plan.' "$PROMPT" ||
+  fail "portable prompt is missing the pre-draft companion gate"
+
+unresolved=$(sed '/^# INLINED REFERENCE: /d; /^# INLINED TEMPLATE: /d; /^# INLINED VALIDATOR: /d' "$PROMPT" |
+  grep -En 'references/([a-z-]+|<domain>)\.md|references/|templates/PLAN\.template\.mdx|skills/godplans/scripts/validate-plan\.sh|(^|[^[:alnum:]-])plan-format\.md([^[:alnum:]-]|$)' || true)
 [ -z "$unresolved" ] || fail "unresolved required local reference remains:\n$unresolved"
 
 first_hash=$(shasum -a 256 "$PROMPT" | awk '{print $1}')
