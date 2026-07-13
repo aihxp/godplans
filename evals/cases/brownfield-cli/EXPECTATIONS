@@ -1,0 +1,12 @@
+outcome|plan|
+frontmatter|mode|brownfield
+frontmatter|archetype|cli-tool
+domain|security|applicable
+domain|ui|excluded
+domain|seo|excluded
+contains|src/format.js|
+contains|test/cli.test.js|
+contains|--json|
+contains|Reuses:|
+not-contains|rewrite from scratch|
+max-count|## Open Questions|1

@@ -2,11 +2,11 @@
   "name": "godplans",
   "owner": {
     "name": "aihxp",
-    "url": "https://github.com/aihxp"
+    "url": "https://github.com/hannsxpeter"
   },
   "metadata": {
-    "description": "godplans: plan everything before anything. A single-command planning superskill emitting audit-proof, agent-executable master plans.",
-    "version": "1.0.0"
+    "description": "godplans: plan everything before anything. A single-command planning superskill emitting audit-aware, validated, agent-executable master plans.",
+    "version": "1.1.0"
   },
   "plugins": [
     {

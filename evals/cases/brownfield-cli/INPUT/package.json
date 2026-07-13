@@ -1,0 +1,9 @@
+{
+  "name": "fixture-status-cli",
+  "version": "0.4.0",
+  "type": "module",
+  "bin": "src/cli.js",
+  "scripts": {
+    "test": "node --test"
+  }
+}

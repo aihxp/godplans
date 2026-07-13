@@ -4,7 +4,7 @@ Plans classic-search visibility and AI answer-engine citability before any templ
 
 ## Lineage
 
-Descends from seoauditor, the read-only audit of how a codebase makes a website visible to search engines and AI answer engines across 12 dimensions (CRAWL, RENDER, CONTENT, CANON, SCHEMA, AIVIS, URLARCH, PERF, SOCIAL, OBSV, I18N, FEEDS). The discipline that carries over: verify against what reaches the crawler, not against intent; hunt paper controls; distinguish AI training bots from citation bots; never score llms.txt as load-bearing; calibrate to site type so a monolingual site never gets hreflang recommendations. Every audit check that seoauditor runs after the fact becomes a plan requirement here, so the emitted PLAN.mdx produces a codebase that scores an A on the first /seoauditor run.
+Descends from seoauditor, the read-only audit of how a codebase makes a website visible to search engines and AI answer engines across 12 dimensions (CRAWL, RENDER, CONTENT, CANON, SCHEMA, AIVIS, URLARCH, PERF, SOCIAL, OBSV, I18N, FEEDS). The discipline that carries over: verify against what reaches the crawler, not against intent; hunt paper controls; distinguish AI training bots from citation bots; never score llms.txt as load-bearing; calibrate to site type so a monolingual site never gets hreflang recommendations. Audit checks that seoauditor runs after the fact become plan requirements here, reducing preventable visibility findings while leaving final verification to the shipped site audit.
 
 ## Decisions to force
 

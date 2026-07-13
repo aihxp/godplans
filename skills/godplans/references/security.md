@@ -1,6 +1,6 @@
 # Security and hardening planning module
 
-Plans the Security and hardening sections of PLAN.mdx so the finished project passes a secauditor run at 90+ on the first attempt. The orchestrator loads this module for every archetype with any network surface, auth, persistent data, secrets, CI/CD, containers, or LLM calls; only a fully offline library with none of these may exclude it, with the reason recorded in the applicability matrix.
+Plans the Security and hardening sections of PLAN.mdx by moving secauditor controls into explicit requirements, tasks, and reproduced-attack checks before implementation. The finished project still requires runtime verification and an independent audit. The orchestrator loads this module for every archetype with any network surface, auth, persistent data, secrets, CI/CD, containers, or LLM calls; only a fully offline library with none of these may exclude it, with the reason recorded in the applicability matrix.
 
 ## Lineage
 

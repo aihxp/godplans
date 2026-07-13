@@ -1,7 +1,7 @@
 {
   "name": "godplans",
-  "version": "1.0.0",
-  "description": "Plan everything before anything. A single-command AI agent skill that produces a complete, audit-proof, agent-executable master plan (PLAN.mdx) for a software project before any code is written.",
+  "version": "1.1.0",
+  "description": "Plan everything before anything. A single-command AI agent skill that produces an audit-aware, validated, agent-executable master plan before application code is written.",
   "keywords": [
     "agent-skills",
     "ai-agents",
@@ -16,27 +16,37 @@
     "architecture",
     "project-planning"
   ],
-  "homepage": "https://github.com/aihxp/godplans",
-  "bugs": "https://github.com/aihxp/godplans/issues",
+  "homepage": "https://github.com/hannsxpeter/godplans",
+  "bugs": "https://github.com/hannsxpeter/godplans/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aihxp/godplans.git"
+    "url": "git+https://github.com/hannsxpeter/godplans.git"
   },
   "license": "MIT",
-  "author": "aihxp (https://github.com/aihxp)",
+  "author": "aihxp (https://github.com/hannsxpeter)",
   "files": [
     "skills",
     "install.sh",
     "scripts",
+    "evals/cases",
+    "evals/runners",
+    "evals/README.md",
+    "tests",
+    "docs",
     "PROMPT.md",
     "README.md",
     "LICENSE",
     "CHANGELOG.md"
   ],
   "scripts": {
+    "test": "bash tests/run.sh",
     "lint": "bash scripts/lint.sh --all --verbose",
+    "check": "npm run lint && npm test",
+    "eval": "bash scripts/eval.sh",
+    "eval:check": "bash scripts/eval.sh --check-cases",
     "build:prompt": "bash scripts/build-prompt.sh",
     "install:skill": "sh install.sh",
-    "postpack": "echo 'Install the skill with: sh install.sh (or npx skills add aihxp/godplans)'"
+    "prepack": "npm run check",
+    "postpack": "echo 'Install the skill with: sh install.sh (or npx skills add hannsxpeter/godplans)'"
   }
 }

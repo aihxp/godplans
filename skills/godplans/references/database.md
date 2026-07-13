@@ -1,6 +1,6 @@
 # Database planning module
 
-Plans the data layer so a dbauditor run at project end scores an A on the first pass. The orchestrator loads this module for any archetype that persists state (saas-dashboard, api-service, mobile-app backend, ml-pipeline metadata); it is excluded, with a stated reason, only for stateless CLIs, static marketing sites, and pure libraries.
+Plans the data layer so checks a database auditor would perform later become requirements before schema work begins. The orchestrator loads this module for any archetype that persists state (saas-dashboard, api-service, mobile-app backend, ml-pipeline metadata); it is excluded, with a stated reason, only for stateless CLIs, static marketing sites, and pure libraries.
 
 ## Lineage
 

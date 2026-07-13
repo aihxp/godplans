@@ -1,0 +1,115 @@
+---
+name: fixture-replan-cli
+plan_version: 1
+status: executing
+created: 2026-07-12
+updated: 2026-07-12
+mode: greenfield
+archetype: cli-tool
+domains_applicable: [product, architecture, stack, security, code-quality, style-genome, agent-memory, repo, build, roadmap]
+domains_excluded:
+  - name: database
+    reason: the CLI processes in-memory values and persists nothing
+progress:
+  phases_total: 2
+  phases_done: 1
+  tasks_total: 2
+  tasks_done: 1
+---
+
+# Fixture CLI master plan
+
+Done means text output remains stable and JSON output is available to scripts.
+
+## Scope and non-goals
+
+In scope: text and JSON output. Non-goal: network services.
+
+## Compliance gate
+
+Result: pass.
+
+## Applicability matrix
+
+| Domain | Status | Reason |
+|---|---|---|
+| security | applicable | shell input remains untrusted |
+| database | excluded | no persistence |
+
+## Decisions
+
+JSON is additive. Text remains the default for compatibility.
+
+## Requirements
+
+R-1.1: WHEN no format flag is supplied THE SYSTEM SHALL emit the existing text.
+R-1.2: WHEN `--json` is supplied THE SYSTEM SHALL emit schema-stable JSON.
+
+## Architecture
+
+The formatter owns both serializations behind one command parser.
+
+## Style genome
+
+Use existing JavaScript module conventions.
+
+## Agent memory
+
+The existing AGENTS.md remains authoritative.
+
+## Phases
+
+## Phase 1: Compatibility baseline
+
+Goal: preserve current output.
+
+### Wave 1.1
+
+- [x] GP-101 [W1.1] Preserve text output
+  - Files: src/format.js, test/cli.test.js
+  - Depends on: none
+  - Reuses: current formatStatus helper
+  - Acceptance: existing text snapshot remains unchanged; no flag emits text
+  - Verify: `npm test`
+  - Requirements: R-1.1, R-CODE-7
+
+Checkpoint: compatibility test passes.
+
+Must-haves:
+- Truth: default output is unchanged
+- Artifact: test/cli.test.js covers the default
+- Link: CLI imports src/format.js
+
+## Phase 2: Verification
+
+Goal: prove JSON output without regressing text.
+
+### Wave 2.1
+
+- [ ] GP-201 [W2.1] Verify text and JSON output
+  - Files: test/cli.test.js
+  - Depends on: GP-101
+  - Reuses: existing node test harness
+  - Acceptance: both output modes pass; malformed flags fail with usage text
+  - Verify: `npm test`
+  - Requirements: R-1.1, R-1.2, R-CODE-7
+
+Checkpoint: the full suite passes.
+
+Must-haves:
+- Truth: both formats are observable
+- Artifact: tests cover each format
+- Link: command parser selects the formatter
+
+## Open Questions
+
+None. The additive alias is approved.
+
+## Rules for executing agents
+
+> [!IMPORTANT]
+> Work only when status is approved or executing. Verify before checking tasks.
+
+## Session log
+
+- 2026-07-12 GP-101 completed; GP-201 is next
