@@ -60,6 +60,7 @@ Descends from launch-ready, the shipping-tier ready-suite skill that puts a depl
 19. R-LAUNCH-19: PLAN.mdx contains the D-7 to D+7 runbook as a timezone-aware calendar with an owner and a pass criterion per item, a launch-day hour-by-hour schedule, and a retrospective task with targets set before launch so results are measured against a baseline. Criterion: WHEN the runbook is planned THE PLAN SHALL give every row a date, owner, and pass criterion, and the retrospective SHALL reference pre-set numeric targets.
 20. R-LAUNCH-20: PLAN.mdx couples launch to its siblings: the status page is hosted out-of-band from the app infra, no launch date lands atop an in-progress schema migration from the deploy section, and any at-risk SLO from the observability section gets an SLO-watch row in the runbook. Criterion: IF the deploy section schedules a migration THE PLAN SHALL sequence the launch after its contract phase completes; WHEN a status page is planned THE PLAN SHALL host it off the app's infrastructure.
 21. R-LAUNCH-21: PLAN.mdx ends the launch phase with the cold proof test: a stranger on an unfamiliar device describes the product in under 15 seconds, clicks the CTA into a working waitlist, receives confirmation within 5 minutes, sees a correct OG preview from any of the five channels, and appears in analytics under the right UTM source. Criterion: WHEN the launch phase is planned THE PLAN SHALL include the cold proof test as its checkpoint with all five observations as must-haves.
+22. R-LAUNCH-22: For a public release, exactly one task cites this requirement to mark the first public activation action. It immediately follows and depends on the prepublication gate task citing R-ROAD-21, which in turn follows and depends on the latest hardening evidence task citing R-SEC-26. The gate records checked_at, hardening_revision, finding counts, policy, verdict, and validates owner, justification, accepted_at, and expires_at for permitted Critical risks. Any hardening change invalidates it. Criterion: WHEN a link, package, store artifact, service, model, or infrastructure surface will become public THE PLAN SHALL cite R-LAUNCH-22 only on the first activation task and place the R-ROAD-21 gate immediately before it; IF no public surface exists THE PLAN SHALL record `public_release: false` and omit both tasks.
 
 Banned-word replacement table for R-LAUNCH-6. Each slop word is replaced with the concrete claim it hides, not deleted:
 
@@ -116,6 +117,19 @@ Banned-word replacement table for R-LAUNCH-6. Each slop word is replaced with th
   - Acceptance: every row has date, timezone, owner, pass criterion; five-event waterfall staging test row before D-1; five-channel OG preview row at or before D-1; retrospective row with pre-set targets; cold proof test as final checkpoint
   - Verify: grep -c 'pass:' docs/launch/RUNBOOK.md | grep -qE '^[1-9][0-9]*$' && grep -q 'cold proof' docs/launch/RUNBOOK.md
   - Requirements: R-LAUNCH-11, R-LAUNCH-17, R-LAUNCH-19, R-LAUNCH-20, R-LAUNCH-21
+- [ ] GP-xxx Run fresh prepublication gate before public activation
+  - Files: docs/release/PREPUBLICATION.md
+  - Depends on: GP-HARDENING
+  - Acceptance: records checked_at later than current hardening evidence, matching hardening_revision, finding_counts, policy, and verdict; validates owner, justification, accepted_at, and expires_at for permitted Critical risks; any later hardening change invalidates the pass
+  - Verify: test "$(git hash-object docs/security/HARDENING.md)" = "$(awk '/^hardening_revision:/ {print $2}' docs/release/PREPUBLICATION.md)" && grep -q '^verdict: pass$' docs/release/PREPUBLICATION.md
+  - Requirements: R-ROAD-21
+
+- [ ] GP-xxx Perform the first public activation
+  - Files: deployment or publication target for the selected product form
+  - Depends on: GP-PREPUBLICATION
+  - Acceptance: the selected link, package, store artifact, service, model, or infrastructure surface becomes public only after the immediately preceding prepublication gate passes
+  - Verify: run the product-form-specific public availability check
+  - Requirements: R-LAUNCH-22
 
 ## Self-audit rubric
 
@@ -125,7 +139,7 @@ Banned-word replacement table for R-LAUNCH-6. Each slop word is replaced with th
 - Waitlist and email funnel (15): double opt-in with 5-minute welcome; every sequence email enumerated with a purpose; SPF/DKIM/DMARC scheduled early in wave order with a DNS verify command; unsubscribe and consent handled.
 - Channels and etiquette (10): every in-scope channel has all seven post-plan fields; venue etiquette (PH timing and hunter, Show HN title rules, Reddit 9:1, LinkedIn founder voice) encoded as acceptance conditions, not advice.
 - Telemetry and attribution (10): UTM taxonomy defined with a registry; five-event waterfall named and staging-tested before launch; amplification list named with founder as primary responder.
-- Runbook and sibling coupling (10): D-7 to D+7 calendar with owners and pass criteria; retrospective with pre-set targets; status page out-of-band; no launch atop a mid-flight migration; SLO-watch rows for at-risk SLOs; cold proof test as the phase checkpoint.
+- Runbook and sibling coupling (10): D-7 to D+7 calendar with owners and pass criteria; public activation follows a fresh matching hardening revision and complete risk checks; status page is out-of-band; no launch sits atop a migration; cold proof closes the phase.
 
 Total: 100. Below 85, revise the launch section before emission.
 
@@ -143,3 +157,4 @@ Total: 100. Below 85, revise the launch section before emission.
 - Silent fade: no D+1 through D+7 follow-up and no retrospective, so the launch teaches nothing. The planner puts the follow-up emails and the retrospective with pre-set targets on the runbook calendar before launch day.
 - Same-infra status page: a status page that goes down with the app. The planner hosts it out-of-band and cross-references the observability section.
 - Launch atop a migration: a launch date landing mid expand/contract. The planner reads the deploy section's schedule and sequences the launch after the contract phase completes.
+- Stale release authorization: a prepared launch trusts a prepublication pass older than hardening. The planner invalidates the pass on any hardening change and schedules the fresh revision-bound check immediately before public activation.

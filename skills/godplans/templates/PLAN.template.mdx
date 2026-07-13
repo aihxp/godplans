@@ -5,7 +5,12 @@ status: planning
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 mode: greenfield
+product_form: PRODUCT-FORM
 archetype: ARCHETYPE
+public_release: PUBLIC-RELEASE-BOOLEAN
+source_revision: SOURCE-REVISION-OR-NONE
+input_digest: sha256:INPUT-DIGEST
+validated_at: YYYY-MM-DDTHH:MM:SSZ
 domains_applicable: []
 domains_excluded: []
 progress:
@@ -25,6 +30,24 @@ of done ("done means: a new user can X, Y is deployed at Z, the suite passes").
 In scope: the smallest first cut that proves the approach.
 Non-goals: named exclusions with a word on why (deferred, out of scope, or rejected).
 Scale and capacity: CALIBRATION; CAPACITY; at most N phases and N tasks; planned task appetites total N.
+
+## Plan provenance
+
+Source revision: SOURCE-REVISION-OR-NONE
+Input digest: sha256:INPUT-DIGEST
+Validated at: YYYY-MM-DDTHH:MM:SSZ
+Evidence inventory:
+- `intake` = `sha256:INTAKE-DIGEST`
+- `EVIDENCE-LABEL` = `sha256:EVIDENCE-DIGEST`
+
+Inventory labels are unique, exactly one is `intake`, and every digest covers the named normalized intake text or raw file bytes. Mark completed or imported evidence that must be rechecked on resume in its label or an adjacent plan section without changing the machine-readable inventory line.
+
+## Product form
+
+Primary: web application | API or service | CLI or SDK | mobile or desktop | data or ML | infrastructure or IaC.
+Vertical slice: the form-specific end-to-end path from discovery.md.
+Completion evidence: the form-specific gate that proves a user-operable increment.
+Secondary form: none, unless it has its own user, contract, distribution path, deliverable, and completion evidence.
 
 ## Compliance gate
 
@@ -142,7 +165,7 @@ recommended default, and what happens if unanswered.
 > [!IMPORTANT]
 > This plan is the source of truth. The chat is not.
 >
-> 1. Before any work: read the frontmatter and refuse unless `status` is `approved` or `executing`. `planning` awaits sign-off; `done` is closed. Run `bash .godplans/validate-plan.sh .godplans/PLAN.mdx`. If status is `approved`, change it to `executing` and update the date before the first task.
+> 1. Before any work: read the frontmatter and `## Plan provenance`, then re-derive state from disk. Recheck recorded completed or imported evidence; if material evidence drifted, change status to `planning`, record the stale evidence, and stop for replan. Otherwise refuse unless `status` is `approved` or `executing`. `planning` awaits sign-off; `done` is closed. Run `bash .godplans/validate-plan.sh .godplans/PLAN.mdx`. If status is `approved`, change it to `executing` and update the date before the first task.
 > 2. Find the first unchecked task in wave order. Re-derive state from checkboxes; trust nothing remembered.
 > 3. One task at a time. Respect Depends on. Run tasks marked [P] concurrently only when their Files lists are disjoint.
 > 4. Run the task's Verify command. Only after it passes, flip [ ] to [x] and update the frontmatter counters and `updated:` date in the same edit. Never batch check-offs.
@@ -155,4 +178,4 @@ recommended default, and what happens if unanswered.
 
 ## Session log
 
-- YYYY-MM-DD plan created (godplans v1.1.0)
+- YYYY-MM-DD plan created (godplans v1.2.0)

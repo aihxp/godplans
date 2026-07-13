@@ -8,7 +8,24 @@ Loaded in Phase 2 and Phase 3. Turns a raw idea (or an existing codebase) into t
 - Source manifests exist (`package.json`, `pyproject.toml`, `go.mod`, `Cargo.toml`, `Gemfile`, `pom.xml`, `mix.exs`, `Package.swift`) -> brownfield.
 - Otherwise -> greenfield.
 
-Brownfield fingerprint, read-only, before any planning: stack and versions from manifests; directory shape and module boundaries; entry points; test and CI setup; the style genome sample (naming, file organization, error-handling idiom, comment density) from 5 to 10 representative source files; anything under `agents/`, `AGENTS.md`, `CLAUDE.md`, or `.cursor/rules/` that records existing conventions. The plan extends what exists; a brownfield plan that reads like a greenfield plan has failed before it ships.
+Brownfield fingerprint, read-only, before any planning: stack and versions from manifests; directory shape and module boundaries; entry points; test and CI setup; the style genome sample (naming, file organization, error-handling idiom, comment density) from 5 to 10 representative source files; anything under `agents/`, `AGENTS.md`, `CLAUDE.md`, or `.cursor/rules/` that records existing conventions. Record the current Git revision when available, a SHA-256 digest of the stable intake and source evidence, and a UTC validation timestamp. The plan extends what exists; a brownfield plan that reads like a greenfield plan has failed before it ships.
+
+## Product-form routing
+
+Pick product form before archetype and domain composition. Product form describes how a user operates and receives the software. It defines the vertical-slice shape, the build concerns, and the completion evidence. Do not default to web application because the request says product, platform, tool, or dashboard.
+
+Every form ships a user-operable increment. Real-backend discipline applies when the product has a backend; it does not invent one for a local CLI, embedded SDK, offline desktop utility, notebook workflow, or declarative module.
+
+| Product form | A vertical slice means | Build concerns | Completion evidence |
+|---|---|---|---|
+| web-application | persistence or external source -> service and permission boundary -> API or server action -> UI states -> tests | route and information architecture, loading/empty/error/success states, server-side authorization, accessibility, responsive behavior, user-journey telemetry | one roadmap job works from user action through real data and back; relevant UI states and permission checks exist; unit, integration, and browser tests pass |
+| api-or-service | contract -> validation and authorization -> domain operation -> persistence or dependency -> telemetry -> tests | versioned contracts, idempotency, timeouts, retry budgets, dependency failures, migrations, health, consumer compatibility | a real consumer fixture completes one contract path; errors, bounded retries, health, telemetry, contract tests, and integration tests pass |
+| cli-or-sdk | public command or API -> parsing and validation -> domain operation -> output or return contract -> consumer fixture -> cross-platform tests | stable public surface, exit codes or error types, configuration precedence, deterministic output, examples, compatibility, semantic versioning, distribution | a clean consumer installs the artifact, completes the primary job without repository internals, receives documented errors, executes examples, passes supported-platform checks, and reproduces the release artifact |
+| mobile-or-desktop | native interaction -> local state -> sync or service boundary -> offline and recovery states -> device or platform tests | lifecycle behavior, local persistence, sync conflicts, offline states, permissions, secure storage, accessibility, crash reporting, signing, updates | a development or signed build runs on each platform class; the primary job survives lifecycle and connectivity transitions; secure storage, device tests, crash telemetry, and packaging pass |
+| data-or-ml | versioned input -> validated transform or training step -> reproducible output -> quality evaluation -> lineage and operations | provenance, schemas, data quality, reproducible environments, experiment tracking, leakage and bias checks, registries, drift, cost | a clean environment reproduces an artifact from versioned inputs; quality thresholds pass; code, data, and config lineage is recorded; serving tests pass when serving is in scope |
+| infrastructure-or-iac | versioned config -> static validation -> plan -> policy check -> isolated apply or simulation -> rollback or destroy proof | state, secrets, pinned tools and providers, policy as code, environment separation, least privilege, drift, disaster recovery, cost | formatting and validation pass; an isolated plan and policy check pass; sandbox apply or faithful simulation proves the main path; state, secrets, destructive guards, and rollback are verified |
+
+Pick one primary form and write its slug to frontmatter as `product_form`. A secondary form is not a label for a supporting component. Add one only when it has its own user, public contract, distribution path, deliverable, and completion evidence. Keep primary-form sequencing authoritative and add a separate secondary-form slice rather than blending both gates into a web-shaped checklist.
 
 ## Archetype detection
 
@@ -87,7 +104,8 @@ Question quality bar, by example. Bad: "What database do you want?" (module deci
 
 By the end of Phase 3 the following exist, ready for the domain passes:
 
-- Mode, archetype (with hybrid note), scale calibration.
+- Mode, primary product form, any independently justified secondary form, archetype (with hybrid note), and scale calibration.
+- Plan provenance: source revision or `none`, evidence inventory, SHA-256 input digest, and UTC validation timestamp.
 - The applicability matrix, complete.
 - The user's answers, verbatim where load-bearing.
 - The assumptions ledger: every default taken, each flagged as a hypothesis.
@@ -100,4 +118,6 @@ By the end of Phase 3 the following exist, ready for the domain passes:
 - **The mind-reader**: zero questions, silent guesses on hard-to-reverse bets. Refused: bets get asked or get flagged as hypotheses, never silently assumed.
 - **The generic matrix**: applicability copied from the archetype table without looking at the project. Refused: reasons must survive the substitution test.
 - **Brownfield amnesia**: planning as if the codebase were empty. Refused: the fingerprint runs first and the plan cites real files.
+- **Web-shaped everything**: API, CLI, mobile, data, or IaC work forced through UI and backend assumptions. Refused: product form is selected before archetype and every slice uses the form-specific gate.
+- **Decorative secondary form**: a supporting component labeled secondary without its own user or deliverable. Refused: secondary forms require an independent contract, distribution path, and completion evidence.
 - **Scale theater**: enterprise ceremony on a weekend project, or weekend sloppiness on a funded product. Refused: calibration is stated and modules scale to it.

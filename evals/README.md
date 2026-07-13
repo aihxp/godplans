@@ -13,6 +13,11 @@ produce the right kind of plan for a concrete request?
 | brownfield-cli | brownfield | cli-tool | real-file fingerprinting and reuse |
 | replan-preserves-history | replan | cli-tool | stable completed work and new task IDs |
 | compliance-refusal | hard stop | prohibited product | refusal before discovery or planning |
+| product-form-routing | greenfield | ml-pipeline | primary data or ML form plus independent API form |
+| nested-pillars | greenfield | hybrid | Pillars 1.1 nested scopes, catalog, and precedence |
+| stale-source-evidence | brownfield | api-service | provenance binding and stale resume handling |
+| stale-prepublication | greenfield | saas-dashboard | late Critical invalidates public-release authorization |
+| observability-evidence | greenfield | api-service | installation evidence separated from real-event maturity |
 
 Every case contains:
 
@@ -81,11 +86,15 @@ contains|workspace_id|
 contains-ci|usage policy|
 not-contains|PLACEHOLDER|
 max-count|## Open Questions|1
+gate|prepublication|hardening_revision
 ```
 
 Supported operations are `outcome`, `frontmatter`, `domain`, `contains`,
-`contains-ci`, `not-contains`, and `max-count`. `contains-ci` performs a
-case-insensitive fixed-string check. Every case declares exactly one outcome.
+`contains-ci`, `not-contains`, `max-count`, and `gate`. `contains-ci` performs
+a case-insensitive fixed-string check. `gate` names a release-blocking
+invariant in its second field and requires the fixed string in its third field;
+one missing gate fails the case regardless of its other score. Every case
+declares exactly one outcome.
 
 ## Publishing a baseline
 

@@ -20,6 +20,9 @@
 #   shell-syntax         shell scripts parse in their declared shell.
 #   eval-cases           behavioral case manifests are complete and valid.
 #   product-surfaces     shipped validator and evaluation entry points exist.
+#   action-pins          every third-party GitHub Action uses a full commit SHA.
+#   official-validator  runs skills-ref when installed, otherwise skips.
+#   tag-release-parity  verifies published tags against package versions and releases.
 #   prompt-fresh         PROMPT.md matches build-prompt.sh without mutation.
 #
 # Usage: bash scripts/lint.sh [check-name | --all] [--verbose]
@@ -45,6 +48,7 @@ authored_files() {
   find "$REPO_DIR" \
     -path "$REPO_DIR/.git" -prune -o \
     -path "$REPO_DIR/node_modules" -prune -o \
+    -path "$REPO_DIR/.venv-skills-ref" -prune -o \
     -path "$REPO_DIR/evals/output" -prune -o \
     -type f \( -name '*.md' -o -name '*.mdx' -o -name '*.sh' -o -name '*.js' -o -name '*.json' -o -name '*.yml' -o -name 'EXPECTATIONS' -o -name '.gitignore' -o -name 'LICENSE' \) -print
 }
@@ -170,7 +174,7 @@ check_json_valid() {
   command -v node >/dev/null 2>&1 || { fail "node not found; cannot parse JSON"; return; }
   bad=0
   file_list=$(mktemp)
-  find "$REPO_DIR" -path "$REPO_DIR/.git" -prune -o -path "$REPO_DIR/node_modules" -prune -o -path "$REPO_DIR/evals/output" -prune -o -type f -name '*.json' -print > "$file_list"
+  find "$REPO_DIR" -path "$REPO_DIR/.git" -prune -o -path "$REPO_DIR/node_modules" -prune -o -path "$REPO_DIR/.venv-skills-ref" -prune -o -path "$REPO_DIR/evals/output" -prune -o -type f -name '*.json' -print > "$file_list"
   while IFS= read -r f; do
     if ! node -e 'JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"))' "$f" 2>/dev/null; then
       fail "invalid JSON: ${f#$REPO_DIR/}"
@@ -213,11 +217,75 @@ check_product_surfaces() {
   for f in \
     "$SKILL_DIR/scripts/validate-plan.sh" \
     "$REPO_DIR/scripts/eval.sh" \
+    "$REPO_DIR/scripts/release-check.sh" \
     "$REPO_DIR/evals/runners/codex.sh" \
     "$REPO_DIR/tests/run.sh"
   do
     if [ ! -x "$f" ]; then
       fail "missing executable: ${f#$REPO_DIR/}"
+      bad=1
+    fi
+  done
+  [ "$bad" = "0" ] && pass
+}
+
+check_action_pins() {
+  CHECK=action-pins
+  bad=0
+  for workflow in "$REPO_DIR"/.github/workflows/*.yml "$REPO_DIR"/.github/workflows/*.yaml; do
+    [ -f "$workflow" ] || continue
+    while IFS= read -r line; do
+      ref=$(printf '%s\n' "$line" | sed -n 's/^[[:space:]]*uses:[[:space:]]*\([^#[:space:]]*\).*/\1/p')
+      [ -n "$ref" ] || continue
+      case "$ref" in
+        ./*) continue ;;
+      esac
+      if ! printf '%s\n' "$ref" | grep -Eq '@[0-9a-f]{40}$'; then
+        fail "floating GitHub Action reference in ${workflow#$REPO_DIR/}: $ref"
+        bad=1
+      fi
+    done < "$workflow"
+  done
+  [ "$bad" = "0" ] && pass
+}
+
+check_official_validator() {
+  CHECK=official-validator
+  if [ -n "${SKILLS_REF_BIN:-}" ]; then
+    validator=$SKILLS_REF_BIN
+  elif command -v skills-ref >/dev/null 2>&1; then
+    validator=$(command -v skills-ref)
+  else
+    note "skills-ref not installed; scripts/release-check.sh requires it"
+    pass
+    return
+  fi
+  if "$validator" validate "$SKILL_DIR" >/dev/null; then
+    pass
+  else
+    fail "official skills-ref validator rejected skills/godplans"
+  fi
+}
+
+check_tag_release_parity() {
+  CHECK=tag-release-parity
+  if ! command -v gh >/dev/null 2>&1 || ! gh auth status >/dev/null 2>&1; then
+    note "authenticated gh CLI unavailable; scripts/release-check.sh requires it"
+    pass
+    return
+  fi
+  bad=0
+  for tag in $(git -C "$REPO_DIR" tag --list 'v*' --sort=version:refname); do
+    version=${tag#v}
+    tagged_version=$(git -C "$REPO_DIR" show "$tag:package.json" 2>/dev/null | awk -F'"' '/"version":/ { print $4; exit }')
+    if [ "$tagged_version" != "$version" ]; then
+      fail "$tag package version ($tagged_version) does not match $version"
+      bad=1
+    fi
+    release_record=$(gh release view "$tag" --repo hannsxpeter/godplans --json tagName,isDraft --jq '[.tagName, (.isDraft | tostring)] | @tsv' 2>/dev/null || true)
+    expected_record=$(printf '%s\tfalse' "$tag")
+    if [ "$release_record" != "$expected_record" ]; then
+      fail "$tag has no matching published GitHub release"
       bad=1
     fi
   done
@@ -254,6 +322,8 @@ case "$TARGET" in
     check_shell_syntax
     check_eval_cases
     check_product_surfaces
+    check_action_pins
+    check_official_validator
     check_prompt_fresh
     ;;
   unicode-clean) check_unicode_clean ;;
@@ -267,6 +337,9 @@ case "$TARGET" in
   shell-syntax) check_shell_syntax ;;
   eval-cases) check_eval_cases ;;
   product-surfaces) check_product_surfaces ;;
+  action-pins) check_action_pins ;;
+  official-validator) check_official_validator ;;
+  tag-release-parity) check_tag_release_parity ;;
   prompt-fresh) check_prompt_fresh ;;
   *) echo "Unknown check: $TARGET" >&2; exit 1 ;;
 esac

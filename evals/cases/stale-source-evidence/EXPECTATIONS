@@ -1,0 +1,10 @@
+outcome|plan|
+frontmatter|mode|brownfield
+frontmatter|product_form|api-or-service
+contains|source_revision|
+contains|input_digest|
+contains|validated_at|
+contains-ci|completed or imported evidence|
+contains|status: planning|
+gate|source-drift|## Plan provenance
+max-count|## Open Questions|1

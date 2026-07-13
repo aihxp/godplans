@@ -32,7 +32,8 @@ contribution rules are about discipline, not build systems.
 
 1. Fork, branch from `main`.
 2. Make the change in the canonical files.
-3. `npm run check` until green.
+3. `npm run check` until green. Release changes also run the pinned official
+   validator through `npm run release:check`; see `docs/RELEASING.md`.
 4. If SKILL.md or an inlined reference changed: `bash scripts/build-prompt.sh`.
 5. If behavior changed: add a CHANGELOG entry under a new version heading and
    bump every published version surface. The linter enforces parity across

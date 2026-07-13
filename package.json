@@ -1,6 +1,6 @@
 {
   "name": "godplans",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Plan everything before anything. A single-command AI agent skill that produces an audit-aware, validated, agent-executable master plan before application code is written.",
   "keywords": [
     "agent-skills",
@@ -28,6 +28,7 @@
     "skills",
     "install.sh",
     "scripts",
+    "requirements",
     "evals/cases",
     "evals/runners",
     "evals/README.md",
@@ -45,6 +46,7 @@
     "eval": "bash scripts/eval.sh",
     "eval:check": "bash scripts/eval.sh --check-cases",
     "build:prompt": "bash scripts/build-prompt.sh",
+    "release:check": "bash scripts/release-check.sh",
     "install:skill": "sh install.sh",
     "prepack": "npm run check",
     "postpack": "echo 'Install the skill with: sh install.sh (or npx skills add hannsxpeter/godplans)'"

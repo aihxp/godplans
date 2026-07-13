@@ -1,0 +1,12 @@
+outcome|plan|
+frontmatter|mode|greenfield
+contains|packages/web/AGENTS.md|
+contains|agents/catalog.yaml|
+contains|privacy|
+contains|development|
+contains|release|
+contains-ci|nearest-scope|
+contains-ci|path-derived|
+contains-ci|unknown|
+gate|pillars-five-state|cataloged absent
+max-count|## Open Questions|1

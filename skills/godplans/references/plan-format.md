@@ -25,7 +25,12 @@ status: planning
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 mode: greenfield
+product_form: web-application
 archetype: saas-dashboard
+public_release: true
+source_revision: 0123456789abcdef0123456789abcdef01234567
+input_digest: sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+validated_at: 2026-07-13T12:00:00Z
 domains_applicable: [product, architecture, stack, database, security, ...]
 domains_excluded:
   - name: seo
@@ -40,6 +45,10 @@ progress:
 
 Allowed modes are `greenfield`, `brownfield`, and `replan`. Frontmatter is the digest, not the truth. The truth is the checkboxes; `progress` counters are derived from them and updated in the same edit that flips a box. `tasks_total` and `tasks_done` count active task definition header lines. `phases_total` counts numbered phase headings, and a phase contributes to `phases_done` only when every active task in it is checked. If counters disagree, recount from the task definitions.
 
+Allowed product forms are `web-application`, `api-or-service`, `cli-or-sdk`, `mobile-or-desktop`, `data-or-ml`, and `infrastructure-or-iac`. `public_release` is `true` only when execution can activate a public site, service, package, store artifact, model, or infrastructure surface. Internal and local-only projects set it to `false`; they do not inherit a public-activation gate.
+
+`source_revision` is the full Git commit used for planning, or `none` when no revision exists. `validated_at` is a UTC ISO-8601 timestamp. The `## Plan provenance` values repeat those frontmatter values exactly, with no trailing punctuation. Its machine-readable inventory contains one or more lines shaped ``- `<label>` = `sha256:<64-lowercase-hex>` ``. Labels use only ASCII letters, digits, `.`, `_`, `/`, and `-`; labels are unique; and exactly one label is `intake`. Hash normalized intake text for `intake`, and hash raw file bytes for file entries. To derive `input_digest`, sort entries lexicographically by label, concatenate each as `<label><TAB><64-lowercase-hex><LF>`, hash the UTF-8 bytes with SHA-256, and prefix the result with `sha256:`. Inventory display order does not affect the aggregate. These values bind the plan to its inputs; they are not claims that later execution leaves the repository unchanged.
+
 The status lifecycle is `planning -> approved -> executing -> done`:
 
 1. A new or materially replanned document has `status: planning`. Validate it with `--allow-planning`, present it, and wait.
@@ -53,17 +62,19 @@ A material replan restarts this lifecycle at `planning`, increments `plan_versio
 
 1. `# <Project> master plan` and a one-paragraph objective ending with an observable definition of done.
 2. `## Scope and non-goals`. Non-goals are named, not implied. State the scale calibration, available capacity, phase and task ceiling, and the sum of task appetites. A weekend plan has at most 3 phases and 8 tasks.
-3. `## Compliance gate`. One short section: pass, or the mitigations injected (with task IDs).
-4. `## Applicability matrix`. The full table: every domain, applicable or excluded, with reason. After the table, add a compact module disposition that lists landed requirement IDs and groups scale-excluded IDs by module with a specific reason.
-5. `## Decisions`. Hard-to-reverse bets first: wire formats, public identifiers, data-model shape, auth and ownership boundaries. Each entry is a decision with rationale, a hypothesis with a validation plan, or a pointer to Open Questions. Where options were weighed, show the comparison in a small table.
-6. `## Requirements`. Numbered user stories with EARS acceptance criteria: `R-1.1: WHEN <trigger> THE SYSTEM SHALL <observable behavior>`. A compact table is also valid when the requirement ID is the first cell of each row. Task `Requirements:` lines point here and at module IDs (R-SEC-4 style).
-7. `## Architecture`. The mermaid visuals (see Visual layer) plus the prose that the diagrams support.
-8. `## Style genome`. Naming, idioms, structure conventions the first commit must already follow.
-9. `## Agent memory`. The AGENTS.md and pillar files the scaffold phase will emit.
-10. `## Phases`. The task body; see Task grammar.
-11. `## Open Questions`. Exactly one such section, at the bottom, the only enumeration of open decisions. Each question carries options and a recommended default. Committed decisions never appear here. A complex plan with zero open questions is acceptable only when every meaningful decision has been explicitly made above.
-12. `## Rules for executing agents`. Copied verbatim from this module (below).
-13. `## Session log`. Append-only, one line per session.
+3. `## Plan provenance`. Record the source revision, stable evidence inventory, digest algorithm and SHA-256 input digest, validation timestamp, and the completed or imported evidence that must be rechecked on resume.
+4. `## Product form`. Name the primary form, its vertical-slice definition, form-specific completion evidence, and any secondary form that passes the independent-deliverable rule.
+5. `## Compliance gate`. One short section: pass, or the mitigations injected (with task IDs).
+6. `## Applicability matrix`. The full table: every domain, applicable or excluded, with reason. After the table, add a compact module disposition that lists landed requirement IDs and groups scale-excluded IDs by module with a specific reason.
+7. `## Decisions`. Hard-to-reverse bets first: wire formats, public identifiers, data-model shape, auth and ownership boundaries. Each entry is a decision with rationale, a hypothesis with a validation plan, or a pointer to Open Questions. Where options were weighed, show the comparison in a small table.
+8. `## Requirements`. Numbered user stories with EARS acceptance criteria: `R-1.1: WHEN <trigger> THE SYSTEM SHALL <observable behavior>`. A compact table is also valid when the requirement ID is the first cell of each row. Task `Requirements:` lines point here and at module IDs (R-SEC-4 style).
+9. `## Architecture`. The mermaid visuals (see Visual layer) plus the prose that the diagrams support.
+10. `## Style genome`. Naming, idioms, structure conventions the first commit must already follow.
+11. `## Agent memory`. The AGENTS.md and pillar files the scaffold phase will emit.
+12. `## Phases`. The task body; see Task grammar.
+13. `## Open Questions`. Exactly one such section, at the bottom, the only enumeration of open decisions. Each question carries options and a recommended default. Committed decisions never appear here. A complex plan with zero open questions is acceptable only when every meaningful decision has been explicitly made above.
+14. `## Rules for executing agents`. Copied verbatim from this module (below).
+15. `## Session log`. Append-only, one line per session.
 
 ## Task grammar
 
@@ -114,6 +125,12 @@ Grammar rules:
 - **Must-haves**: goal-backward proof: observable truths, required artifacts, and key links showing the pieces are wired, because a checked box alone cannot distinguish a real implementation from a placeholder.
 - The final phase of every plan is **Verification**: run the full test suite, lint, build, and at least one end-to-end smoke that names the real command or the exact manual path.
 
+## Conditional public-release gate
+
+When `public_release: true`, mark the latest hardening evidence task with `R-SEC-26`, exactly one prepublication gate task with `R-ROAD-21`, and exactly one first public activation task with `R-LAUNCH-22`. Keep those role markers on distinct tasks. The gate follows and depends on the latest hardening task. The activation task follows the gate immediately and depends on it. The gate records `checked_at`, `hardening_revision` (a content hash or immutable revision), `finding_counts`, `policy`, and `verdict`. `checked_at` must be later than the latest hardening evidence. Its acceptance states that a later hardening change `invalidates` the pass and forces the task to run again.
+
+Every permitted Critical risk acceptance names `owner`, `justification`, `accepted_at`, and `expires_at`. Missing or expired fields block public activation. Projects with `public_release: false` state why no public surface exists and do not receive this task.
+
 ## Visual layer
 
 Diagrams are mermaid in fenced blocks, GitHub-native. Use them where they carry decisions, next to the prose they support:
@@ -135,7 +152,7 @@ This block is copied verbatim into every emitted plan, under `## Rules for execu
 > [!IMPORTANT]
 > This plan is the source of truth. The chat is not.
 >
-> 1. Before any work: read the frontmatter and refuse unless `status` is `approved` or `executing`. `planning` awaits sign-off; `done` is closed. Run `bash .godplans/validate-plan.sh .godplans/PLAN.mdx`. If status is `approved`, change it to `executing` and update the date before the first task.
+> 1. Before any work: read the frontmatter and `## Plan provenance`, then re-derive state from disk. Recheck recorded completed or imported evidence; if material evidence drifted, change status to `planning`, record the stale evidence, and stop for replan. Otherwise refuse unless `status` is `approved` or `executing`. `planning` awaits sign-off; `done` is closed. Run `bash .godplans/validate-plan.sh .godplans/PLAN.mdx`. If status is `approved`, change it to `executing` and update the date before the first task.
 > 2. Find the first unchecked task in wave order. Re-derive state from checkboxes; trust nothing remembered.
 > 3. One task at a time. Respect Depends on. Run tasks marked [P] concurrently only when their Files lists are disjoint.
 > 4. Run the task's Verify command. Only after it passes, flip [ ] to [x] and update the frontmatter counters and `updated:` date in the same edit. Never batch check-offs.
@@ -155,7 +172,7 @@ The emitted companion is the only machine-check entry point. Copy it byte-for-by
 bash .godplans/validate-plan.sh --allow-planning .godplans/PLAN.mdx
 ```
 
-The companion embeds the domain requirement catalog and reads no skill files at runtime. Before this command, verify `test -x .godplans/validate-plan.sh` and compare the companion byte-for-byte with the installed source. `--allow-planning` performs structural validation for a draft or closed plan. Without it, the validator is also an execution gate and accepts only `approved` or `executing`. It checks essential frontmatter and lifecycle values; derived task and phase counters; sequential phase numbers and matching wave tags; unique IDs on task definition headers; all required task fields; earlier dependency targets; local and module-catalog requirement references; banned Unicode through portable Perl; exactly one Open Questions section; and a final Verification phase. Any failure blocks emission. Do not replace this command with ad hoc grep pipelines.
+The companion embeds the domain requirement catalog and reads no skill files at runtime. Before this command, verify `test -x .godplans/validate-plan.sh` and compare the companion byte-for-byte with the installed source. `--allow-planning` performs structural validation for a draft or closed plan. Without it, the validator is also an execution gate and accepts only `approved` or `executing`. It checks essential frontmatter, provenance parity and aggregate input digest, product form, conditional public-release gate structure, and lifecycle values; derived task and phase counters; sequential phase numbers and matching wave tags; unique IDs on task definition headers; all required task fields; earlier dependency targets; local and module-catalog requirement references; banned Unicode through portable Perl; exactly one Plan provenance section; exactly one Open Questions section; and a final Verification phase. Its Bash 3.2 and portable Perl implementation runs on stock macOS and Linux. Any failure blocks emission. Do not replace this command with ad hoc grep pipelines.
 
 ## Size discipline
 
@@ -163,4 +180,4 @@ The plan is re-read every session; bloat is a tax on every future turn. Budgets:
 
 ## Replan protocol
 
-When PLAN.mdx already exists: read it fully, recount progress from checkboxes, read the session log, then apply the delta. Completed work is history and never altered. New work gets fresh IDs continuing the sequence. Superseded unstarted tasks are struck through (`~~- [ ] GP-310 ...~~` plus a reason line), not deleted, so the audit trail survives. Bump `plan_version`, log the delta in the session log, and re-run the Phase 6 self-audit on any section that changed.
+When PLAN.mdx already exists: read it fully, recount progress from checkboxes, read the session log, and recompute the source evidence recorded under `## Plan provenance`. Recheck every artifact recorded as completed or imported. If its content, revision, or existence changed materially, mark the plan stale by returning `status` to `planning` before applying the delta; do not trust the chat or old validation timestamp. Completed work is history and never altered. New work gets fresh IDs continuing the sequence. Superseded unstarted tasks are struck through (`~~- [ ] GP-310 ...~~` plus a reason line), not deleted, so the audit trail survives. Refresh the evidence inventory, `input_digest`, and `validated_at`; bump `plan_version`; log the delta in the session log; and re-run the Phase 6 self-audit on any section that changed.

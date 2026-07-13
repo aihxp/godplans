@@ -1,0 +1,10 @@
+outcome|plan|
+frontmatter|product_form|api-or-service
+domain|observe|applicable
+contains|installation-ready|
+contains|operationally-mature|
+contains|not-yet-evidenced|
+contains-ci|synthetic|
+contains-ci|real incident history|
+gate|observability-labels|R-OBS-21
+max-count|## Open Questions|1

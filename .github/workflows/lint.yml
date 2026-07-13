@@ -21,14 +21,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: '3.13'
 
       - name: Set up Node.js
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: 24
 
-      - name: Run release checks
-        run: npm run check
+      - name: Install pinned official validator
+        run: python -m pip install -r requirements/skills-ref.txt
 
-      - name: Verify package contents
-        run: npm pack --dry-run --json
+      - name: Run release checks
+        run: SKILLS_REF_BIN="$(command -v skills-ref)" npm run release:check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

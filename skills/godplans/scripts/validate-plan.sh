@@ -53,6 +53,7 @@ fi
 exec perl -CSD - "$PLAN_FILE" "$ALLOW_PLANNING" <<'PERL'
 use strict;
 use warnings;
+use Digest::SHA qw(sha256_hex);
 
 my ($plan_file, $allow_planning) = @ARGV;
 my @errors;
@@ -67,6 +68,22 @@ sub trim {
     $value =~ s/^\s+//;
     $value =~ s/\s+$//;
     return $value;
+}
+
+sub task_has_requirement {
+    my ($task, $requirement_id) = @_;
+    return 0 unless exists $task->{fields}{Requirements};
+    return 0 unless @{$task->{fields}{Requirements}} == 1;
+    my @requirement_ids = split /\s*,\s*/, $task->{fields}{Requirements}[0], -1;
+    return scalar grep { $_ eq $requirement_id } @requirement_ids;
+}
+
+sub task_depends_on {
+    my ($task, $task_id) = @_;
+    return 0 unless exists $task->{fields}{'Depends on'};
+    return 0 unless @{$task->{fields}{'Depends on'}} == 1;
+    my @dependencies = split /\s*,\s*/, $task->{fields}{'Depends on'}[0], -1;
+    return scalar grep { $_ eq $task_id } @dependencies;
 }
 
 open my $plan_fh, '<:encoding(UTF-8)', $plan_file
@@ -111,7 +128,7 @@ if ($frontmatter_end > 0) {
     }
 }
 
-for my $key (qw(name plan_version status created updated mode archetype domains_applicable domains_excluded)) {
+for my $key (qw(name plan_version status created updated mode product_form archetype public_release source_revision input_digest validated_at domains_applicable domains_excluded)) {
     if (!exists $frontmatter{$key}) {
         fail("missing frontmatter field: $key");
     } elsif ($frontmatter{$key} eq '' && $key ne 'domains_excluded') {
@@ -142,6 +159,36 @@ if (exists $frontmatter{status} && !$allowed_status{$frontmatter{status}}) {
 my %allowed_mode = map { $_ => 1 } qw(greenfield brownfield replan);
 if (exists $frontmatter{mode} && !$allowed_mode{$frontmatter{mode}}) {
     fail("invalid mode '$frontmatter{mode}'; expected greenfield, brownfield, or replan");
+}
+
+my %allowed_product_form = map { $_ => 1 } qw(web-application api-or-service cli-or-sdk mobile-or-desktop data-or-ml infrastructure-or-iac);
+if (exists $frontmatter{product_form} && !$allowed_product_form{$frontmatter{product_form}}) {
+    fail("invalid product_form '$frontmatter{product_form}'; expected web-application, api-or-service, cli-or-sdk, mobile-or-desktop, data-or-ml, or infrastructure-or-iac");
+}
+
+if (exists $frontmatter{public_release}
+        && $frontmatter{public_release} ne 'true'
+        && $frontmatter{public_release} ne 'false') {
+    fail('public_release must be true or false');
+}
+
+if (exists $frontmatter{source_revision}
+        && $frontmatter{source_revision} ne 'none'
+        && $frontmatter{source_revision} !~ /^[0-9a-f]{40,64}$/) {
+    fail('source_revision must be none or a full lowercase hexadecimal revision');
+}
+
+if (exists $frontmatter{input_digest}
+        && $frontmatter{input_digest} !~ /^sha256:[0-9a-f]{64}$/) {
+    fail('input_digest must be sha256 followed by 64 lowercase hexadecimal characters');
+} elsif (exists $frontmatter{input_digest}
+        && $frontmatter{input_digest} eq 'sha256:' . ('0' x 64)) {
+    fail('input_digest must not use the all-zero placeholder');
+}
+
+if (exists $frontmatter{validated_at}
+        && $frontmatter{validated_at} !~ /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$/) {
+    fail('validated_at must use UTC ISO-8601 form YYYY-MM-DDTHH:MM:SSZ');
 }
 
 for my $key (qw(created updated)) {
@@ -183,14 +230,14 @@ my %catalog_max = (
     DB => 22,
     DEPLOY => 18,
     DNA => 20,
-    LAUNCH => 21,
+    LAUNCH => 22,
     LLM => 23,
-    MEM => 18,
-    OBS => 20,
+    MEM => 22,
+    OBS => 21,
     PRD => 17,
     REPO => 20,
-    ROAD => 20,
-    SEC => 25,
+    ROAD => 21,
+    SEC => 26,
     SEO => 22,
     STACK => 20,
     UI => 20,
@@ -317,6 +364,59 @@ for my $task (@tasks) {
     }
 }
 
+if (exists $frontmatter{public_release} && $frontmatter{public_release} eq 'false') {
+    for my $requirement_id (qw(R-SEC-26 R-ROAD-21 R-LAUNCH-22)) {
+        fail("public_release false must not cite $requirement_id")
+            if grep { task_has_requirement($_, $requirement_id) } @tasks;
+    }
+}
+
+if (exists $frontmatter{public_release} && $frontmatter{public_release} eq 'true') {
+    my @hardening_indexes = grep { task_has_requirement($tasks[$_], 'R-SEC-26') } 0 .. $#tasks;
+    my @gate_indexes = grep { task_has_requirement($tasks[$_], 'R-ROAD-21') } 0 .. $#tasks;
+    my @activation_indexes = grep { task_has_requirement($tasks[$_], 'R-LAUNCH-22') } 0 .. $#tasks;
+
+    fail('public release requires at least one hardening task citing R-SEC-26')
+        unless @hardening_indexes;
+    if (!@gate_indexes) {
+        fail('public release requires a prepublication gate task citing R-ROAD-21');
+    } elsif (@gate_indexes != 1) {
+        fail('public release requires exactly one prepublication gate task citing R-ROAD-21, found ' . scalar @gate_indexes);
+    }
+    fail('public release requires exactly one first activation task citing R-LAUNCH-22, found ' . scalar @activation_indexes)
+        unless @activation_indexes == 1;
+
+    if (@hardening_indexes && @gate_indexes == 1) {
+        my $latest_hardening_index = $hardening_indexes[-1];
+        my $gate_index = $gate_indexes[0];
+        my $latest_hardening_id = $tasks[$latest_hardening_index]{id};
+        my $gate_id = $tasks[$gate_index]{id};
+
+        fail("prepublication gate must follow the latest hardening task $latest_hardening_id")
+            unless $gate_index > $latest_hardening_index;
+        fail("prepublication gate must depend on the latest hardening task $latest_hardening_id")
+            unless task_depends_on($tasks[$gate_index], $latest_hardening_id);
+
+        if (exists $tasks[$gate_index]{fields}{Acceptance}
+                && @{$tasks[$gate_index]{fields}{Acceptance}} == 1) {
+            my $acceptance = $tasks[$gate_index]{fields}{Acceptance}[0];
+            for my $field (qw(checked_at hardening_revision finding_counts policy verdict owner justification accepted_at expires_at invalidates)) {
+                fail("prepublication gate $gate_id Acceptance is missing $field")
+                    if index($acceptance, $field) < 0;
+            }
+        }
+
+        if (@activation_indexes == 1) {
+            my $activation_index = $activation_indexes[0];
+            my $activation_id = $tasks[$activation_index]{id};
+            fail("public activation must immediately follow the prepublication gate $gate_id")
+                unless $activation_index == $gate_index + 1;
+            fail("public activation must depend on the prepublication gate $gate_id")
+                unless task_depends_on($tasks[$activation_index], $gate_id);
+        }
+    }
+}
+
 my $tasks_total = scalar @tasks;
 my $tasks_done = scalar grep { $_->{done} } @tasks;
 my $phases_total = scalar @phases;
@@ -348,6 +448,106 @@ for my $key (qw(phases_total phases_done tasks_total tasks_done)) {
 my $open_questions_count = scalar grep { $_ eq '## Open Questions' } @lines;
 fail("expected exactly one ## Open Questions section, found $open_questions_count")
     if $open_questions_count != 1;
+
+my $provenance_count = scalar grep { $_ eq '## Plan provenance' } @lines;
+fail("expected exactly one ## Plan provenance section, found $provenance_count")
+    if $provenance_count != 1;
+
+my $product_form_count = scalar grep { $_ eq '## Product form' } @lines;
+fail("expected exactly one ## Product form section, found $product_form_count")
+    if $product_form_count != 1;
+
+if ($provenance_count == 1) {
+    my $inside = 0;
+    my @body;
+    for my $line (@lines) {
+        if ($line eq '## Plan provenance') {
+            $inside = 1;
+            next;
+        }
+        last if $inside && $line =~ /^## /;
+        push @body, $line if $inside;
+    }
+
+    my %label_key = (
+        'Source revision' => 'source_revision',
+        'Input digest' => 'input_digest',
+        'Validated at' => 'validated_at',
+    );
+    my %label_count;
+    my %label_value;
+    my %inventory;
+    my $inventory_count = 0;
+    my $inventory_started = 0;
+    my $inventory_valid = 1;
+
+    for my $line (@body) {
+        next if $line eq '';
+        if ($line =~ /^(Source revision|Input digest|Validated at):[ \t]*(.*)$/) {
+            my ($label, $value) = ($1, trim($2));
+            $label_count{$label}++;
+            $label_value{$label} = $value;
+            next;
+        }
+        if ($line =~ /^Evidence inventory:[ \t]*(.*)$/) {
+            $label_count{'Evidence inventory'}++;
+            $inventory_started = 1;
+            if (trim($1) ne '') {
+                fail('Plan provenance Evidence inventory label must not contain an inline value');
+                $inventory_valid = 0;
+            }
+            next;
+        }
+        if ($inventory_started
+                && $line =~ /^- `([A-Za-z0-9][A-Za-z0-9._\/-]*)` = `sha256:([0-9a-f]{64})`$/) {
+            my ($label, $digest) = ($1, $2);
+            $inventory_count++;
+            if (exists $inventory{$label}) {
+                fail("duplicate Plan provenance inventory label: $label");
+                $inventory_valid = 0;
+            } else {
+                $inventory{$label} = $digest;
+            }
+            next;
+        }
+        if ($inventory_started) {
+            fail("malformed Plan provenance inventory item: $line");
+        } else {
+            fail("malformed Plan provenance line: $line");
+        }
+        $inventory_valid = 0;
+    }
+
+    for my $label ('Source revision', 'Input digest', 'Validated at', 'Evidence inventory') {
+        my $count = $label_count{$label} || 0;
+        fail("Plan provenance is missing $label:") if $count == 0;
+        fail("Plan provenance has duplicate $label label") if $count > 1;
+    }
+
+    for my $label ('Source revision', 'Input digest', 'Validated at') {
+        next unless ($label_count{$label} || 0) == 1;
+        my $key = $label_key{$label};
+        next unless exists $frontmatter{$key};
+        fail("Plan provenance $label does not match frontmatter $key")
+            if $label_value{$label} ne $frontmatter{$key};
+    }
+
+    fail('Plan provenance Evidence inventory must contain at least one item')
+        if $inventory_count == 0;
+    my $intake_count = exists $inventory{intake} ? 1 : 0;
+    fail('Plan provenance Evidence inventory must contain exactly one intake item')
+        unless $intake_count == 1;
+
+    if ($inventory_valid
+            && $inventory_count > 0
+            && $intake_count == 1
+            && ($label_count{'Input digest'} || 0) == 1) {
+        my $digest_input = join '', map { "$_\t$inventory{$_}\n" } sort keys %inventory;
+        my $aggregate = 'sha256:' . sha256_hex($digest_input);
+        fail('Plan provenance Input digest does not match the Evidence inventory aggregate')
+            if $label_value{'Input digest'} ne $aggregate;
+    }
+}
 
 if (!@phases || $phases[-1]{name} ne 'Verification') {
     my $found = @phases ? $phases[-1]{name} : 'none';

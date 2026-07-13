@@ -79,6 +79,13 @@ grep -Fq 'Weekend plans have at most 3 phases and 8 tasks.' "$PROMPT" ||
   fail "portable prompt is missing the weekend scale ceiling"
 grep -Fq 'Create the validator companion before drafting the plan.' "$PROMPT" ||
   fail "portable prompt is missing the pre-draft companion gate"
+grep -Fq 'Pick product form before archetype and domain composition.' "$PROMPT" ||
+  fail "portable prompt is missing product-form routing"
+grep -Fq 'expected exactly one ## Plan provenance section' "$PROMPT" ||
+  fail "portable prompt is missing provenance validation"
+
+prompt_bytes=$(wc -c < "$PROMPT" | tr -d ' ')
+[ "$prompt_bytes" -le 525000 ] || fail "portable prompt exceeds 525000-byte budget: $prompt_bytes"
 
 unresolved=$(sed '/^# INLINED REFERENCE: /d; /^# INLINED TEMPLATE: /d; /^# INLINED VALIDATOR: /d' "$PROMPT" |
   grep -En 'references/([a-z-]+|<domain>)\.md|references/|templates/PLAN\.template\.mdx|skills/godplans/scripts/validate-plan\.sh|(^|[^[:alnum:]-])plan-format\.md([^[:alnum:]-]|$)' || true)
