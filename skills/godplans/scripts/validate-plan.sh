@@ -224,7 +224,7 @@ for my $line (@lines) {
 }
 
 my %catalog_max = (
-    ARCH => 19,
+    ARCH => 20,
     BUILD => 20,
     CODE => 24,
     DB => 23,
