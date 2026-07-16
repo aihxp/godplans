@@ -83,6 +83,9 @@ Criterion: WHEN the Repository section is read, THE PLAN SHALL state a numeric t
 R-REPO-20. The plan consumes upstream sections instead of re-deriving: stack from the stack section, repo topology from architecture, product name and audience from product. On drift between an upstream artifact and existing code (brownfield), the plan trusts the code and records the discrepancy.
 Criterion: WHEN repo decisions overlap upstream sections, THE PLAN SHALL cite the upstream decision rather than restate a new one, and any brownfield drift SHALL appear as a noted assumption.
 
+R-REPO-21. The plan derives a documentation manifest from the applicability matrix, product form, scale, and risk or regulatory profile, listing the documents this project needs, each tagged required, recommended, or not-applicable with the signal that set it; a small project may fold several into one file, but a required document is never silently dropped. The manifest includes the governance documents (an initiation brief combining project charter, business case, and stakeholders with a RACI; a requirements-traceability matrix; and a closeout with lessons learned) when scale and risk warrant them, and marks them not-applicable with a reason otherwise. Documentation is scaled to the project, a prototype does not get a business-continuity plan and a regulated platform does not ship without a threat model and traceability record.
+Criterion: WHEN the plan sets its applicability matrix THE PLAN SHALL emit a documentation manifest keyed to form, scale, and risk, SHALL tag every document required, recommended, or not-applicable with its reason, and SHALL name the governance documents required at funded-product-with-regulated-data or enterprise scale.
+
 ## Task seeds
 
 - [ ] GP-xxx Scaffold tier-scoped repo file inventory

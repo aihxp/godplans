@@ -3,6 +3,18 @@
 All notable changes to godplans are documented here. The format follows
 Keep a Changelog; versioning follows SemVer.
 
+## [1.5.0] - 2026-07-16
+
+### Added
+
+- R-REPO-21: the plan derives a documentation manifest from its applicability
+  matrix, product form, scale, and risk or regulatory profile, tagging each
+  document required, recommended, or not-applicable with the signal that set it,
+  and names the governance documents (initiation brief with charter, business
+  case, and stakeholders/RACI; requirements-traceability matrix; closeout with
+  lessons) required at funded-product-with-regulated-data or enterprise scale.
+  Documentation is scaled to the project, not a fixed checklist.
+
 ## [1.4.0] - 2026-07-16
 
 ### Added

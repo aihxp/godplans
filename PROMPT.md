@@ -146,7 +146,7 @@ godplans plans; it does not build. The status lifecycle is `planning -> approved
 - **Policy-violating projects**: the Phase 1 gate is not advisory. Prohibited purposes get a refusal with the policy category named.
 - **Silent domain skipping**: a domain is either planned or excluded with a reason in the matrix. Never silently absent.
 
-## Skill version: 1.4.0
+## Skill version: 1.5.0
 
 
 ---
@@ -2281,6 +2281,9 @@ Criterion: WHEN the Repository section is read, THE PLAN SHALL state a numeric t
 R-REPO-20. The plan consumes upstream sections instead of re-deriving: stack from the stack section, repo topology from architecture, product name and audience from product. On drift between an upstream artifact and existing code (brownfield), the plan trusts the code and records the discrepancy.
 Criterion: WHEN repo decisions overlap upstream sections, THE PLAN SHALL cite the upstream decision rather than restate a new one, and any brownfield drift SHALL appear as a noted assumption.
 
+R-REPO-21. The plan derives a documentation manifest from the applicability matrix, product form, scale, and risk or regulatory profile, listing the documents this project needs, each tagged required, recommended, or not-applicable with the signal that set it; a small project may fold several into one file, but a required document is never silently dropped. The manifest includes the governance documents (an initiation brief combining project charter, business case, and stakeholders with a RACI; a requirements-traceability matrix; and a closeout with lessons learned) when scale and risk warrant them, and marks them not-applicable with a reason otherwise. Documentation is scaled to the project, a prototype does not get a business-continuity plan and a regulated platform does not ship without a threat model and traceability record.
+Criterion: WHEN the plan sets its applicability matrix THE PLAN SHALL emit a documentation manifest keyed to form, scale, and risk, SHALL tag every document required, recommended, or not-applicable with its reason, and SHALL name the governance documents required at funded-product-with-regulated-data or enterprise scale.
+
 ## Task seeds
 
 - [ ] GP-xxx Scaffold tier-scoped repo file inventory
@@ -3645,7 +3648,7 @@ recommended default, and what happens if unanswered.
 
 ## Session log
 
-- YYYY-MM-DD plan created (godplans v1.4.0)
+- YYYY-MM-DD plan created (godplans v1.5.0)
 
 
 ---
@@ -3890,7 +3893,7 @@ my %catalog_max = (
     MEM => 22,
     OBS => 21,
     PRD => 17,
-    REPO => 20,
+    REPO => 21,
     ROAD => 21,
     SEC => 30,
     SEO => 22,
