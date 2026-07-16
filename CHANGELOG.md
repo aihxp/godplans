@@ -3,6 +3,25 @@
 All notable changes to godplans are documented here. The format follows
 Keep a Changelog; versioning follows SemVer.
 
+## [1.4.0] - 2026-07-16
+
+### Added
+
+- Compliance plan-time requirements:
+  - R-SEC-29: consent and regulated-data governance (consent/lawful-basis before
+    non-essential trackers with a server-honored opt-out; ROPA, DPA/BAA,
+    transfer basis, and regulated-data scope as plan artifacts).
+  - R-SEC-30: applicable compliance frameworks identified by where users live and
+    what data is handled (GDPR/CCPA/PIPEDA, WCAG 2.2 AA/AODA/Section 508, SOC 2/
+    ISO 27001, PCI DSS/HIPAA), mapped to the controls that evidence each and
+    framed as technical-readiness, not certification.
+  - R-UI-21: WCAG 2.2 AA pointer target size (2.5.8) and focus appearance (2.4.11)
+    with a named conformance target.
+  - R-CODE-24: behavioral requirements (concurrency, gating flags, state
+    transitions, non-primary caller paths, runtime consent/accessibility) verified
+    against the running app by an end-to-end or browser harness, not only unit
+    tests or static greps.
+
 ## [1.3.0] - 2026-07-16
 
 ### Added

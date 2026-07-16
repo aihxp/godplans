@@ -146,7 +146,7 @@ godplans plans; it does not build. The status lifecycle is `planning -> approved
 - **Policy-violating projects**: the Phase 1 gate is not advisory. Prohibited purposes get a refusal with the policy category named.
 - **Silent domain skipping**: a domain is either planned or excluded with a reason in the matrix. Never silently absent.
 
-## Skill version: 1.3.0
+## Skill version: 1.4.0
 
 
 ---
@@ -1019,6 +1019,10 @@ Descends from secauditor (an 11-dimension read-only vulnerability audit anchored
     Criterion: WHEN a privileged operation is planned THE PLAN SHALL list every caller path that reaches it and SHALL require an identical gate on each, with a test that drives the operation through the non-primary path (an API key after tenant suspension, a token before MFA, the raw exported function) and asserts denial.
 28. R-SEC-28: The plan requires that any caller-supplied selector (id, email, slug, or hostname from the request body, query, or model output) that resolves a record is ownership-bound to the authenticated principal before the record is read, charged, mutated, or state-transitioned; for an email or hostname the caller must additionally prove control (a verified session or an out-of-band confirmation), and public checkout, unauthenticated verification, and agent or tool arguments are named as the highest-risk cases.
     Criterion: WHEN a function resolves a record from caller-supplied input THE PLAN SHALL require a tenant or owner check binding it to the caller, SHALL forbid attaching or charging an existing party by unverified email, and SHALL include an IDOR and confused-deputy test (a cross-tenant id, a foreign email, a model-named id) that asserts denial.
+29. R-SEC-29: The plan handles consent and regulated-data governance when a consent regime or regulated data is present: consent or a lawful basis is captured before any non-essential cookie or third-party tracker fires; a genuine reject or opt-out exists and is honored in server code and in analytics or tag initialization, not only in the UI; and governance records exist in the repository or plan (a data classification or record of processing, data-processing or business-associate agreements for processors that receive regulated data, a cross-border transfer basis, and a stated regulated-data scope that minimizes what is stored or transmitted).
+    Criterion: WHEN the product sets non-essential trackers or processes regulated personal, card, or health data THE PLAN SHALL require consent-before-tracking with a server-honored opt-out and SHALL name the governance records (classification or ROPA, DPA or BAA, transfer basis, scope boundary) as plan artifacts with a Verify line.
+30. R-SEC-30: The plan identifies the applicable compliance frameworks by where the product's users live and what data it handles, not only where the business sits, and maps each to the controls that evidence it: privacy and sovereignty (GDPR, CCPA/CPRA, PIPEDA), accessibility (WCAG 2.2 AA, AODA, ADA/Section 508), security frameworks (SOC 2 Trust Services Criteria, ISO/IEC 27001), and industry standards (PCI DSS, HIPAA). It frames each as technical-readiness, the code-evidenced controls, never as a certification claim, and marks frameworks whose regulated surface is absent as not-applicable with a reason.
+    Criterion: WHEN regulated users, data, or an accessibility obligation exist THE PLAN SHALL enumerate the applicable frameworks with the controls or requirements that evidence each, SHALL mark absent surfaces not-applicable with a reason, and SHALL frame conformance as technical-readiness rather than certification.
 
 ## Task seeds
 
@@ -1478,6 +1482,9 @@ Criterion: WHEN any protection is planned, THE PLAN SHALL pair it with a wiring 
 R-UI-20. PLAN.mdx must trace the eight always-Critical audit conditions to tasks: keyboard lockout on a load-bearing control, core control with no accessible name, focus trap with no escape, zoom disabled, load-bearing media without captions/transcript, accessibility theater on a load-bearing surface, no reflow at 320px, and a load-bearing form broken at implementation level (frozen controlled input, submit losing input). Each maps to at least one task acceptance, and the final Verification phase includes a UI sweep task running the zero-count greps.
 Criterion: WHEN the Verification phase is written, THE PLAN SHALL contain a UI sweep task whose acceptance enumerates zero-count checks covering all eight always-Critical conditions applicable to the project.
 
+R-UI-21. PLAN.mdx plans WCAG 2.2 Level AA pointer and focus criteria: interactive targets meet the 24 by 24 CSS px minimum with adequate spacing (2.5.8 Target Size Minimum) and the stated mobile target contract; the focus indicator meets the focus-appearance minimum (2.4.11), never removed without an equivalent, with sufficient area and contrast; and the conformance target (WCAG 2.2 AA, plus AODA or Section 508 where the audience requires it) is named.
+Criterion: WHEN interactive UI is planned THE PLAN SHALL set the WCAG 2.2 AA conformance target and require target-size and focus-appearance acceptances with a Verify line (a grep or test for undersized targets and for removed or too-faint focus styles).
+
 ## Task seeds
 
 - [ ] GP-xxx Declare the UI stack contract and build the document shell
@@ -1784,6 +1791,9 @@ Criterion: WHEN the self-audit gate runs, THE PLAN SHALL contain zero recommenda
 
 R-CODE-23: PLAN.mdx keeps controls live and state machines lawful and time-correct: every operator-configurable or stored flag meant to gate behavior is planned with the code path that READS it (not only writes and displays it); every lifecycle state machine names its legal transitions and a rule that no transition frees a still-committed resource (inventory slot, access grant, credit hold) before its end or runs out of lifecycle order; and all scheduling and availability arithmetic uses the entity's configured timezone with daylight-saving handling, never server UTC.
 Criterion: WHEN a control flag, a state machine, or a scheduling or availability feature is planned THE PLAN SHALL name the read site for each gating flag, the transition table with its resource-release guard, and the timezone source, each with a test (a flag set on that changes behavior, an illegal or early-release transition that is rejected, a non-UTC-timezone slot that lands on the local wall clock).
+
+R-CODE-24: PLAN.mdx verifies behavioral requirements against the running app, not only by static reading or unit tests. The class of requirement that static inspection can state but not prove (race conditions and TOCTOU, dead controls that are stored but never read, lifecycle transitions that free a resource early, authorization on non-primary caller paths, and consent or accessibility behavior that appears only at runtime) is confirmed in the Verification phase by an end-to-end or browser harness driving the real flow.
+Criterion: WHEN a requirement is behavioral (concurrency, a gating flag, a state transition, a non-primary caller path, or runtime consent or accessibility) THE PLAN SHALL include an end-to-end or browser test that drives the real flow and asserts the expected outcome, not only a unit test or static grep.
 
 ## Task seeds
 
@@ -3635,7 +3645,7 @@ recommended default, and what happens if unanswered.
 
 ## Session log
 
-- YYYY-MM-DD plan created (godplans v1.3.0)
+- YYYY-MM-DD plan created (godplans v1.4.0)
 
 
 ---
@@ -3871,7 +3881,7 @@ for my $line (@lines) {
 my %catalog_max = (
     ARCH => 19,
     BUILD => 20,
-    CODE => 23,
+    CODE => 24,
     DB => 23,
     DEPLOY => 18,
     DNA => 20,
@@ -3882,10 +3892,10 @@ my %catalog_max = (
     PRD => 17,
     REPO => 20,
     ROAD => 21,
-    SEC => 28,
+    SEC => 30,
     SEO => 22,
     STACK => 20,
-    UI => 20,
+    UI => 21,
     UX => 20,
 );
 my %catalog_requirements;
