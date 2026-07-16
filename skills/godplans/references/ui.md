@@ -81,6 +81,9 @@ Criterion: WHEN any protection is planned, THE PLAN SHALL pair it with a wiring 
 R-UI-20. PLAN.mdx must trace the eight always-Critical audit conditions to tasks: keyboard lockout on a load-bearing control, core control with no accessible name, focus trap with no escape, zoom disabled, load-bearing media without captions/transcript, accessibility theater on a load-bearing surface, no reflow at 320px, and a load-bearing form broken at implementation level (frozen controlled input, submit losing input). Each maps to at least one task acceptance, and the final Verification phase includes a UI sweep task running the zero-count greps.
 Criterion: WHEN the Verification phase is written, THE PLAN SHALL contain a UI sweep task whose acceptance enumerates zero-count checks covering all eight always-Critical conditions applicable to the project.
 
+R-UI-21. PLAN.mdx plans WCAG 2.2 Level AA pointer and focus criteria: interactive targets meet the 24 by 24 CSS px minimum with adequate spacing (2.5.8 Target Size Minimum) and the stated mobile target contract; the focus indicator meets the focus-appearance minimum (2.4.11), never removed without an equivalent, with sufficient area and contrast; and the conformance target (WCAG 2.2 AA, plus AODA or Section 508 where the audience requires it) is named.
+Criterion: WHEN interactive UI is planned THE PLAN SHALL set the WCAG 2.2 AA conformance target and require target-size and focus-appearance acceptances with a Verify line (a grep or test for undersized targets and for removed or too-faint focus styles).
+
 ## Task seeds
 
 - [ ] GP-xxx Declare the UI stack contract and build the document shell
