@@ -90,6 +90,9 @@ Criterion: WHEN tasks are emitted, EVERY task SHALL have 2-4 grep-verifiable acc
 R-CODE-22: PLAN.mdx contains no banned vague obligations: "improve error handling", "add more tests", "refactor for clarity", or any line failing the substitution test. Every quality obligation says what to change, where, and how to confirm it worked.
 Criterion: WHEN the self-audit gate runs, THE PLAN SHALL contain zero recommendations of the banned forms, verifiable by grep for the banned phrases and by spot-checking that each quality line names a file, rule, or command.
 
+R-CODE-23: PLAN.mdx keeps controls live and state machines lawful and time-correct: every operator-configurable or stored flag meant to gate behavior is planned with the code path that READS it (not only writes and displays it); every lifecycle state machine names its legal transitions and a rule that no transition frees a still-committed resource (inventory slot, access grant, credit hold) before its end or runs out of lifecycle order; and all scheduling and availability arithmetic uses the entity's configured timezone with daylight-saving handling, never server UTC.
+Criterion: WHEN a control flag, a state machine, or a scheduling or availability feature is planned THE PLAN SHALL name the read site for each gating flag, the transition table with its resource-release guard, and the timezone source, each with a test (a flag set on that changes behavior, an illegal or early-release transition that is rejected, a non-UTC-timezone slot that lands on the local wall clock).
+
 ## Task seeds
 
 - [ ] GP-xxx Wire lint, format, and type checking into CI with quality budgets

@@ -146,7 +146,7 @@ godplans plans; it does not build. The status lifecycle is `planning -> approved
 - **Policy-violating projects**: the Phase 1 gate is not advisory. Prohibited purposes get a refusal with the policy category named.
 - **Silent domain skipping**: a domain is either planned or excluded with a reason in the matrix. Never silently absent.
 
-## Skill version: 1.2.0
+## Skill version: 1.3.0
 
 
 ---
@@ -867,6 +867,8 @@ Descends from aihxp dbauditor, the read-only after-the-fact audit of schema, rel
    Criterion: WHEN the plan defines an append-only or high-churn table THE PLAN SHALL pair it with its retention mechanism, and WHEN replicas serve reads THE PLAN SHALL declare read-your-writes routing for money, auth, and inventory paths.
 22. R-DB-22 The plan enforces invariants in shipped DDL, not ORM annotations, bans every paper-control pattern by name (NOT VALID without a scheduled VALIDATE, UNIQUE on nullable without a semantics decision, RLS ENABLEd but not FORCEd, @Transactional without verified semantics, timeouts that die at the pooler), and includes a strengths-to-preserve inventory (real FKs, NUMERIC or integer money, keyset pagination, DB-enforced uniqueness) that later tasks must not regress.
    Criterion: WHEN the plan claims an integrity or security control THE PLAN SHALL bind it to specific DDL a later audit can read, and SHALL list the strengths inventory that executing agents are forbidden to regress.
+23. R-DB-23 The plan requires money flows to reconcile end to end across every stage and store: the amount authorized or charged equals the amount persisted on the order or booking, the invoice, the settlement, any refund, and any marketplace payout or transfer, with add-ons, discounts, credits, and tax accounted on every side; provider status (payment, refund, transfer, payout) is confirmed before a local record is marked final; a marketplace refund reverses the already-released transfer; and a later price or status change reconciles the already-settled invoice rather than silently diverging.
+   Criterion: WHEN a payment, refund, payout, or transfer path is planned THE PLAN SHALL name the fields compared at each reconciliation point and SHALL include a test that drives a paid order through an add-on change, a refund, and a marketplace payout and asserts every side of the ledger balances.
 
 ## Task seeds
 
@@ -1013,6 +1015,11 @@ Descends from secauditor (an 11-dimension read-only vulnerability audit anchored
 26. R-SEC-26: For `public_release: true`, hardening emits revision-bound evidence that a later prepublication gate can verify. Every Critical finding has a status; a permitted acceptance has owner, justification, accepted_at, and expires_at; regulated hard gates remain non-bypassable. Any hardening evidence change invalidates a prior pass. Projects without a public release surface do not inherit a public-activation requirement.
     Criterion: WHEN public release is planned THE PLAN SHALL schedule a fresh content hash or immutable hardening revision after all findings work and SHALL block activation on mismatched evidence, unresolved Criticals, incomplete or expired acceptance, or a regulated hard gate.
 
+27. R-SEC-27: The plan requires authorization parity across every caller path to a privileged operation, not only the primary interactive one. It enumerates the paths a backend function can be reached through (interactive session, API key or bearer token, a publicly exported function, an action whose authorization runs in a non-writable query context, and any agent or tool call) and specifies that the same authentication, tenant-suspension and soft-delete, step-up or MFA, and role gates apply on each. Suspension and step-up are enforced at the data or function tier, not only in a page or edge gate.
+    Criterion: WHEN a privileged operation is planned THE PLAN SHALL list every caller path that reaches it and SHALL require an identical gate on each, with a test that drives the operation through the non-primary path (an API key after tenant suspension, a token before MFA, the raw exported function) and asserts denial.
+28. R-SEC-28: The plan requires that any caller-supplied selector (id, email, slug, or hostname from the request body, query, or model output) that resolves a record is ownership-bound to the authenticated principal before the record is read, charged, mutated, or state-transitioned; for an email or hostname the caller must additionally prove control (a verified session or an out-of-band confirmation), and public checkout, unauthenticated verification, and agent or tool arguments are named as the highest-risk cases.
+    Criterion: WHEN a function resolves a record from caller-supplied input THE PLAN SHALL require a tenant or owner check binding it to the caller, SHALL forbid attaching or charging an existing party by unverified email, and SHALL include an IDOR and confused-deputy test (a cross-tenant id, a foreign email, a model-named id) that asserts denial.
+
 ## Task seeds
 
 - [ ] GP-xxx Central deny-by-default authorization layer
@@ -1086,6 +1093,8 @@ Total: 100. Any plan scoring below 85 on this rubric gets revised before emissio
 - Silent surface exclusion (secauditor conditional dimensions): skipping uploads, IaC, or LLM controls because nobody declared the surface. Refusal: the applicability matrix records every surface as present or absent with a reason before any section is written.
 - Automatic-Critical blindness (secauditor): shipping a design where one condition caps the audit at 79. Refusal: the R-SEC-24 design-out list is checked against the draft plan before emission, and any hit forces a revision.
 - Late-Critical race: launch preparation finishes, hardening changes, and publication trusts the old pass. Refusal: seal current evidence, invalidate stale passes on any change, and require the fresh prepublication task only when a public release surface exists.
+- Primary-path-only authorization: a control proven on the interactive session while an API key, a pre-MFA token, or a raw exported function reaches the same resource ungated. Refusal: every privileged operation lists its caller paths and carries an identical gate on each, tested through the non-primary path (R-SEC-27).
+- Trusted-selector confused deputy: a caller-supplied id, email, or hostname that resolves and then acts on a record with no ownership binding, so anonymous checkout spends another member's credit by email or unauthenticated verification transitions another tenant's state. Refusal: every caller-supplied selector is ownership-bound before use, and email or hostname control is proven, with an IDOR test (R-SEC-28).
 
 
 ---
@@ -1772,6 +1781,9 @@ Criterion: WHEN tasks are emitted, EVERY task SHALL have 2-4 grep-verifiable acc
 
 R-CODE-22: PLAN.mdx contains no banned vague obligations: "improve error handling", "add more tests", "refactor for clarity", or any line failing the substitution test. Every quality obligation says what to change, where, and how to confirm it worked.
 Criterion: WHEN the self-audit gate runs, THE PLAN SHALL contain zero recommendations of the banned forms, verifiable by grep for the banned phrases and by spot-checking that each quality line names a file, rule, or command.
+
+R-CODE-23: PLAN.mdx keeps controls live and state machines lawful and time-correct: every operator-configurable or stored flag meant to gate behavior is planned with the code path that READS it (not only writes and displays it); every lifecycle state machine names its legal transitions and a rule that no transition frees a still-committed resource (inventory slot, access grant, credit hold) before its end or runs out of lifecycle order; and all scheduling and availability arithmetic uses the entity's configured timezone with daylight-saving handling, never server UTC.
+Criterion: WHEN a control flag, a state machine, or a scheduling or availability feature is planned THE PLAN SHALL name the read site for each gating flag, the transition table with its resource-release guard, and the timezone source, each with a test (a flag set on that changes behavior, an illegal or early-release transition that is rejected, a non-UTC-timezone slot that lands on the local wall clock).
 
 ## Task seeds
 
@@ -3623,7 +3635,7 @@ recommended default, and what happens if unanswered.
 
 ## Session log
 
-- YYYY-MM-DD plan created (godplans v1.2.0)
+- YYYY-MM-DD plan created (godplans v1.3.0)
 
 
 ---
@@ -3859,8 +3871,8 @@ for my $line (@lines) {
 my %catalog_max = (
     ARCH => 19,
     BUILD => 20,
-    CODE => 22,
-    DB => 22,
+    CODE => 23,
+    DB => 23,
     DEPLOY => 18,
     DNA => 20,
     LAUNCH => 22,
@@ -3870,7 +3882,7 @@ my %catalog_max = (
     PRD => 17,
     REPO => 20,
     ROAD => 21,
-    SEC => 26,
+    SEC => 28,
     SEO => 22,
     STACK => 20,
     UI => 20,

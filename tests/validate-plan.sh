@@ -320,8 +320,8 @@ perl -0pi -e 's/R-CODE-21/R-NOPE-1/' "$CASE_FILE"
 expect_fail "unknown domain requirement" "undefined requirement R-NOPE-1" --allow-planning "$CASE_FILE"
 
 new_case
-perl -0pi -e 's/R-CODE-21/R-CODE-23/' "$CASE_FILE"
-expect_fail "out-of-range domain requirement" "undefined requirement R-CODE-23" --allow-planning "$CASE_FILE"
+perl -0pi -e 's/R-CODE-21/R-CODE-24/' "$CASE_FILE"
+expect_fail "out-of-range domain requirement" "undefined requirement R-CODE-24" --allow-planning "$CASE_FILE"
 
 new_case
 perl -0pi -e 's/R-1\.1, R-CODE-21/R-9.9, R-CODE-21/' "$CASE_FILE"

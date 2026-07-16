@@ -3,6 +3,30 @@
 All notable changes to godplans are documented here. The format follows
 Keep a Changelog; versioning follows SemVer.
 
+## [1.3.0] - 2026-07-16
+
+### Added
+
+- Behavioral plan-time requirements that force controls to be wired, not merely
+  present, closing gaps a control-presence audit misses:
+  - R-SEC-27: authorization parity across every caller path to a privileged
+    operation (interactive session, API key or token, publicly exported
+    function, action-in-query-context, agent or tool call), with suspension and
+    step-up enforced at the data or function tier, not only at a page gate.
+  - R-SEC-28: caller-supplied selectors (id, email, slug, hostname, model
+    output) are ownership-bound to the authenticated principal before use, with
+    proof-of-control required for email and hostname; public checkout,
+    unauthenticated verification, and agent or tool arguments named as the
+    highest-risk cases.
+  - R-DB-23: money flows reconcile end to end across charge, invoice,
+    settlement, refund, and payout or transfer, with provider status confirmed
+    before a record is marked final and transfers reversed on refund.
+  - R-CODE-23: control flags meant to gate behavior are read on the enforcement
+    path, lifecycle transitions never release a still-committed resource early
+    or out of order, and scheduling uses the entity timezone rather than UTC.
+- Two security anti-patterns refused at plan time: primary-path-only
+  authorization and the trusted-selector confused deputy.
+
 ## [1.2.0] - 2026-07-13
 
 ### Added
