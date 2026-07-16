@@ -3,6 +3,25 @@
 All notable changes to godplans are documented here. The format follows
 Keep a Changelog; versioning follows SemVer.
 
+## [1.6.0] - 2026-07-16
+
+### Changed
+
+- Derive-not-duplicate refactor. The validator's `%catalog_max` block is now
+  generated from the reference modules by `npm run catalog` instead of being
+  hand-maintained, and `catalog:check` (gated in `npm run check`) verifies it,
+  adding a requirement no longer desyncs the validator. The out-of-range
+  regression fixture computes `max+1` from the catalog instead of hard-coding an
+  id, so it never breaks on growth.
+
+### Added
+
+- `npm run version:sync` writes the single source of version truth (package.json)
+  into every version surface and regenerates the prompt; `version:check` verifies
+  and prints the fix command (gated in `check`). `npm run release:prepare --
+  <bump>` bumps, syncs, and stubs a CHANGELOG entry in one command. This release
+  was cut with release:prepare.
+
 ## [1.5.0] - 2026-07-16
 
 ### Added

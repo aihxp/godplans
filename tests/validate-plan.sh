@@ -320,8 +320,10 @@ perl -0pi -e 's/R-CODE-21/R-NOPE-1/' "$CASE_FILE"
 expect_fail "unknown domain requirement" "undefined requirement R-NOPE-1" --allow-planning "$CASE_FILE"
 
 new_case
-perl -0pi -e 's/R-CODE-21/R-CODE-25/' "$CASE_FILE"
-expect_fail "out-of-range domain requirement" "undefined requirement R-CODE-25" --allow-planning "$CASE_FILE"
+CODE_MAX=$(perl -ne 'print $1 if /^\s+CODE => (\d+),/' "$REPOSITORY_VALIDATOR")
+CODE_OOR="R-CODE-$((CODE_MAX + 1))"
+perl -0pi -e "s/R-CODE-21/$CODE_OOR/" "$CASE_FILE"
+expect_fail "out-of-range domain requirement" "undefined requirement $CODE_OOR" --allow-planning "$CASE_FILE"
 
 new_case
 perl -0pi -e 's/R-1\.1, R-CODE-21/R-9.9, R-CODE-21/' "$CASE_FILE"

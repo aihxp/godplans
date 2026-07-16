@@ -146,7 +146,7 @@ godplans plans; it does not build. The status lifecycle is `planning -> approved
 - **Policy-violating projects**: the Phase 1 gate is not advisory. Prohibited purposes get a refusal with the policy category named.
 - **Silent domain skipping**: a domain is either planned or excluded with a reason in the matrix. Never silently absent.
 
-## Skill version: 1.5.0
+## Skill version: 1.6.0
 
 
 ---
@@ -3648,7 +3648,7 @@ recommended default, and what happens if unanswered.
 
 ## Session log
 
-- YYYY-MM-DD plan created (godplans v1.5.0)
+- YYYY-MM-DD plan created (godplans v1.6.0)
 
 
 ---
