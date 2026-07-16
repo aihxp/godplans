@@ -3,6 +3,20 @@
 All notable changes to godplans are documented here. The format follows
 Keep a Changelog; versioning follows SemVer.
 
+## [1.7.0] - 2026-07-16
+
+### Added
+
+- R-ARCH-20 (API contract), the plan-side mirror of godaudits A-ARCH-23 and
+  A-SEC-33. When the system exposes an API or service surface, PLAN.mdx settles
+  the API style (REST, GraphQL, or RPC), a consumer-safe versioning strategy, the
+  machine-readable contract (an OpenAPI document or a GraphQL schema), a single
+  error envelope (RFC 7807 Problem Details or a documented equivalent), and the
+  interaction-safety postures: an idempotency key on retryable unsafe operations
+  and connection authentication plus resource bounds on any real-time (WebSocket
+  or SSE) surface. The architecture module's `%catalog_max` was regenerated from
+  the reference (ARCH 19 to 20) with no hand-edit to the validator.
+
 ## [1.6.0] - 2026-07-16
 
 ### Changed

@@ -79,6 +79,9 @@ Criterion: WHEN the final phase is written, THE PLAN SHALL contain a drift-audit
 R-ARCH-19 The architecture section of PLAN.mdx stays under three pages of prose (tables, diagrams, and ADR tasks excluded) and survives the substitution test: swap the domain nouns (orders for tickets) or the storage shape and the text must become false, or it is decoration and gets cut.
 Criterion: WHEN the architecture section is drafted, THE PLAN SHALL contain no paragraph that reads equally true for an unrelated product; any such paragraph SHALL be deleted or made specific.
 
+R-ARCH-20 When the system exposes an API or service surface, PLAN.mdx settles the API contract: the API style (REST, GraphQL, or RPC) and why; a versioning strategy that does not break existing consumers; a machine-readable contract (an OpenAPI document or a GraphQL schema) as a planned artifact; consistent resource and URI modeling for REST; a single error envelope (RFC 7807 Problem Details or a documented equivalent); and the interaction-safety postures, an idempotency key on retryable unsafe operations and connection authentication plus resource bounds on any real-time (WebSocket or SSE) surface.
+Criterion: WHEN an API surface is planned THE PLAN SHALL name the API style, the versioning strategy, the contract artifact, and the error envelope, and SHALL require an idempotency key on retryable create-or-charge endpoints and authenticated, bounded real-time connections, each with a Verify line.
+
 ## Task seeds
 
 - [ ] GP-xxx Write ADR corpus for shape, storage, and trust boundaries
