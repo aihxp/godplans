@@ -1,6 +1,6 @@
 {
   "name": "godplans",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Plan everything before anything. A single-command AI agent skill that produces an audit-aware, validated, agent-executable master plan before application code is written.",
   "keywords": [
     "agent-skills",
@@ -41,8 +41,13 @@
   ],
   "scripts": {
     "test": "bash tests/run.sh",
+    "catalog": "node skills/godplans/scripts/build-catalog.js",
+    "catalog:check": "node skills/godplans/scripts/build-catalog.js --check",
+    "version:sync": "node scripts/version-sync.js",
+    "version:check": "node scripts/version-sync.js --check",
+    "release:prepare": "node scripts/release-prepare.js",
     "lint": "bash scripts/lint.sh --all --verbose",
-    "check": "npm run lint && npm test",
+    "check": "npm run version:check && npm run catalog:check && npm run lint && npm test",
     "eval": "bash scripts/eval.sh",
     "eval:check": "bash scripts/eval.sh --check-cases",
     "build:prompt": "bash scripts/build-prompt.sh",
