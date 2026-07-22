@@ -6,9 +6,11 @@ domain|security|applicable
 domain|ux|applicable
 domain|ui|applicable
 domain|observe|applicable
+domain|stack|applicable
 domain|llm|excluded
 contains|workspace_id|
 contains|R-DB-|
 contains|R-SEC-|
+contains|R-STACK-21|
 contains|settlement|
 max-count|## Open Questions|1

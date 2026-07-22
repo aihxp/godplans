@@ -124,4 +124,59 @@ if GODPLANS_EVAL_CASES="$TMP/cases" "$ROOT/scripts/eval.sh" --check-cases >/dev/
   fail "invalid expectation operation was accepted"
 fi
 
+# Control arm. Restore the manifest mutated above and run both arms into a
+# fresh output directory so no earlier mutation leaks into the comparison.
+printf '%s\n' \
+  'outcome|plan|' \
+  'frontmatter|mode|greenfield' \
+  'frontmatter|archetype|cli-tool' \
+  'domain|security|applicable' \
+  'contains|GP-101|' \
+  'gate|prepublication|fresh-prepublication' \
+  'not-contains|PLACEHOLDER|' \
+  'max-count|## Open Questions|1' \
+  > "$TMP/cases/plan-case/EXPECTATIONS"
+
+test -x "$ROOT/evals/runners/codex-baseline.sh" || fail "baseline runner is not executable"
+bash -n "$ROOT/evals/runners/codex-baseline.sh"
+if grep -q 'ln -s' "$ROOT/evals/runners/codex-baseline.sh"; then
+  fail "baseline runner linked the skill into its workspace"
+fi
+
+if GODPLANS_EVAL_CASES="$TMP/cases" GODPLANS_EVAL_RUNNER="$TMP/bin/runner" \
+  "$ROOT/scripts/eval.sh" --baseline --output "$TMP/base-output" >/dev/null 2>&1; then
+  fail "--baseline ran without a baseline runner"
+fi
+
+if GODPLANS_EVAL_CASES="$TMP/cases" GODPLANS_EVAL_RUNNER="$TMP/bin/runner" \
+  GODPLANS_EVAL_BASELINE_RUNNER="$TMP/bin/runner" \
+  "$ROOT/scripts/eval.sh" --baseline --output "$TMP/base-output" >/dev/null 2>&1; then
+  fail "--baseline accepted the skill runner as its own control"
+fi
+
+# A weak control: it answers, but produces none of the plan structure.
+printf '%s\n' '#!/usr/bin/env sh' \
+  'set -eu' \
+  'printf "%s\n" "An unaided answer with no plan structure." > "$2"' \
+  > "$TMP/bin/baseline-runner"
+chmod +x "$TMP/bin/baseline-runner"
+
+GODPLANS_EVAL_CASES="$TMP/cases" \
+GODPLANS_EVAL_RUNNER="$TMP/bin/runner" \
+GODPLANS_EVAL_BASELINE_RUNNER="$TMP/bin/baseline-runner" \
+GODPLANS_VALIDATOR="$TMP/bin/validator" \
+GODPLANS_TEST_PLAN="$TMP/PLAN.mdx" \
+GODPLANS_TEST_VALIDATOR="$TMP/bin/validator" \
+  "$ROOT/scripts/eval.sh" --baseline --output "$TMP/base-output" > "$TMP/baseline.out" 2> "$TMP/baseline.err" \
+  || fail "the control arm changed the exit code"
+
+grep -q '^plan-case[[:space:]]PASS[[:space:]]8/8$' "$TMP/baseline.out" || fail "skill arm regressed under --baseline"
+grep -q '^plan-case[[:space:]]BASE[[:space:]]' "$TMP/baseline.out" || fail "no control row for the plan case"
+grep -q '^AGGREGATE[[:space:]]' "$TMP/baseline.out" || fail "no aggregate row"
+grep -q 'delta +' "$TMP/baseline.out" || fail "no delta reported"
+test -f "$TMP/base-output/plan-case/baseline/PLAN.mdx" || fail "control artifact was not retained"
+if grep -q '^plan-case[[:space:]]MISS' "$TMP/baseline.err"; then
+  fail "control misses were reported as skill-arm misses"
+fi
+
 echo "ok   [eval-harness]"

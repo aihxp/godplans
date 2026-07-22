@@ -113,9 +113,17 @@ Excluded domains get one line in the applicability matrix and nothing else.
 
 Walk every applicable module's Plan requirements section and give it one of two dispositions: landed somewhere concrete, or excluded with a specific archetype or scale reason in the compact module disposition. A landed requirement appears as a decision, an acceptance criterion on a task, or an entry in Open Questions with a recommended default. Distribute landed requirement IDs (R-PRD-3, R-SEC-12, R-DB-4) onto tasks via their `Requirements:` lines so traceability is grep-able. An applicable requirement with neither disposition is a hole; fix it before Phase 6. Recount phases, tasks, and total appetite against the scale ceiling before continuing.
 
-### Phase 6: Self-audit gate
+### Phase 6: Independent audit gate
 
-Read the inlined exemplar reference first; it is the calibration for what full marks mean. Then score the draft plan against the landed requirement set for every applicable module, 0 to 100 per domain. Excluded rubric items do not enter the denominator only when their module disposition names a specific archetype or scale reason. Any scored domain below 85: revise that section and rescore. Do not raise a score by adding work that breaks the scale ceiling; cut or consolidate first. Print the scorecard in chat when done. A plan that would not survive its own descendant auditors does not ship.
+The author does not grade the author. Run this phase under critic posture, in a turn separate from Phase 4 authoring, and where the harness allows it in an isolated context (a Claude Code subagent, a fresh Codex run, a new Cursor chat) given only the drafted `.godplans/PLAN.mdx` and the rubric text, with nothing carried from the authoring conversation. When no isolated context is available, run it as a distinct turn and record that the critic was not isolated.
+
+**6a. Score.** Read the inlined exemplar reference first; it is the calibration for what full marks mean. Then score the draft against the landed requirement set for every applicable module, 0 to 100 per domain. Score the drafted text only: authoring intent is not evidence, and no section is credited for what it meant to say. Excluded rubric items do not enter the denominator only when their module disposition names a specific archetype or scale reason. Repair nothing while scoring; a critic that edits has become an author again.
+
+**6b. Name every deduction.** Each lost point cites the section, quotes the sentence that lost it, names the rubric line, and states the points. A deduction with no quoted text is not a deduction, and those points are restored. Produce the complete scorecard before any revision.
+
+**6c. Revise and rescore.** Any scored domain below 85: revise that section and rescore. Every revision quotes the deduction it answers. A rescore that raises a domain with no corresponding revision is a self-report and is discarded. Do not raise a score by adding work that breaks the scale ceiling; cut or consolidate first.
+
+Print the scorecard in chat when done, including whether the critic ran isolated. A plan that would not survive its own descendant auditors does not ship.
 
 ### Phase 7: Emit and hand off
 
@@ -146,7 +154,7 @@ godplans plans; it does not build. The status lifecycle is `planning -> approved
 - **Policy-violating projects**: the Phase 1 gate is not advisory. Prohibited purposes get a refusal with the policy category named.
 - **Silent domain skipping**: a domain is either planned or excluded with a reason in the matrix. Never silently absent.
 
-## Skill version: 1.7.0
+## Skill version: 1.8.0
 
 
 ---
@@ -516,7 +524,7 @@ Criterion: IF no load-bearing trigger holds, THE PLAN SHALL cap the architecture
 R-ARCH-3 PLAN.mdx answers the 8 pre-flight questions in writing: purpose, appetite, honest 12-month scale ceiling, binding NFRs, team shape, incumbent stack, external integrations with their failure modes, and the product section's explicit deferrals to architecture.
 Criterion: WHEN the architecture section opens, THE PLAN SHALL contain all 8 answers, including a numeric 12-month scale ceiling and at least one named failure mode per external integration.
 
-R-ARCH-4 PLAN.mdx picks exactly one of the seven system shapes with ADR-001 semantics: alternatives rejected with reasons, the flip point that would reverse the choice, and the blast radius if wrong. Modular monolith is the default; any microservices choice names one of the three forcing functions.
+R-ARCH-4 PLAN.mdx picks exactly one system shape with ADR-001 semantics: alternatives rejected with reasons, the flip point that would reverse the choice, and the blast radius if wrong. The seven listed shapes are the presumptive set; an eighth shape is permitted only when the plan names the constraint that no listed shape satisfies and carries the same flip point and blast radius under the same rigor. Modular monolith is the default; any microservices choice names one of the three forcing functions.
 Criterion: WHEN a system shape is stated, THE PLAN SHALL name at least two rejected alternatives, one flip point, and one blast radius; IF the shape is microservices, THE PLAN SHALL name the forcing function or change the shape.
 
 R-ARCH-5 PLAN.mdx enumerates components as domain bounded contexts (Ordering, Billing; never UserService or CoreAPI), each with six fields: bounded context, one-sentence responsibility without compounds, interface (sync/async, wire format, idempotency posture), data ownership with one writer per entity, dependencies, failure posture. No anemic services (thin wrapper over one table) and no god services (owns half the domain).
@@ -690,6 +698,7 @@ Each requirement is one plan-time obligation inverted from a stack-ready audit c
 18. **R-STACK-18 Open questions with owners.** Remaining stack unknowns appear only in the plan's single Open Questions section, each with an owner, a due date, and a recommended default. Criterion: IF any stack question remains open, THE PLAN SHALL list it in Open Questions with owner and due date, and THE PLAN SHALL NOT restate committed stack decisions there.
 19. **R-STACK-19 Migration path.** A stack migration includes all five components: blast radius, sequenced steps with dual-write/dual-read parallels and cutover points, a rollback checkpoint per phase, a data migration strategy (transforms, backfills, reconciliation, validation), and an honest engineer-week timeline. Criterion: IF the plan replaces any existing stack component that holds data, THE PLAN SHALL contain all five migration components with a rollback checkpoint in every migration phase.
 20. **R-STACK-20 Skip-the-rigor guard.** An experience-backed, reversible, low-stakes repeat pick gets a compact constraint check instead of the full scoring pass; formal scoring there is itself the paralysis failure mode. Criterion: IF the team has shipped this exact bundle before and every component is reversible under the stated constraints, THE PLAN SHALL record a compact constraint check with the prior deployment named instead of a full scoring table.
+21. **R-STACK-21 Named runner-up beyond the starting set.** The pre-combined bundles in Decisions to force are a starting set, not a ceiling. The plan names one viable alternative that was generated rather than selected from that set, together with the single condition under which it would have won, so a reader can tell a bundle that was chosen from one that was merely defaulted into. This records the alternative; it does not promote it, and the incumbent bias in R-STACK-7 and R-STACK-12 stands. Criterion: WHEN the bundle is chosen, THE PLAN SHALL name one runner-up that was not on the pre-combined bundle list together with the condition that would flip the decision to it, or SHALL state that generation produced no viable off-list candidate and name the constraint that eliminated them.
 
 ## Task seeds
 
@@ -739,8 +748,8 @@ Score the plan's stack section 0-100. Below 85 total, revise before emission. Th
   Full marks: all six pre-flight answers in writing with silence stated affirmatively, every answer converted to a hard constraint or weighted preference, the map appearing before any tool name, violators dropped unscored.
   Typical losses: regulatory field answered by omission (-5), constraints listed after the recommendation they were supposed to filter (-5).
 - **Candidate coverage (15).**
-  Full marks: all 12 dimensions decided or excluded with a stated reason, 2-4 named candidates per decided dimension, every loser's reason recorded.
-  Typical losses: observability, email, or background jobs skipped without an exclusion reason (-3 each), a dimension with one candidate and no eliminating constraint named (-3).
+  Full marks: all 12 dimensions decided or excluded with a stated reason, 2-4 named candidates per decided dimension, every loser's reason recorded, and one named runner-up generated outside the pre-combined bundle list with its flip condition (or the constraint that eliminated all off-list candidates).
+  Typical losses: observability, email, or background jobs skipped without an exclusion reason (-3 each), a dimension with one candidate and no eliminating constraint named (-3), every candidate traceable to the starting bundles with no off-list alternative named or excluded (-3).
 - **Scoring discipline (15).**
   Full marks: weight vector printed and re-derivable, every score carrying a rationale that names what was scored, 9+/3- caps respected with justification, top bundle ranked by the weighted aggregate.
   Typical losses: scores with no rationale (-5), an unexplained 10 (-5), aggregate that does not follow from the printed weights (-5).
@@ -3240,8 +3249,13 @@ Options:
   (a) No; boards live and die inside one workspace.
   (b) Read-only public links with unguessable tokens.
   (c) Full cross-workspace membership.
+  (d) No sharing primitive at all; export a read-only snapshot, which
+      moves the question out of the permission model entirely.
 Recommended default: (b). It satisfies the stated sharing story (R-1.6)
 without per-object ACLs; the token table is additive, not structural.
+Outside the framing: (a) through (c) only vary how much sharing the
+permission model allows. (d) was generated and rejected; it wins only if
+sharing stays read-only permanently, which R-1.6 does not promise.
 If unanswered by Phase 4 start: the plan proceeds on (b).
 ```
 
@@ -3356,7 +3370,7 @@ A material replan restarts this lifecycle at `planning`, increments `plan_versio
 10. `## Style genome`. Naming, idioms, structure conventions the first commit must already follow.
 11. `## Agent memory`. The AGENTS.md and pillar files the scaffold phase will emit.
 12. `## Phases`. The task body; see Task grammar.
-13. `## Open Questions`. Exactly one such section, at the bottom, the only enumeration of open decisions. Each question carries options and a recommended default. Committed decisions never appear here. A complex plan with zero open questions is acceptable only when every meaningful decision has been explicitly made above.
+13. `## Open Questions`. Exactly one such section, at the bottom, the only enumeration of open decisions. Each question carries options and a recommended default. When every listed option is a variant of one framing, the question also names the option from outside that framing, or states that none survived and which constraint eliminated it; options that only vary a dial are a menu, not a set of alternatives. Committed decisions never appear here. A complex plan with zero open questions is acceptable only when every meaningful decision has been explicitly made above.
 14. `## Rules for executing agents`. Copied verbatim from this module (below).
 15. `## Session log`. Append-only, one line per session.
 
@@ -3464,7 +3478,7 @@ The plan is re-read every session; bloat is a tax on every future turn. Budgets:
 
 ## Replan protocol
 
-When PLAN.mdx already exists: read it fully, recount progress from checkboxes, read the session log, and recompute the source evidence recorded under `## Plan provenance`. Recheck every artifact recorded as completed or imported. If its content, revision, or existence changed materially, mark the plan stale by returning `status` to `planning` before applying the delta; do not trust the chat or old validation timestamp. Completed work is history and never altered. New work gets fresh IDs continuing the sequence. Superseded unstarted tasks are struck through (`~~- [ ] GP-310 ...~~` plus a reason line), not deleted, so the audit trail survives. Refresh the evidence inventory, `input_digest`, and `validated_at`; bump `plan_version`; log the delta in the session log; and re-run the Phase 6 self-audit on any section that changed.
+When PLAN.mdx already exists: read it fully, recount progress from checkboxes, read the session log, and recompute the source evidence recorded under `## Plan provenance`. Recheck every artifact recorded as completed or imported. If its content, revision, or existence changed materially, mark the plan stale by returning `status` to `planning` before applying the delta; do not trust the chat or old validation timestamp. Completed work is history and never altered. New work gets fresh IDs continuing the sequence. Superseded unstarted tasks are struck through (`~~- [ ] GP-310 ...~~` plus a reason line), not deleted, so the audit trail survives. Refresh the evidence inventory, `input_digest`, and `validated_at`; bump `plan_version`; log the delta in the session log; and re-run the Phase 6 audit on any section that changed.
 
 
 ---
@@ -3651,7 +3665,7 @@ recommended default, and what happens if unanswered.
 
 ## Session log
 
-- YYYY-MM-DD plan created (godplans v1.7.0)
+- YYYY-MM-DD plan created (godplans v1.8.0)
 
 
 ---
@@ -3900,7 +3914,7 @@ my %catalog_max = (
     ROAD => 21,
     SEC => 30,
     SEO => 22,
-    STACK => 20,
+    STACK => 21,
     UI => 21,
     UX => 20,
 );

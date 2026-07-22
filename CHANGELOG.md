@@ -3,6 +3,73 @@
 All notable changes to godplans are documented here. The format follows
 Keep a Changelog; versioning follows SemVer.
 
+## [1.8.0] - 2026-07-22
+
+Two defects fixed and one measurement gap closed, all prompted by reading
+UditAkhourii/adhd (MIT), whose thesis is that mixing the generator and the
+critic destroys output quality and that a menu of options is not a set of
+alternatives. The technique is re-expressed here for planning; no ADHD text,
+prompt, or code is copied, and nothing in this release adds a dependency,
+a network call, or a harness-specific primitive.
+
+### Changed
+
+- **Phase 6 is now an independent audit gate, not a self-audit.** The author
+  graded the author, and worse: ground rule 8 makes the author read the
+  module (including its rubric) before authoring, so the generator saw the
+  grading key. Phase 6 now splits into 6a score, 6b name every deduction, and
+  6c revise and rescore. Scoring runs under critic posture in a separate turn,
+  and in an isolated context where the harness offers one, given only the
+  drafted plan and the rubric text. Each deduction must cite the section,
+  quote the sentence that lost the points, and name the rubric line; a
+  deduction with no quoted text is not a deduction. Every revision quotes the
+  deduction it answers, and a rescore with no corresponding revision is
+  discarded. The scorecard now records whether the critic ran isolated.
+- **R-ARCH-4 admits an eighth system shape.** The requirement demanded exactly
+  one of seven listed shapes, so a genuinely apt shape outside the list did
+  not merely lose, it failed a requirement. The seven remain the presumptive
+  set; an eighth is permitted only when the plan names the constraint no
+  listed shape satisfies and carries the same flip point and blast radius.
+- **Open Questions must escape their own framing.** When every listed option
+  is a variant of one framing, the question now names the option from outside
+  that framing or states which constraint eliminated it. Options that only
+  vary a dial are a menu, not alternatives. `references/exemplar.md` shows the
+  worked form, including one genuinely off-framing option and why it lost.
+
+### Added
+
+- **R-STACK-21 (named runner-up beyond the starting set).** The pre-combined
+  bundles in Decisions to force are a starting set, not a ceiling. The plan
+  names one viable alternative that was generated rather than selected from
+  that set, with the single condition under which it would have won, or states
+  that generation produced none and names the constraint that eliminated them.
+  This records the alternative without promoting it: the incumbent bias in
+  R-STACK-7 and R-STACK-12 is deliberate and stands. Scored inside the
+  existing Candidate coverage dimension, so the stack rubric still totals 100.
+- **A control arm for the evaluation harness (`scripts/eval.sh --baseline`).**
+  Every case previously scored godplans against godplans' own expectations, so
+  the matrix could prove conformance but never that the skill beats the same
+  agent unaided. `--baseline` runs each case a second time through
+  `GODPLANS_EVAL_BASELINE_RUNNER` with no skill loaded, scores it against the
+  identical expectations, and reports a per-case and aggregate delta. The
+  control arm is a measurement, never a gate: its misses cannot change the
+  exit code and are not reported as failures.
+- **`evals/runners/codex-baseline.sh`**, a deliberately fair control: same
+  agent, model, reasoning effort, workspace, fixture, and request; a plain ask
+  for a thorough plan so it has a real chance at every scored dimension; no
+  skill link and no leaked format contract, requirement IDs, validator, or
+  phase method; and a plan accepted at any plausible path. A control denied a
+  fair attempt measures the rigging, not the skill.
+- Harness regression tests covering the control arm: both misuse guards
+  (missing baseline runner, and a control that is the skill runner), artifact
+  retention, delta and aggregate reporting, and the invariant that control
+  misses never surface as skill-arm misses or change the exit code.
+- `evals/cases/greenfield-saas` asserts the stack domain is applicable and
+  that R-STACK-21 lands.
+- `evals/README.md` documents the control arm, its fairness rules, and two
+  limits now stated rather than hidden: single-sample cases carry no variance,
+  and one shipped runner cannot separate godplans' contribution from Codex's.
+
 ## [1.7.0] - 2026-07-16
 
 ### Added

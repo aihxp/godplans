@@ -3,7 +3,7 @@ name: godplans
 description: "Produce an audit-aware, agent-executable master plan (PLAN.mdx) for a software project before application code is written. One command runs discovery, forces hard-to-reverse decisions, and plans product, architecture, roadmap, stack, repo, build, deploy, observability, launch, security, code quality, style genome, database, LLM integration, SEO, UI, UX, and agent memory upfront. After-the-fact audit checks become plan-time acceptance criteria, and a self-contained validator enforces task structure and approval state. Use when the user says: plan this project, godplans, master plan, plan everything upfront, idea to plan, plan before code, audit-aware plan, replan, or starts a greenfield project or major feature. Refuses plan theater (sections filled, decisions absent), vague tasks without verification, unsupported quality guarantees, and projects whose core purpose violates the Anthropic Usage Policy."
 license: MIT
 metadata:
-  version: "1.7.0"
+  version: "1.8.0"
   author: aihxp
   homepage: https://github.com/hannsxpeter/godplans
 ---
@@ -106,9 +106,17 @@ Excluded domains get one line in the applicability matrix and nothing else.
 
 Walk every applicable module's Plan requirements section and give it one of two dispositions: landed somewhere concrete, or excluded with a specific archetype or scale reason in the compact module disposition. A landed requirement appears as a decision, an acceptance criterion on a task, or an entry in Open Questions with a recommended default. Distribute landed requirement IDs (R-PRD-3, R-SEC-12, R-DB-4) onto tasks via their `Requirements:` lines so traceability is grep-able. An applicable requirement with neither disposition is a hole; fix it before Phase 6. Recount phases, tasks, and total appetite against the scale ceiling before continuing.
 
-### Phase 6: Self-audit gate
+### Phase 6: Independent audit gate
 
-Read `references/exemplar.md` first; it is the calibration for what full marks mean. Then score the draft plan against the landed requirement set for every applicable module, 0 to 100 per domain. Excluded rubric items do not enter the denominator only when their module disposition names a specific archetype or scale reason. Any scored domain below 85: revise that section and rescore. Do not raise a score by adding work that breaks the scale ceiling; cut or consolidate first. Print the scorecard in chat when done. A plan that would not survive its own descendant auditors does not ship.
+The author does not grade the author. Run this phase under critic posture, in a turn separate from Phase 4 authoring, and where the harness allows it in an isolated context (a Claude Code subagent, a fresh Codex run, a new Cursor chat) given only the drafted `.godplans/PLAN.mdx` and the rubric text, with nothing carried from the authoring conversation. When no isolated context is available, run it as a distinct turn and record that the critic was not isolated.
+
+**6a. Score.** Read `references/exemplar.md` first; it is the calibration for what full marks mean. Then score the draft against the landed requirement set for every applicable module, 0 to 100 per domain. Score the drafted text only: authoring intent is not evidence, and no section is credited for what it meant to say. Excluded rubric items do not enter the denominator only when their module disposition names a specific archetype or scale reason. Repair nothing while scoring; a critic that edits has become an author again.
+
+**6b. Name every deduction.** Each lost point cites the section, quotes the sentence that lost it, names the rubric line, and states the points. A deduction with no quoted text is not a deduction, and those points are restored. Produce the complete scorecard before any revision.
+
+**6c. Revise and rescore.** Any scored domain below 85: revise that section and rescore. Every revision quotes the deduction it answers. A rescore that raises a domain with no corresponding revision is a self-report and is discarded. Do not raise a score by adding work that breaks the scale ceiling; cut or consolidate first.
+
+Print the scorecard in chat when done, including whether the critic ran isolated. A plan that would not survive its own descendant auditors does not ship.
 
 ### Phase 7: Emit and hand off
 
@@ -152,4 +160,4 @@ godplans plans; it does not build. The status lifecycle is `planning -> approved
 | `templates/PLAN.template.mdx` | The skeleton PLAN.mdx |
 | `scripts/validate-plan.sh` | Self-contained validator copied beside each emitted plan |
 
-## Skill version: 1.7.0
+## Skill version: 1.8.0
