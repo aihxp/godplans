@@ -15,6 +15,23 @@ test -x "$ROOT/scripts/eval.sh" || fail "scripts/eval.sh is not executable"
 test -x "$ROOT/evals/runners/codex.sh" || fail "Codex runner is not executable"
 bash -n "$ROOT/evals/runners/codex.sh"
 
+# Global-skill isolation. A machine that runs these evals almost always has
+# godplans installed globally (in ~/.codex/skills and ~/.agents/skills), which
+# Codex discovers regardless of the workspace. Without isolation, BOTH arms
+# load the skill and the control measures godplans against itself. Both Codex
+# runners must isolate HOME and CODEX_HOME; only the skill runner may link the
+# project-local skill.
+for codex_runner in codex codex-baseline; do
+  runner_path="$ROOT/evals/runners/$codex_runner.sh"
+  bash -n "$runner_path"
+  grep -q 'HOME="\$ISO_HOME" CODEX_HOME="\$ISO_CODEX_HOME" codex' "$runner_path" \
+    || fail "$codex_runner.sh does not isolate HOME and CODEX_HOME from global skills"
+done
+grep -q 'ln -s' "$ROOT/evals/runners/codex.sh" || fail "skill runner no longer links the project skill"
+if grep -q 'ln -s' "$ROOT/evals/runners/codex-baseline.sh"; then
+  fail "baseline runner links a skill into its workspace"
+fi
+
 help_output=$("$ROOT/scripts/eval.sh" --help)
 printf '%s\n' "$help_output" | grep -q '^Usage:' || fail "help is missing a Usage line"
 if printf '%s\n' "$help_output" | grep -q 'set -euo pipefail'; then
