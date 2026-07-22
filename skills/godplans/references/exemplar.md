@@ -81,8 +81,13 @@ Options:
   (a) No; boards live and die inside one workspace.
   (b) Read-only public links with unguessable tokens.
   (c) Full cross-workspace membership.
+  (d) No sharing primitive at all; export a read-only snapshot, which
+      moves the question out of the permission model entirely.
 Recommended default: (b). It satisfies the stated sharing story (R-1.6)
 without per-object ACLs; the token table is additive, not structural.
+Outside the framing: (a) through (c) only vary how much sharing the
+permission model allows. (d) was generated and rejected; it wins only if
+sharing stays read-only permanently, which R-1.6 does not promise.
 If unanswered by Phase 4 start: the plan proceeds on (b).
 ```
 

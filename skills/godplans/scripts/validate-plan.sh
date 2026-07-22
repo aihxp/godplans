@@ -239,7 +239,7 @@ my %catalog_max = (
     ROAD => 21,
     SEC => 30,
     SEO => 22,
-    STACK => 20,
+    STACK => 21,
     UI => 21,
     UX => 20,
 );

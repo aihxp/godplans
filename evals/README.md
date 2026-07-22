@@ -74,6 +74,41 @@ Score-only mode still rejects missing, non-executable, or drifted validator
 companions. Use `bash scripts/eval.sh --help` for case selection and output
 options.
 
+## Control arm
+
+Without a control, the matrix proves conformance and nothing more: every case
+scores godplans against godplans' own expectations, so a pass shows the skill
+did what it promised, not that the promise was worth loading. `--baseline`
+adds the missing arm by running each case a second time through the same
+agent, model, and reasoning effort with no skill available, then scoring that
+output against the identical expectations.
+
+```bash
+GODPLANS_EVAL_RUNNER="$PWD/evals/runners/codex.sh" \
+GODPLANS_EVAL_BASELINE_RUNNER="$PWD/evals/runners/codex-baseline.sh" \
+bash scripts/eval.sh --baseline
+```
+
+Each case prints a `BASE` row with the control score and the delta, and the run
+ends with an `AGGREGATE` row totaling both arms. The control arm is a
+measurement and never a gate: its misses are the point, so they are not
+reported as failures and cannot change the exit code.
+
+A control arm only means something if it is fair. `codex-baseline.sh` holds
+the agent, model, reasoning effort, workspace, `INPUT/` fixture, and
+`REQUEST.md` identical to the skill arm, asks plainly for a thorough plan so
+the control has a real chance at every scored dimension, leaks nothing from
+the skill (no format contract, requirement IDs, validator, or phase method),
+and accepts a plan written at any plausible path. A control that is denied a
+fair attempt at a dimension it is scored on measures the rigging, not the
+skill. When the control produces no plan at all, its final response is scored
+instead and the assertions fail honestly rather than being hidden as a runner
+error.
+
+Expect the control to win some assertions outright. Any case where it scores
+near the skill arm is a case whose expectations test formatting rather than
+planning quality, and it should be tightened.
+
 ## Expectation grammar
 
 Each non-comment line is pipe-delimited:
@@ -98,9 +133,17 @@ declares exactly one outcome.
 
 ## Publishing a baseline
 
-Run the complete matrix once per supported agent and model family. Commit the
-summary, runner version, model identifier, date, plan validator version, and
-the exact commit under `evals/baselines/`. Never publish a score without the
-raw generated artifacts needed to reproduce it. Model-backed evaluations are
-release evidence, not a CI gate, because they require credentials and incur
-cost.
+Run the complete matrix once per supported agent and model family, with
+`--baseline`, so the published record carries both arms. Commit the summary,
+runner version, model identifier, date, plan validator version, and the exact
+commit under `evals/baselines/`. Never publish a score without the raw
+generated artifacts needed to reproduce it, and never publish a skill score
+without the control score beside it: a number with no control is a
+conformance report being presented as evidence of value. Model-backed
+evaluations are release evidence, not a CI gate, because they require
+credentials and incur cost.
+
+Two limits of the current harness, stated rather than hidden. Each case is a
+single sample, so a published delta carries no variance; repeat runs and
+report the spread before treating a delta as a measurement. And only one agent
+runner ships, so no result yet separates godplans' contribution from Codex's.
