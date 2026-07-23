@@ -29,6 +29,11 @@ architecture
 stack
 database
 security
+exemplar
+plan-format
+"
+
+lazy_refs="
 llm
 ux
 ui
@@ -42,8 +47,6 @@ roadmap
 deploy
 observe
 launch
-exemplar
-plan-format
 "
 
 bash "$BUILD" >/dev/null
@@ -60,6 +63,14 @@ for ref in $expected_refs; do
   previous_line=$line
 done
 
+for ref in $lazy_refs; do
+  marker="# INLINED REFERENCE: references/$ref.md"
+  count=$(marker_count "$marker")
+  [ "$count" -eq 0 ] || fail "lazy module was inlined into the core: $ref"
+  grep -Fq "references/$ref.md" "$PROMPT" ||
+    fail "portable core does not route to lazy module: $ref"
+done
+
 template_marker="# INLINED TEMPLATE: templates/PLAN.template.mdx"
 assert_marker_once "$template_marker"
 template_title="# PROJECT-NAME master plan"
@@ -73,7 +84,12 @@ assert_marker_once "$validator_marker"
 validator_line=$(grep -Fnx "$validator_marker" "$PROMPT" | cut -d: -f1)
 [ "$validator_line" -gt "$template_line" ] || fail "validator does not follow the template"
 validator_shebangs=$(grep -Fxc '#!/usr/bin/env bash' "$PROMPT" || true)
-[ "$validator_shebangs" -eq 1 ] || fail "expected one inlined validator shebang, found $validator_shebangs"
+[ "$validator_shebangs" -eq 2 ] || fail "expected validator and metric script shebangs, found $validator_shebangs"
+
+halflife_marker="# INLINED SCRIPT: scripts/plan-halflife.sh"
+assert_marker_once "$halflife_marker"
+halflife_line=$(grep -Fnx "$halflife_marker" "$PROMPT" | cut -d: -f1)
+[ "$halflife_line" -gt "$validator_line" ] || fail "plan half-life script does not follow the validator"
 
 grep -Fq 'Weekend plans have at most 3 phases and 8 tasks.' "$PROMPT" ||
   fail "portable prompt is missing the weekend scale ceiling"
@@ -85,15 +101,23 @@ grep -Fq 'expected exactly one ## Plan provenance section' "$PROMPT" ||
   fail "portable prompt is missing provenance validation"
 
 prompt_bytes=$(wc -c < "$PROMPT" | tr -d ' ')
-[ "$prompt_bytes" -le 525000 ] || fail "portable prompt exceeds 525000-byte budget: $prompt_bytes"
+[ "$prompt_bytes" -le 300000 ] || fail "portable core exceeds 300000-byte budget: $prompt_bytes"
 
 unresolved=$(sed '/^# INLINED REFERENCE: /d; /^# INLINED TEMPLATE: /d; /^# INLINED VALIDATOR: /d' "$PROMPT" |
-  grep -En 'references/([a-z-]+|<domain>)\.md|references/|templates/PLAN\.template\.mdx|skills/godplans/scripts/validate-plan\.sh|(^|[^[:alnum:]-])plan-format\.md([^[:alnum:]-]|$)' || true)
+  grep -En 'templates/PLAN\.template\.mdx|skills/godplans/scripts/validate-plan\.sh|(^|[^[:alnum:]-])plan-format\.md([^[:alnum:]-]|$)' || true)
 [ -z "$unresolved" ] || fail "unresolved required local reference remains:\n$unresolved"
 
 first_hash=$(shasum -a 256 "$PROMPT" | awk '{print $1}')
 bash "$BUILD" >/dev/null
 second_hash=$(shasum -a 256 "$PROMPT" | awk '{print $1}')
 [ "$first_hash" = "$second_hash" ] || fail "regeneration is not deterministic"
+
+FULL_PROMPT="$REPO_DIR/PROMPT.full.test.md"
+trap 'rm -f "$FULL_PROMPT"' EXIT
+bash "$BUILD" --full --output "$FULL_PROMPT" >/dev/null
+for ref in $expected_refs $lazy_refs; do
+  grep -Fqx "# INLINED REFERENCE: references/$ref.md" "$FULL_PROMPT" ||
+    fail "full prompt is missing module: $ref"
+done
 
 echo "ok   [portable-prompt]"

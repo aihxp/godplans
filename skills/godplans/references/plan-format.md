@@ -32,6 +32,10 @@ source_revision: 0123456789abcdef0123456789abcdef01234567
 input_digest: sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
 validated_at: 2026-07-13T12:00:00Z
 domains_applicable: [product, architecture, stack, database, security, ...]
+domains_deferred:
+  - name: observe
+    trigger: first real user
+    reason: full SLO policy is reversible until traffic exists
 domains_excluded:
   - name: seo
     reason: internal tool behind SSO; no public surface to index
@@ -43,11 +47,11 @@ progress:
 ---
 ```
 
-Allowed modes are `greenfield`, `brownfield`, and `replan`. Frontmatter is the digest, not the truth. The truth is the checkboxes; `progress` counters are derived from them and updated in the same edit that flips a box. `tasks_total` and `tasks_done` count active task definition header lines. `phases_total` counts numbered phase headings, and a phase contributes to `phases_done` only when every active task in it is checked. If counters disagree, recount from the task definitions.
+Allowed modes are `greenfield`, `brownfield`, and `replan`. Frontmatter is the digest, not the truth. The truth is the checkboxes; `progress` counters are derived from them and updated in the same edit that flips a box. `tasks_total` and `tasks_done` count active task definition header lines. `phases_total` counts numbered phase headings, and a phase contributes to `phases_done` only when every active task in it is checked. If counters disagree, recount from the task definitions. The three domain lists summarize the applicability matrix. Deferred entries repeat the row's observable trigger and reversibility reason. The matrix is authoritative if a summary and row ever disagree.
 
 Allowed product forms are `web-application`, `api-or-service`, `cli-or-sdk`, `mobile-or-desktop`, `data-or-ml`, and `infrastructure-or-iac`. `public_release` is `true` only when execution can activate a public site, service, package, store artifact, model, or infrastructure surface. Internal and local-only projects set it to `false`; they do not inherit a public-activation gate.
 
-`source_revision` is the full Git commit used for planning, or `none` when no revision exists. `validated_at` is a UTC ISO-8601 timestamp. The `## Plan provenance` values repeat those frontmatter values exactly, with no trailing punctuation. Its machine-readable inventory contains one or more lines shaped ``- `<label>` = `sha256:<64-lowercase-hex>` ``. Labels use only ASCII letters, digits, `.`, `_`, `/`, and `-`; labels are unique; and exactly one label is `intake`. Hash normalized intake text for `intake`, and hash raw file bytes for file entries. To derive `input_digest`, sort entries lexicographically by label, concatenate each as `<label><TAB><64-lowercase-hex><LF>`, hash the UTF-8 bytes with SHA-256, and prefix the result with `sha256:`. Inventory display order does not affect the aggregate. These values bind the plan to its inputs; they are not claims that later execution leaves the repository unchanged.
+`source_revision` is the full Git commit used for planning, or `none` when no revision exists. `validated_at` is a UTC ISO-8601 timestamp. The `## Plan provenance` values repeat those frontmatter values exactly, with no trailing punctuation. Its machine-readable inventory contains one or more lines shaped ``- `<label>` = `sha256:<64-lowercase-hex>` ``. Prefix a stable file artifact with `[recheck]` when phase-boundary drift checks must recompute it: ``- [recheck] `path/to/artifact` = `sha256:<64-lowercase-hex>` ``. A recheck label is a repository-relative file path, not an alias. Labels use only ASCII letters, digits, `.`, `_`, `/`, and `-`; labels are unique; and exactly one label is `intake`. Hash normalized intake text for `intake`, and hash raw file bytes for file entries. To derive `input_digest`, sort entries lexicographically by label, concatenate each as `<label><TAB><64-lowercase-hex><LF>`, hash the UTF-8 bytes with SHA-256, and prefix the result with `sha256:`. The `[recheck]` marker does not enter the digest. Inventory display order does not affect the aggregate. These values bind the plan to its inputs; they are not claims that later execution leaves the repository unchanged.
 
 The status lifecycle is `planning -> approved -> executing -> done`:
 
@@ -65,8 +69,17 @@ A material replan restarts this lifecycle at `planning`, increments `plan_versio
 3. `## Plan provenance`. Record the source revision, stable evidence inventory, digest algorithm and SHA-256 input digest, validation timestamp, and the completed or imported evidence that must be rechecked on resume.
 4. `## Product form`. Name the primary form, its vertical-slice definition, form-specific completion evidence, and any secondary form that passes the independent-deliverable rule.
 5. `## Compliance gate`. One short section: pass, or the mitigations injected (with task IDs).
-6. `## Applicability matrix`. The full table: every domain, applicable or excluded, with reason. After the table, add a compact module disposition that lists landed requirement IDs and groups scale-excluded IDs by module with a specific reason.
-7. `## Decisions`. Hard-to-reverse bets first: wire formats, public identifiers, data-model shape, auth and ownership boundaries. Each entry is a decision with rationale, a hypothesis with a validation plan, or a pointer to Open Questions. Where options were weighed, show the comparison in a small table.
+6. `## Applicability matrix`. The full table: every domain marked applicable, deferred, or excluded. Applicable and excluded behave as before (excluded requires a project-specific reason). Deferred is reserved for the deferrable set named in `discovery.md` (seo, launch, observe, ui, deploy): the row names the trigger, an observable event that forces the domain pass, and argues why the decision is reversible until the trigger fires. After the table, add a compact module disposition that lists landed requirement IDs and groups scale-excluded IDs by module with a specific reason.
+7. `## Decisions`. Hard-to-reverse bets first: wire formats, public identifiers, data-model shape, auth and ownership boundaries. Each entry is a decision with rationale, a hypothesis with a validation plan, or a pointer to Open Questions. Where options were weighed, show the comparison in a small table. Every `### D<n>` decision entry carries this structured falsifier:
+
+   ```markdown
+   Falsifier:
+   - Signal: p99 read latency for the largest tenant from the production query span
+   - Failure boundary: p99 exceeds 250 ms for seven consecutive days
+   - Replan action: return to planning and evaluate schema-per-tenant against the rejected shared-table design
+   ```
+
+   `Signal` names observable evidence, `Failure boundary` states the event or numeric threshold that kills the decision, and `Replan action` names what is reconsidered after returning to planning. A falsifier that can never fire is decoration. Hypotheses in the assumptions ledger need no falsifier block; their validation task already is one.
 8. `## Requirements`. Numbered user stories with EARS acceptance criteria: `R-1.1: WHEN <trigger> THE SYSTEM SHALL <observable behavior>`. A compact table is also valid when the requirement ID is the first cell of each row. Task `Requirements:` lines point here and at module IDs (R-SEC-4 style).
 9. `## Architecture`. The mermaid visuals (see Visual layer) plus the prose that the diagrams support.
 10. `## Style genome`. Naming, idioms, structure conventions the first commit must already follow.
@@ -104,6 +117,7 @@ Goal: a user can sign up, log in, and own their data. Blocks Phase 3.
   - Requirements: R-SEC-6
 
 Checkpoint: signup flow works end to end against a local db.
+Checkpoint verify: `npm run test:e2e -- signup`
 
 Must-haves:
 - Truth: a new user row appears after signup (manual: `curl -X POST /api/signup`)
@@ -119,9 +133,9 @@ Grammar rules:
 - **Files**: exact paths. Brownfield plans name real existing files.
 - **Depends on**: task IDs or `none`. No reflexive chains; a dependency exists because the work cannot start without it, not because the tasks are neighbors.
 - **Acceptance**: 2 to 4 grep-verifiable or observable conditions. "Works correctly" is banned; "returns 401 without a session cookie" ships.
-- **Verify**: one exact command whose exit code proves the task, in backticks. Manual checks state the exact manual path ("open /settings, toggle dark mode, reload").
+- **Verify**: one exact executable command whose exit code proves the task, in backticks. It must be safe and idempotent when rerun at a phase boundary; deployment, publication, destructive migration, or activation actions are task work, not verification. Manual-only Verify values are refused; wrap browser or device evidence in an executable harness.
 - **Requirements**: comma-separated IDs from the Requirements section and domain modules. Every task traces to at least one requirement; a task tracing to nothing is scope creep.
-- **Checkpoint**: every phase ends with one independently observable outcome.
+- **Checkpoint**: every phase ends with one independently observable outcome and one `Checkpoint verify:` command whose exit status reproves it at the next phase boundary.
 - **Must-haves**: goal-backward proof: observable truths, required artifacts, and key links showing the pieces are wired, because a checked box alone cannot distinguish a real implementation from a placeholder.
 - The final phase of every plan is **Verification**: run the full test suite, lint, build, and at least one end-to-end smoke that names the real command or the exact manual path.
 
@@ -155,13 +169,15 @@ This block is copied verbatim into every emitted plan, under `## Rules for execu
 > 1. Before any work: read the frontmatter and `## Plan provenance`, then re-derive state from disk. Recheck recorded completed or imported evidence; if material evidence drifted, change status to `planning`, record the stale evidence, and stop for replan. Otherwise refuse unless `status` is `approved` or `executing`. `planning` awaits sign-off; `done` is closed. Run `bash .godplans/validate-plan.sh .godplans/PLAN.mdx`. If status is `approved`, change it to `executing` and update the date before the first task.
 > 2. Find the first unchecked task in wave order. Re-derive state from checkboxes; trust nothing remembered.
 > 3. One task at a time. Respect Depends on. Run tasks marked [P] concurrently only when their Files lists are disjoint.
-> 4. Run the task's Verify command. Only after it passes, flip [ ] to [x] and update the frontmatter counters and `updated:` date in the same edit. Never batch check-offs.
+> 4. Run the task's Verify command. Only after it passes, flip [ ] to [x] and update the frontmatter counters and `updated:` date in the same edit. Never batch check-offs. Regenerate the sidecar in the same batch: `bash .godplans/validate-plan.sh --allow-planning --emit-json .godplans/PLAN.json .godplans/PLAN.mdx`.
 > 5. If Verify fails: the box stays unchecked. Append an indented `- Note (YYYY-MM-DD):` line under the task saying what happened.
-> 6. Scope changes are not improvised. Return status to `planning`, patch the plan (new task IDs, struck-through superseded tasks with a reason), increment `plan_version`, and obtain fresh approval before more execution.
-> 7. Never renumber, reword, or uncheck a completed task.
-> 8. At session end: append one line to `## Session log`: date, tasks completed, where you stopped, what is next.
-> 9. Re-read the current phase before starting it; re-read Decisions before touching anything they govern.
-> 10. After every task is checked and the final Verification phase passes, change status from `executing` to `done`, update the date, and run `bash .godplans/validate-plan.sh --allow-planning .godplans/PLAN.mdx` for a final structural check.
+> 6. Phase-boundary gate: before the first task of a new phase, run `bash .godplans/validate-plan.sh --drift-check N .godplans/PLAN.mdx`, replacing N with the completed phase. The command recomputes `[recheck]` provenance files, reruns a deterministic sample of up to three completed task Verify commands, and reruns the phase's Checkpoint verify command. Any failure returns status to `planning` and stops execution for replan.
+> 7. If a deferred domain's trigger fires mid-execution (its named event occurs), return status to `planning` and run that domain's pass before continuing.
+> 8. Scope changes are not improvised. Return status to `planning`, patch the plan (new task IDs, struck-through superseded tasks with a reason), increment `plan_version`, and obtain fresh approval before more execution.
+> 9. Never renumber, reword, or uncheck a completed task.
+> 10. At session end: append one line to `## Session log`: date, tasks completed, where you stopped, what is next.
+> 11. Re-read the current phase before starting it; re-read Decisions before touching anything they govern.
+> 12. After every task is checked and the final Verification phase passes, change status from `executing` to `done`, update the date, and run `bash .godplans/validate-plan.sh --allow-planning .godplans/PLAN.mdx` for a final structural check.
 ```
 
 ## Machine checks
@@ -172,7 +188,19 @@ The emitted companion is the only machine-check entry point. Copy it byte-for-by
 bash .godplans/validate-plan.sh --allow-planning .godplans/PLAN.mdx
 ```
 
-The companion embeds the domain requirement catalog and reads no skill files at runtime. Before this command, verify `test -x .godplans/validate-plan.sh` and compare the companion byte-for-byte with the installed source. `--allow-planning` performs structural validation for a draft or closed plan. Without it, the validator is also an execution gate and accepts only `approved` or `executing`. It checks essential frontmatter, provenance parity and aggregate input digest, product form, conditional public-release gate structure, and lifecycle values; derived task and phase counters; sequential phase numbers and matching wave tags; unique IDs on task definition headers; all required task fields; earlier dependency targets; local and module-catalog requirement references; banned Unicode through portable Perl; exactly one Plan provenance section; exactly one Open Questions section; and a final Verification phase. Its Bash 3.2 and portable Perl implementation runs on stock macOS and Linux. Any failure blocks emission. Do not replace this command with ad hoc grep pipelines.
+The companion embeds the domain requirement catalog and reads no skill files at runtime. Before this command, verify `test -x .godplans/validate-plan.sh` and compare the companion byte-for-byte with the installed source. `--allow-planning` performs structural validation for a draft or closed plan. Without it, the validator is also an execution gate and accepts only `approved` or `executing`. It checks essential frontmatter, provenance parity and aggregate input digest, product form, conditional public-release gate structure, and lifecycle values; derived task and phase counters; sequential phase numbers and matching wave tags; unique IDs on task definition headers; all required task fields; earlier dependency targets; local and module-catalog requirement references; every applicability-matrix domain exactly once, deferral only for the reversible set, deferred triggers and reversibility reasons, and excluded reasons; the three-field `Falsifier:` block on every `### D<n>` decision entry; phase Checkpoint and Checkpoint verify lines; banned Unicode through portable Perl; exactly one Plan provenance section; exactly one Applicability matrix section; exactly one Decisions section; exactly one Open Questions section; and a final Verification phase. `--drift-check N` adds the explicit execution-time recheck for a completed phase. Its Bash 3.2 and portable Perl implementation runs on stock macOS and Linux. Any failure blocks emission. Do not replace this command with ad hoc grep pipelines.
+
+## Machine-readable sidecar
+
+`--emit-json PATH` writes a generated JSON view of the plan after a successful validation:
+
+```bash
+bash .godplans/validate-plan.sh --allow-planning --emit-json .godplans/PLAN.json .godplans/PLAN.mdx
+```
+
+PLAN.json carries the frontmatter, applicability rows, decision falsifiers, progress counters, phases, active tasks, superseded tasks, and cumulative supersession metrics (with `depends_on` and `requirements` as arrays) so executing agents and tooling never parse MDX checkboxes. It is generated atomically and never hand-edited: any plan edit regenerates it with the same command. Its `plan_digest` field is the SHA-256 of the PLAN.mdx bytes at generation time; a consumer recomputes the digest before trusting the sidecar and regenerates on mismatch. The plan remains the only source of truth; the sidecar is a derived view, and the validator regenerates it only from a plan that passes every structural check.
+
+The published schema is `schemas/PLAN.schema.json`. Consumers validate the sidecar against it before scheduling work, then verify `plan_digest` against the PLAN.mdx bytes.
 
 ## Size discipline
 
@@ -180,4 +208,6 @@ The plan is re-read every session; bloat is a tax on every future turn. Budgets:
 
 ## Replan protocol
 
-When PLAN.mdx already exists: read it fully, recount progress from checkboxes, read the session log, and recompute the source evidence recorded under `## Plan provenance`. Recheck every artifact recorded as completed or imported. If its content, revision, or existence changed materially, mark the plan stale by returning `status` to `planning` before applying the delta; do not trust the chat or old validation timestamp. Completed work is history and never altered. New work gets fresh IDs continuing the sequence. Superseded unstarted tasks are struck through (`~~- [ ] GP-310 ...~~` plus a reason line), not deleted, so the audit trail survives. Refresh the evidence inventory, `input_digest`, and `validated_at`; bump `plan_version`; log the delta in the session log; and re-run the Phase 6 audit on any section that changed.
+When PLAN.mdx already exists: read it fully, recount progress from checkboxes, read the session log, and recompute the source evidence recorded under `## Plan provenance`. Recheck every artifact recorded as completed or imported. If its content, revision, or existence changed materially, mark the plan stale by returning `status` to `planning` before applying the delta; do not trust the chat or old validation timestamp. Completed work is history and never altered. New work gets fresh IDs continuing the sequence. Superseded unstarted tasks are not deleted. Strike only the heading (`~~- [ ] GP-310 [W3.1] Old work~~`), then retain `  - Superseded: <one-line reason>` and `  - Requirements: <original ids>` so the audit trail and domain metric survive. Refresh the evidence inventory, `input_digest`, and `validated_at`; bump `plan_version`; log the delta in the session log; and re-run the Phase 6 audit on any section that changed.
+
+Measure the outgoing plan before patching it: run `scripts/plan-halflife.sh .godplans/PLAN.mdx .godplans/PLAN.metrics.json`. The report records active, superseded, and historical tasks, plus cumulative supersession and survival rates overall and per requirement domain. A domain whose tasks are struck repeatedly was over-planned at that scale; shrink its appetite on the next pass instead of reseeding the same tasks.

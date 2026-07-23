@@ -1,0 +1,94 @@
+
+> offline-multi-tenant-notes-api@1.0.0 test
+> node --test --test-concurrency=1
+
+TAP version 13
+# (node:59437) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: identity initialization is idempotent and owner membership is constrained
+ok 1 - identity initialization is idempotent and owner membership is constrained
+  ---
+  duration_ms: 2.732333
+  type: 'test'
+  ...
+# Subtest: all five operations return the same authentication failure
+ok 2 - all five operations return the same authentication failure
+  ---
+  duration_ms: 41.849541
+  type: 'test'
+  ...
+# Subtest: organization peers perform complete CRUD with immutable fields
+ok 3 - organization peers perform complete CRUD with immutable fields
+  ---
+  duration_ms: 10.604375
+  type: 'test'
+  ...
+# Subtest: list ordering is deterministic and organization scoped
+ok 4 - list ordering is deterministic and organization scoped
+  ---
+  duration_ms: 8.768667
+  type: 'test'
+  ...
+# Subtest: validation, routing, media type, payload, and internal errors are uniform
+ok 5 - validation, routing, media type, payload, and internal errors are uniform
+  ---
+  duration_ms: 25.523166
+  type: 'test'
+  ...
+# Subtest: unexpected store failures expose no implementation details
+ok 6 - unexpected store failures expose no implementation details
+  ---
+  duration_ms: 3.508958
+  type: 'test'
+  ...
+# Subtest: OpenAPI is the complete five-operation contract
+ok 7 - OpenAPI is the complete five-operation contract
+  ---
+  duration_ms: 0.64075
+  type: 'test'
+  ...
+# Subtest: contract uses JSON request bodies and the shared Error schema
+ok 8 - contract uses JSON request bodies and the shared Error schema
+  ---
+  duration_ms: 0.092917
+  type: 'test'
+  ...
+# (node:59441) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: test/helpers.js
+ok 3 - test/helpers.js
+  ---
+  duration_ms: 37.274083
+  type: 'test'
+  ...
+# (node:59470) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: known note IDs do not cross the organization boundary in either direction
+ok 10 - known note IDs do not cross the organization boundary in either direction
+  ---
+  duration_ms: 52.587167
+  type: 'test'
+  ...
+# Subtest: tenant and owner fields cannot be supplied during creation
+ok 11 - tenant and owner fields cannot be supplied during creation
+  ---
+  duration_ms: 5.784708
+  type: 'test'
+  ...
+# (node:59471) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: created and updated notes survive clean process-equivalent restarts
+ok 12 - created and updated notes survive clean process-equivalent restarts
+  ---
+  duration_ms: 24.578542
+  type: 'test'
+  ...
+1..12
+# tests 12
+# suites 0
+# pass 12
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 397.961583

@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Blind external plan grade",
+  "type": "object",
+  "required": ["packet_id", "plans", "preference", "rationale"],
+  "properties": {
+    "packet_id": { "type": "string", "minLength": 1 },
+    "plans": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["label", "scores", "total"],
+        "properties": {
+          "label": { "enum": ["A", "B"] },
+          "scores": {
+            "type": "object",
+            "required": ["decision_completeness", "falsifiability", "execution_actionability", "risk_targeting", "proportionality", "internal_consistency"],
+            "properties": {
+              "decision_completeness": { "type": "integer", "minimum": 1, "maximum": 5 },
+              "falsifiability": { "type": "integer", "minimum": 1, "maximum": 5 },
+              "execution_actionability": { "type": "integer", "minimum": 1, "maximum": 5 },
+              "risk_targeting": { "type": "integer", "minimum": 1, "maximum": 5 },
+              "proportionality": { "type": "integer", "minimum": 1, "maximum": 5 },
+              "internal_consistency": { "type": "integer", "minimum": 1, "maximum": 5 }
+            },
+            "additionalProperties": false
+          },
+          "total": { "type": "integer", "minimum": 6, "maximum": 30 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "preference": { "enum": ["A", "B", "tie"] },
+    "rationale": { "type": "string", "minLength": 1 }
+  },
+  "additionalProperties": false
+}

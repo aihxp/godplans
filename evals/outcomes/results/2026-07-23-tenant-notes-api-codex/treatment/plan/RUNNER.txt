@@ -1,0 +1,12 @@
+runner=codex
+arm=skill
+global_skills=isolated
+codex_version=codex-cli 0.145.0
+model=configured-default
+resolved_model=gpt-5.6-sol
+reasoning_effort=configured-default
+usage_source=cli-json
+input_tokens=11186539
+cached_input_tokens=10933248
+output_tokens=49486
+total_tokens=11236025

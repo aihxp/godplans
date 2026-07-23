@@ -58,7 +58,17 @@ Calibration is a ceiling-setter, not an excuse: a weekend project with user pass
 
 ## The applicability matrix
 
-Every domain gets a row. Applicable means the domain pass runs and its requirements bind. Excluded requires a reason specific to this project; "not needed" is banned by the substitution test.
+Every domain gets a row with one of three statuses. Applicable means the domain pass runs now and its requirements bind. Excluded requires a reason specific to this project; "not needed" is banned by the substitution test. Deferred means the domain's decisions are reversible until a named trigger fires, so the pass is postponed rather than skipped: the row names the trigger (an observable event, never "later") and argues why waiting is safe. When the trigger fires, the plan returns to `planning` and the deferred domain pass runs as a replan.
+
+Deferral is a privilege of the reversible. Only these domains may defer, and only with the trigger landing before the work gets expensive to redo:
+
+- **seo**: trigger before the first public crawlable page ships; retrofitting metadata, semantic HTML, and sitemaps onto shipped pages is the expensive version.
+- **launch**: trigger before public-activation planning begins; the prepublication gate consumes launch requirements, so the launch pass must land before that gate is drafted.
+- **observe**: baseline error reporting and one alert are planned now at any scale; full SLOs, error budgets, and runbooks may defer with the trigger at the first real user or the first paid workload.
+- **ui**: the visual system (tokens, primitives) may defer with the trigger before the component library task; ux journeys are never deferred because they shape the architecture.
+- **deploy**: libraries and CLI tools may defer with the trigger before the first distribution task; services with a completion-evidence gate deploy early and never defer.
+
+Never deferrable: product, architecture, stack, database, security, llm (when applicable), ux (when applicable), code-quality, style-genome, agent-memory, repo, build, roadmap. These decide hard-to-reverse shape or feed every other pass; deferring them is plan theater with a calendar.
 
 ```markdown
 ## Applicability matrix
@@ -69,12 +79,12 @@ Every domain gets a row. Applicable means the domain pass runs and its requireme
 | architecture | applicable | |
 | stack | applicable | |
 | database | applicable | |
-| security | applicable | security is never excluded, only scaled |
+| security | applicable | security is never excluded or deferred, only scaled |
 | llm | excluded | no model calls anywhere in the product |
 | ux | applicable | |
 | ui | applicable | |
-| seo | excluded | internal tool behind SSO; nothing to index |
-| code-quality | applicable | never excluded, only scaled |
+| seo | deferred | trigger: the first public marketing page task enters the roadmap; reversible until pages ship without metadata |
+| code-quality | applicable | never excluded or deferred, only scaled |
 | style-genome | applicable | |
 | agent-memory | applicable | |
 | repo | applicable | |
@@ -85,7 +95,7 @@ Every domain gets a row. Applicable means the domain pass runs and its requireme
 | launch | excluded | internal tool; adoption is an email, not a launch |
 ```
 
-Hard rules: security, code-quality, style-genome, repo, roadmap are never excluded (they scale down instead). seo requires a public crawlable surface. llm requires actual model integration; "we might add AI later" is a roadmap entry, not an llm pass. ui requires rendered pixels the project owns.
+Hard rules: security, code-quality, style-genome, repo, roadmap are never excluded and never deferred (they scale down instead). seo requires a public crawlable surface. llm requires actual model integration; "we might add AI later" is a roadmap entry, not an llm pass and not a deferral. ui requires rendered pixels the project owns.
 
 ## The interview
 
@@ -121,3 +131,4 @@ By the end of Phase 3 the following exist, ready for the domain passes:
 - **Web-shaped everything**: API, CLI, mobile, data, or IaC work forced through UI and backend assumptions. Refused: product form is selected before archetype and every slice uses the form-specific gate.
 - **Decorative secondary form**: a supporting component labeled secondary without its own user or deliverable. Refused: secondary forms require an independent contract, distribution path, and completion evidence.
 - **Scale theater**: enterprise ceremony on a weekend project, or weekend sloppiness on a funded product. Refused: calibration is stated and modules scale to it.
+- **Deferral theater**: deferring a load-bearing domain to avoid deciding it, or deferring with a trigger that can never be observed. Refused: only the named deferrable set may defer, the trigger is an observable event with a reversibility argument, and the never-excluded set never defers.

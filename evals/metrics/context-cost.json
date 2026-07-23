@@ -1,0 +1,144 @@
+{
+  "format": "godplans/context-cost@1",
+  "estimate": {
+    "method": "ceil(raw_utf8_bytes / 4)",
+    "limitation": "Provider tokenizers differ. Published model runs record actual input and output token usage in RUNNER.txt and METRICS.json."
+  },
+  "portable_core": {
+    "bytes": 247631,
+    "estimated_tokens": 61908,
+    "sha256": "2be363c852d64c94a45564b2b3410c6123ebfd1280ac057316a9b7ee27499cff"
+  },
+  "portable_full_generated": {
+    "bytes": 551875,
+    "estimated_tokens": 137969,
+    "sha256": "6ba066499d86ee50ae1fdc25c0b540d435abc19514f83c5c9c9443f85c924026"
+  },
+  "native_skill_entry": {
+    "bytes": 19150,
+    "estimated_tokens": 4788,
+    "sha256": "63dd61d32001e98d0edc2a9a8394f304b40f4ff412cdc8cab778e6e8665c1927"
+  },
+  "core_modules": {
+    "compliance": {
+      "bytes": 7070,
+      "estimated_tokens": 1768,
+      "sha256": "d795b29189693e0fd92f97c6a184228ab8374f172d32c6fcea33c57f4aaaad13"
+    },
+    "discovery": {
+      "bytes": 14705,
+      "estimated_tokens": 3677,
+      "sha256": "b76541f03905324820de871d8d6c96084c3830389da43813f50c8b0183162a7a"
+    },
+    "product": {
+      "bytes": 21204,
+      "estimated_tokens": 5301,
+      "sha256": "88f057b86dc326c9755f05e867921624ee50f0b14763e0205d932e67b13b380f"
+    },
+    "architecture": {
+      "bytes": 22127,
+      "estimated_tokens": 5532,
+      "sha256": "9bccafd8a82dca718b02e5b533f5cfe10971e95a4d303117c69bc16be1025440"
+    },
+    "stack": {
+      "bytes": 24319,
+      "estimated_tokens": 6080,
+      "sha256": "b00459507aa9f21d803f4265e0f3af17b2e8bde639ee9e04f80bc74b0d7cf49c"
+    },
+    "database": {
+      "bytes": 27158,
+      "estimated_tokens": 6790,
+      "sha256": "79d848b8d534684824cfa982aef3d7605c38af2c61a04433c5c3c3eff779897f"
+    },
+    "security": {
+      "bytes": 33475,
+      "estimated_tokens": 8369,
+      "sha256": "716f58ebdc726ca06125f8f30a6ae380459cc3edfd49d983bd5e8f4269bcb68c"
+    },
+    "exemplar": {
+      "bytes": 5477,
+      "estimated_tokens": 1370,
+      "sha256": "53f8057000dab6791c97dab0a8897feee3d112aa2772083720864e1bbf502cb4"
+    },
+    "plan-format": {
+      "bytes": 22166,
+      "estimated_tokens": 5542,
+      "sha256": "07937f71d8aeb4f8f6b10ab1a806fc54bc3f944ee901bda5958ab9ab6186edbf"
+    }
+  },
+  "core_modules_total": {
+    "bytes": 177701,
+    "estimated_tokens": 44429
+  },
+  "lazy_modules": {
+    "llm": {
+      "bytes": 27852,
+      "estimated_tokens": 6963,
+      "sha256": "2d7f9cd5472055631df1c26d37b8713fff5aa7f5db9d8f03641c1205fd1e9b5c"
+    },
+    "ux": {
+      "bytes": 21803,
+      "estimated_tokens": 5451,
+      "sha256": "bca7995be1ba55bd408aa67688acc9f61798c8a822e7d02525667474f6037d10"
+    },
+    "ui": {
+      "bytes": 24756,
+      "estimated_tokens": 6189,
+      "sha256": "c19b846f24e0c8650563e9d3373a6fdf6e93e2ecb2ac52f8b117f6508449df51"
+    },
+    "seo": {
+      "bytes": 24758,
+      "estimated_tokens": 6190,
+      "sha256": "981134e1547910b16ed23f255989635b6ad6b9de059649141bde8eb82a33e326"
+    },
+    "code-quality": {
+      "bytes": 24300,
+      "estimated_tokens": 6075,
+      "sha256": "31073950b75179b83cd77d9786f9ee7fd47ada164d8d92df978ba44f093b6ad7"
+    },
+    "style-genome": {
+      "bytes": 19266,
+      "estimated_tokens": 4817,
+      "sha256": "4e3e011c6e379ac0c20052711894933036a13a99d35fe3ccbdca5c401e39e055"
+    },
+    "agent-memory": {
+      "bytes": 26755,
+      "estimated_tokens": 6689,
+      "sha256": "fb3cbbb0a3e3623f9dd4f846efc318fad4cd1733b65e55cd57e330733737e0cc"
+    },
+    "repo": {
+      "bytes": 23053,
+      "estimated_tokens": 5764,
+      "sha256": "d2d58e5886359f34c7733ae0cd9d9e608550bf5208381462a40f904b0fe73bd4"
+    },
+    "build": {
+      "bytes": 21188,
+      "estimated_tokens": 5297,
+      "sha256": "ccf63848731cd9f92d898a6ee0ae1cd523e1a9aadf77b5b1fee1c11ec4f239c0"
+    },
+    "roadmap": {
+      "bytes": 23225,
+      "estimated_tokens": 5807,
+      "sha256": "38488c022b2fe2509cffc8f83ab10750dbacb067e631386cdfb82970f131afde"
+    },
+    "deploy": {
+      "bytes": 18713,
+      "estimated_tokens": 4679,
+      "sha256": "71cdb29d232f193dc601a5230064a13b09dba9e3cf970a3f028fe64f1c70cd9d"
+    },
+    "observe": {
+      "bytes": 23374,
+      "estimated_tokens": 5844,
+      "sha256": "5699511e7d4a6c8106fbd6eb23633c7d05a58e78bed5eda483493c00b12c40e8"
+    },
+    "launch": {
+      "bytes": 24405,
+      "estimated_tokens": 6102,
+      "sha256": "6f2a82d09601deaf4ef9c58f5a7f60f0cb3979923b9ebb375bed2f61e3ba370f"
+    }
+  },
+  "lazy_modules_total": {
+    "bytes": 303448,
+    "estimated_tokens": 75867
+  }
+}

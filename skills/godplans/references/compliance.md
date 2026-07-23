@@ -7,7 +7,7 @@ When this skill runs through a non-Claude provider, use this module as a conserv
 ## A. How the skill itself behaves
 
 1. **Never coach the model past a refusal.** Do not ask any model to ignore, work around, or bypass its guardrails; do not rephrase, fragment, or roleplay a refused request into innocuous-looking steps. Intentional guardrail bypass is a named Usage Policy violation. If a step is refused, route it to the human and move on.
-2. **Authentication hygiene.** Subscription credentials are used only through official clients and supported authentication flows. Never suggest extracting or reusing subscription tokens in third-party harnesses, scripts, or the Agent SDK. Anything this plan schedules unattended (CI, cron, bots, background runs) must specify supported API authentication (`ANTHROPIC_API_KEY` via the Console, Bedrock, or Vertex). No account sharing, no reselling access, no parallel accounts to dodge limits, and no unattended background use of a consumer subscription.
+2. **Authentication hygiene.** Subscription credentials are used only through official clients and supported authentication flows. Never suggest extracting or reusing subscription tokens in third-party harnesses, scripts, or SDKs. Anything this plan schedules unattended (CI, cron, bots, background runs) must specify a supported service account, workload identity, or cloud-provider authentication flow. No account sharing, no reselling access, no parallel accounts to dodge limits, and no unattended background use of a consumer subscription.
 3. **Honest output.** No fabricated results, no presenting AI output as human-authored where disclosure is required. Where the planned product produces consumer-facing AI content, the plan carries the disclosure requirements from the gate below.
 4. **If a warning or suspension happens anyway**: use the appeal route shown while signed in to the restricted Claude account and follow the current Safeguards help-center guidance. Provide factual account and incident details. Do not create another account to evade enforcement.
 
@@ -37,11 +37,11 @@ Screen the project idea against these categories before discovery. Three outcome
 - **Web automation and crawling**: the crawler SHALL honor robots.txt and the target's ToS, throttle requests, identify itself honestly in its user agent, and never operate multiple accounts on a third-party platform. Acceptance: rate limiter and robots.txt check exist as named components in the architecture section.
 - **Outbound automated communications**: messages to people, officials, or support systems SHALL NOT conceal their artificial origin.
 - **Products serving minors**: flag for Anthropic's additional minor-safety requirements and record the age-gating decision.
-- **Anything running Claude unattended**: the task specifies API-key auth, never subscription OAuth (see A2).
+- **Anything running Claude unattended**: the task specifies a supported service account, workload identity, or cloud-provider authentication flow, never subscription credentials (see A2).
 
 ### Do not over-block
 
-The gate exists to catch real violations, not to harass legitimate work. Explicitly fine: authorized security testing and research, civic and policy research, B2B professional tools (exempt from the consumer disclosure duo), heavy individual use of a paid plan, API-key automation and CI, adult themes in creative writing within policy, and competitive analysis. When a project is ambiguous, ask one clarifying question instead of refusing; record the answer in the plan.
+The gate exists to catch real violations, not to harass legitimate work. Explicitly fine: authorized security testing and research, civic and policy research, B2B professional tools (exempt from the consumer disclosure duo), heavy individual use of a paid plan, automation and CI using supported workload authentication, adult themes in creative writing within policy, and competitive analysis. When a project is ambiguous, ask one clarifying question instead of refusing; record the answer in the plan.
 
 ## What lands in the plan
 
@@ -53,7 +53,7 @@ One short section:
 Result: pass | mitigated | (hard stop never reaches a plan)
 Screened: YYYY-MM-DD against anthropic.com/legal/aup (2025-09-15 version).
 Mitigations injected: GP-xxx (AI disclosure banner), GP-yyy (crawler rate limiter). [omit line when pass]
-Account safety: unattended runs use ANTHROPIC_API_KEY; no subscription OAuth outside official clients.
+Account safety: unattended runs use supported workload authentication; no subscription credentials outside official clients.
 ```
 
 Proportionate, checkable, done.

@@ -12,6 +12,7 @@ source_revision: SOURCE-REVISION-OR-NONE
 input_digest: sha256:INPUT-DIGEST
 validated_at: YYYY-MM-DDTHH:MM:SSZ
 domains_applicable: []
+domains_deferred: []
 domains_excluded: []
 progress:
   phases_total: 0
@@ -38,7 +39,7 @@ Input digest: sha256:INPUT-DIGEST
 Validated at: YYYY-MM-DDTHH:MM:SSZ
 Evidence inventory:
 - `intake` = `sha256:INTAKE-DIGEST`
-- `EVIDENCE-LABEL` = `sha256:EVIDENCE-DIGEST`
+- [recheck] `path/to/stable-artifact` = `sha256:EVIDENCE-DIGEST`
 
 Inventory labels are unique, exactly one is `intake`, and every digest covers the named normalized intake text or raw file bytes. Mark completed or imported evidence that must be rechecked on resume in its label or an adjacent plan section without changing the machine-readable inventory line.
 
@@ -53,9 +54,13 @@ Secondary form: none, unless it has its own user, contract, distribution path, d
 
 Result: pass
 Screened: YYYY-MM-DD against anthropic.com/legal/aup.
-Account safety: unattended runs use ANTHROPIC_API_KEY; no subscription OAuth outside official clients.
+Account safety: unattended runs use supported workload authentication; no subscription credentials outside official clients.
 
 ## Applicability matrix
+
+Statuses: applicable (pass runs now), deferred (deferrable set only: seo,
+launch, observe, ui, deploy; the row names the trigger and the reversibility
+argument), excluded (project-specific reason).
 
 | Domain | Status | Reason |
 |---|---|---|
@@ -63,20 +68,20 @@ Account safety: unattended runs use ANTHROPIC_API_KEY; no subscription OAuth out
 | architecture | applicable | |
 | stack | applicable | |
 | database | applicable-or-excluded | reason |
-| security | applicable | never excluded, scales with calibration |
+| security | applicable | never excluded or deferred, scales with calibration |
 | llm | applicable-or-excluded | reason |
 | ux | applicable-or-excluded | reason |
-| ui | applicable-or-excluded | reason |
-| seo | applicable-or-excluded | reason |
-| code-quality | applicable | never excluded, scales with calibration |
+| ui | applicable-deferred-or-excluded | reason; deferred: trigger + reversibility |
+| seo | applicable-deferred-or-excluded | reason; deferred: trigger + reversibility |
+| code-quality | applicable | never excluded or deferred, scales with calibration |
 | style-genome | applicable | |
 | agent-memory | applicable | |
 | repo | applicable | |
 | build | applicable | |
 | roadmap | applicable | |
-| deploy | applicable | |
-| observe | applicable-or-excluded | reason |
-| launch | applicable-or-excluded | reason |
+| deploy | applicable-deferred-or-excluded | reason; deferred: trigger + reversibility |
+| observe | applicable-deferred-or-excluded | reason; deferred: trigger + reversibility |
+| launch | applicable-deferred-or-excluded | reason; deferred: trigger + reversibility |
 
 Module disposition: list landed requirement IDs by applicable module and group
 scale-excluded IDs with a project-specific reason.
@@ -86,11 +91,25 @@ Scale calibration: weekend | side-project | funded-product | enterprise.
 ## Decisions
 
 Hard-to-reverse bets first. Each entry: the decision with rationale and rejected
-alternatives, or a hypothesis with its validation task, or a pointer to Open Questions.
+alternatives, a structured Falsifier block (the observable signal, failure
+boundary, and return-to-planning action), or a hypothesis with its validation
+task, or a pointer to Open Questions.
 
 ### D1: (data-model shape / tenancy)
+Falsifier:
+- Signal: (metric or event and its evidence source)
+- Failure boundary: (numeric threshold or observable event that kills D1)
+- Replan action: return to planning and (reconsidered alternative or migration)
 ### D2: (auth and ownership boundary)
+Falsifier:
+- Signal: (metric or event and its evidence source)
+- Failure boundary: (numeric threshold or observable event that kills D2)
+- Replan action: return to planning and (reconsidered alternative or migration)
 ### D3: (wire format and public identifiers)
+Falsifier:
+- Signal: (metric or event and its evidence source)
+- Failure boundary: (numeric threshold or observable event that kills D3)
+- Replan action: return to planning and (reconsidered alternative or migration)
 ### Assumptions ledger
 Defaults taken without asking, each flagged as a hypothesis with the task that validates it.
 
@@ -133,6 +152,7 @@ Goal: one sentence. Blocks: what this phase gates.
   - Requirements: R-1.1, R-DOM-n
 
 Checkpoint: the independently observable outcome of Phase 1.
+Checkpoint verify: `exact command that reproves the phase outcome`
 
 Must-haves:
 - Truth: observable behavior with its manual check
@@ -154,6 +174,7 @@ Goal: prove the built system satisfies the plan end to end.
   - Requirements: R-1.1, R-CODE-n, R-SEC-n (list the load-bearing IDs; never write "all")
 
 Checkpoint: a fresh clone passes every check with one command sequence.
+Checkpoint verify: `exact full-suite and smoke command`
 
 ## Open Questions
 
@@ -168,14 +189,16 @@ recommended default, and what happens if unanswered.
 > 1. Before any work: read the frontmatter and `## Plan provenance`, then re-derive state from disk. Recheck recorded completed or imported evidence; if material evidence drifted, change status to `planning`, record the stale evidence, and stop for replan. Otherwise refuse unless `status` is `approved` or `executing`. `planning` awaits sign-off; `done` is closed. Run `bash .godplans/validate-plan.sh .godplans/PLAN.mdx`. If status is `approved`, change it to `executing` and update the date before the first task.
 > 2. Find the first unchecked task in wave order. Re-derive state from checkboxes; trust nothing remembered.
 > 3. One task at a time. Respect Depends on. Run tasks marked [P] concurrently only when their Files lists are disjoint.
-> 4. Run the task's Verify command. Only after it passes, flip [ ] to [x] and update the frontmatter counters and `updated:` date in the same edit. Never batch check-offs.
+> 4. Run the task's Verify command. Only after it passes, flip [ ] to [x] and update the frontmatter counters and `updated:` date in the same edit. Never batch check-offs. Regenerate the sidecar in the same batch: `bash .godplans/validate-plan.sh --allow-planning --emit-json .godplans/PLAN.json .godplans/PLAN.mdx`.
 > 5. If Verify fails: the box stays unchecked. Append an indented `- Note (YYYY-MM-DD):` line under the task saying what happened.
-> 6. Scope changes are not improvised. Return status to `planning`, patch the plan (new task IDs, struck-through superseded tasks with a reason), increment `plan_version`, and obtain fresh approval before more execution.
-> 7. Never renumber, reword, or uncheck a completed task.
-> 8. At session end: append one line to `## Session log`: date, tasks completed, where you stopped, what is next.
-> 9. Re-read the current phase before starting it; re-read Decisions before touching anything they govern.
-> 10. After every task is checked and the final Verification phase passes, change status from `executing` to `done`, update the date, and run `bash .godplans/validate-plan.sh --allow-planning .godplans/PLAN.mdx` for a final structural check.
+> 6. Phase-boundary gate: before the first task of a new phase, run `bash .godplans/validate-plan.sh --drift-check N .godplans/PLAN.mdx`, replacing N with the completed phase. The command recomputes `[recheck]` provenance files, reruns a deterministic sample of up to three completed task Verify commands, and reruns the phase's Checkpoint verify command. Any failure returns status to `planning` and stops execution for replan.
+> 7. If a deferred domain's trigger fires mid-execution (its named event occurs), return status to `planning` and run that domain's pass before continuing.
+> 8. Scope changes are not improvised. Return status to `planning`, patch the plan (new task IDs, struck-through superseded tasks with a reason), increment `plan_version`, and obtain fresh approval before more execution.
+> 9. Never renumber, reword, or uncheck a completed task.
+> 10. At session end: append one line to `## Session log`: date, tasks completed, where you stopped, what is next.
+> 11. Re-read the current phase before starting it; re-read Decisions before touching anything they govern.
+> 12. After every task is checked and the final Verification phase passes, change status from `executing` to `done`, update the date, and run `bash .godplans/validate-plan.sh --allow-planning .godplans/PLAN.mdx` for a final structural check.
 
 ## Session log
 
-- YYYY-MM-DD plan created (godplans v1.8.0)
+- YYYY-MM-DD plan created (godplans v1.9.0)

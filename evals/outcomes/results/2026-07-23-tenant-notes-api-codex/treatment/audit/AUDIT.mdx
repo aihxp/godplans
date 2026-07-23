@@ -1,0 +1,813 @@
+---
+name: "tenant-notes-api"
+schema_version: "2.0"
+audit_version: 1
+status: reported
+created: 2026-07-23
+updated: 2026-07-23
+mode: fresh
+plan_aware: false
+commit: "no-git"
+archetype: "api-service"
+project_form: "api-service"
+scale: side-project
+risk_profile: security-critical
+budget: "full"
+engine_version: "2.12.0"
+pack_version: "2.12.0"
+overall: 93
+grade_method: "static-read"
+grade_scope: "an arithmetic roll-up of model-assigned pass/fail from a source read, not a test result, scan, or certification"
+verdict: "audit-proof"
+evidence_basis: "mostly Firm"
+coverage: 98
+findings_total: 9
+tasks_total: 10
+---
+
+# tenant-notes-api audit
+
+Static-read grade 93/100 (audit-proof): an arithmetic roll-up of model-assigned pass/fail from a source read, not a test result, scan, or certification. Evidence basis: mostly Firm. Biggest risk: The artifact has no version-control or CI provenance. Biggest strength: Tenant isolation uses independent physical and logical boundaries.
+
+## Scope and method
+
+Commit no-git; fresh audit; api-service form at side-project scale; security-critical risk profile. Capabilities: static.
+Budget: full. Screening and deep-trace checks are selected for judgment.
+Assumptions: The artifact is a local evaluator target with no public deployment.; No input plan and no treatment or control label were supplied; only the built artifact is audited.; Static evidence cannot establish runtime latency, actual test outcomes, or current Node support status..
+The audit made no source edits, ran no application code, connected to no live systems, and called no models unless an explicitly listed capability states otherwise.
+
+Coverage: 230 of 235 applicable checks evaluated (98%). Unknown checks never earn points and cap the verdict.
+
+## Compliance gate
+
+Result: pass. Screened 2026-07-23 with provider-neutral@1. This is a policy-allowability screen, not a legal-compliance determination.
+
+## Applicability matrix
+
+| Domain | Status | Reason |
+|---|---|---|
+| product | applicable | Full static pass for the product surface at side-project scale. |
+| architecture | applicable | Full static pass for the architecture surface at side-project scale. |
+| stack | applicable | Full static pass for the stack surface at side-project scale. |
+| database | applicable | Full static pass for the database surface at side-project scale. |
+| security | applicable | Full static pass for the security surface at side-project scale. |
+| llm | excluded | No model call exists in source or the dependency graph. |
+| ux | applicable | Full static pass for the ux surface at side-project scale. |
+| ui | excluded | The API owns no rendered pixels or component surface. |
+| seo | excluded | The local JSON API has no public crawlable content. |
+| code-quality | applicable | Full static pass for the code-quality surface at side-project scale. |
+| style-genome | applicable | Full static pass for the style-genome surface at side-project scale. |
+| agent-memory | applicable | Full static pass for the agent-memory surface at side-project scale. |
+| repo | applicable | Full static pass for the repo surface at side-project scale. |
+| build | applicable | Full static pass for the build surface at side-project scale. |
+| roadmap | excluded | No plan, roadmap, or tracker artifact exists; delivery reality is evaluated in repository. |
+| deploy | excluded | The built artifact has no public deployment target or deployment configuration. |
+| observe | applicable | Full static pass for the observe surface at side-project scale. |
+| launch | excluded | The local evaluator artifact has no public launch target. |
+
+## Scorecard
+
+| Domain | Depth | Score | Cap | Evaluated | Evidence basis |
+|---|---|---:|---|---:|---|
+| product | screening | 69 | none | 13/14 | mostly Firm |
+| architecture | screening | 95 | none | 17/18 | mostly Firm |
+| stack | screening | 89 | none | 17/18 | mostly Firm |
+| database | screening | 97 | none | 18/18 | mostly Firm |
+| security | deep-capable | 92 | none | 23/24 | mostly Firm |
+| ux | screening | 97 | none | 8/8 | mostly Firm |
+| code-quality | screening | 100 | none | 26/26 | mostly Firm |
+| style-genome | screening | 100 | none | 23/23 | mostly Firm |
+| agent-memory | screening | 83 | none | 19/20 | mostly Firm |
+| repo | screening | 76 | none | 20/20 | mostly Firm |
+| build | deep-capable | 100 | none | 22/22 | mostly Firm |
+| observe | screening | 100 | none | 24/24 | mostly Firm |
+| Overall | mixed | 93 | coverage 100; critical 100; weak-domain 100 | 230/235 | mostly Firm |
+
+Every score above is an arithmetic roll-up of model-assigned pass/fail from a source read, not a test result, scan, or certification. Confidence is the auditor's own, so the evidence basis states what the grade rests on, not how often such a grade proves right.
+
+## Depth and escalation
+
+Security and build completeness are deep-capable. Every other domain is screening-grade. A domain label describes this audit method, not the importance of the domain. Scanner and inventory signals remain leads until traced and refuted.
+
+| Domain | Label | Deep-trace state | Escalation criterion | Up to three current finding leads |
+|---|---|---|---|---|
+| product | screening | none unknown | Escalate when metric definitions cannot be joined to emitted events or user evidence, or when product claims conflict across code and artifacts. | F-PRD-1, F-PRD-2 |
+| architecture | screening | 1 unknown | Escalate when trust boundaries, load-bearing dependencies, or failure domains cannot be reconstructed without a dedicated architecture review. | none |
+| stack | screening | none unknown | Escalate when supported-version, compatibility, or migration claims need current ecosystem research or executable upgrade testing. | F-STACK-1, F-STACK-2 |
+| database | screening | none unknown | Escalate money, tenant isolation, destructive migration, query-plan, and data-integrity leads to a database specialist with runtime metadata access. | none |
+| security | deep-capable | 1 unknown | Escalate any Critical or High lead, unresolved authorization boundary, secret exposure, or runtime-only exploit path to an independent security assessment. | F-SEC-1, F-SEC-2 |
+| ux | screening | none unknown | Escalate critical journeys whose usability, recovery, consent, or accessibility behavior cannot be established without moderated or runtime testing. | F-UX-1 |
+| code-quality | screening | none unknown | Escalate concurrency, lifecycle, dead-control, or performance leads that require execution, profiling, mutation testing, or property testing. | none |
+| style-genome | screening | none unknown | Escalate authorship, generated-code, and intentional-style ambiguities that cannot be resolved from representative history and repository evidence. | none |
+| agent-memory | screening | 1 unknown | Escalate conflicting scoped instructions, missing authority, or unresolved memory precedence to the repository governance owner. | F-MEM-1 |
+| repo | screening | none unknown | Escalate protected-branch, secret-history, provenance, and supply-chain leads that require forge administration or organization-level evidence. | F-REPO-1 |
+| build | deep-capable | none unknown | Escalate incomplete vertical slices, dead controls, runtime-only flows, or unverifiable acceptance paths to an implementation audit with executable access. | none |
+| observe | screening | none unknown | Escalate paper SLO, alert, runbook, and telemetry leads that require production queries, incident history, or a live failure exercise. | none |
+
+## Standards coverage
+
+Control-evidence readiness, not certification. These frameworks evidence the technical controls a code audit can see (encryption, access control, consent code, DSAR paths, audit logging, accessible markup). They do not evidence the organizational and process controls (policies, training, vendor management, incident response, physical security) that SOC 2, ISO/IEC 27001, or PCI certification require. A category below reports control-evidence readiness and never claims certification.
+
+| Framework | Category | Control-evidence readiness | Checks | Evidence | Findings |
+|---|---|---|---|---|---|
+| owasp-web-2025 | A01:2025 Broken Access Control | pass | A-SEC-3, A-SEC-4, A-SEC-5, A-SEC-10 | E-15, E-19, E-20, E-28, E-29, E-45, E-47, E-50 | none |
+| owasp-web-2025 | A02:2025 Security Misconfiguration | pass | A-SEC-15, A-SEC-16, A-SEC-22 | E-15, E-19, E-20, E-28, E-29, E-45, E-47, E-50 | none |
+| owasp-web-2025 | A03:2025 Software Supply Chain Failures | pass | A-SEC-17, A-SEC-18, A-SEC-26 | E-15, E-19, E-20, E-28, E-29, E-45, E-47, E-50 | none |
+| owasp-web-2025 | A04:2025 Cryptographic Failures | pass | A-SEC-11, A-SEC-12, A-SEC-13 | E-15, E-19, E-20, E-28, E-29 | none |
+| owasp-web-2025 | A05:2025 Injection | pass | A-SEC-8, A-SEC-9, A-SEC-10 | E-15, E-19, E-20, E-28, E-29, E-45, E-47, E-50 | none |
+| owasp-web-2025 | A06:2025 Insecure Design | pass | A-SEC-1, A-SEC-2, A-SEC-16, A-SEC-24, A-SEC-25 | E-15, E-19, E-20, E-28, E-29 | none |
+| owasp-web-2025 | A07:2025 Authentication Failures | pass | A-SEC-6, A-SEC-7 | E-15, E-19, E-20, E-28, E-29 | none |
+| owasp-web-2025 | A08:2025 Software or Data Integrity Failures | fail | A-SEC-10, A-SEC-17, A-SEC-19, A-SEC-22 | E-45, E-47, E-50, E-15, E-19, E-20, E-28, E-29, E-3, E-25 | F-SEC-1 |
+| owasp-web-2025 | A09:2025 Security Logging and Alerting Failures | fail | A-SEC-20, A-OBS-7, A-OBS-8, A-OBS-9, A-OBS-22 | E-17, E-21, E-29, E-10 | F-SEC-2 |
+| owasp-web-2025 | A10:2025 Mishandling Exceptional Conditions | pass | A-SEC-28, A-CODE-12, A-CODE-13, A-CODE-14, A-ARCH-8, A-ARCH-9, A-DB-14, A-DB-15, A-DEPLOY-4, A-DEPLOY-16, A-OBS-22 | E-15, E-19, E-20, E-28, E-29, E-13, E-36, E-16, E-31, E-7, E-8, E-26, E-23, E-45, E-4, E-22, E-24, E-27, E-17, E-21, E-10 | none |
+| gdpr-eu | lawful-basis-and-consent Lawful basis and consent (Art 6-7) | not-applicable | A-SEC-31, A-UX-17 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| gdpr-eu | data-subject-rights Data subject rights (Art 12-22) | not-applicable | A-SEC-21 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| gdpr-eu | security-of-processing Security of processing (Art 32) | not-applicable | A-SEC-3, A-SEC-11, A-SEC-12, A-SEC-20, A-DB-19 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| gdpr-eu | data-minimization-and-retention Data minimization and retention (Art 5) | not-applicable | A-SEC-21, A-DB-7, A-DB-21 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| gdpr-eu | records-and-transfers Records of processing and transfers (Art 30, 44-49) | not-applicable | A-SEC-32 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| gdpr-eu | privacy-by-design Data protection by design and default (Art 25) | not-applicable | A-SEC-2, A-SEC-12 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| ccpa-cpra | consumer-rights Consumer rights to know, delete, correct | not-applicable | A-SEC-21 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| ccpa-cpra | opt-out-of-sale-and-sharing Opt-out of sale and sharing | not-applicable | A-SEC-31, A-UX-17 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| ccpa-cpra | reasonable-security Reasonable security safeguards | not-applicable | A-SEC-3, A-SEC-11, A-SEC-12 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| ccpa-cpra | data-inventory Data inventory and records | not-applicable | A-SEC-32 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| pipeda-ca | consent Consent (Principle 3) | not-applicable | A-SEC-31 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| pipeda-ca | safeguards Safeguards (Principle 7) | not-applicable | A-SEC-11, A-SEC-12, A-SEC-3 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| pipeda-ca | access-and-accuracy Individual access and accuracy (Principles 9-10) | not-applicable | A-SEC-21 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| pipeda-ca | accountability Accountability (Principle 1) | not-applicable | A-SEC-32, A-SEC-20 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| wcag-2.2-aa | perceivable Perceivable | not-applicable | A-UI-3, A-UI-21, A-UI-17 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| wcag-2.2-aa | operable Operable | not-applicable | A-UI-4, A-UI-6, A-UI-7, A-UI-24, A-UI-20, A-UX-8 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| wcag-2.2-aa | understandable Understandable | not-applicable | A-UX-7, A-UX-9, A-UI-8 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| wcag-2.2-aa | robust Robust | not-applicable | A-UI-2, A-UI-9 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| aoda-on | web-content-accessibility Information and communications - web content | not-applicable | A-UI-3, A-UI-4, A-UI-6, A-UI-21, A-UI-24, A-UX-8 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| ada-508 | web-content-accessibility Accessible web content and software | not-applicable | A-UI-2, A-UI-3, A-UI-4, A-UI-21, A-UX-8 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| soc2-tsc | security-common-criteria Security (common criteria) | not-applicable | A-SEC-3, A-SEC-4, A-SEC-5, A-SEC-6, A-SEC-7, A-SEC-20, A-SEC-17 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| soc2-tsc | change-management Change management | not-applicable | A-DEPLOY-1, A-DEPLOY-8, A-DEPLOY-9, A-REPO-13 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| soc2-tsc | availability Availability | not-applicable | A-OBS-3, A-DEPLOY-11, A-DB-21 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| soc2-tsc | confidentiality Confidentiality | not-applicable | A-SEC-11, A-SEC-12, A-DB-19 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| soc2-tsc | processing-integrity Processing integrity | not-applicable | A-DB-9, A-DB-14, A-DB-24 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| soc2-tsc | privacy Privacy | not-applicable | A-SEC-21, A-SEC-31 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| iso-27001 | access-control Access control | not-applicable | A-SEC-3, A-SEC-4, A-SEC-5 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| iso-27001 | cryptography Cryptography | not-applicable | A-SEC-11, A-SEC-12 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| iso-27001 | logging-and-monitoring Logging and monitoring | not-applicable | A-SEC-20, A-OBS-12 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| iso-27001 | secure-development Secure development | not-applicable | A-SEC-8, A-SEC-9, A-SEC-10, A-CODE-8, A-BUILD-15 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| iso-27001 | supplier-and-supply-chain Supplier and supply-chain security | not-applicable | A-SEC-17, A-CODE-17 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| iso-27001 | vulnerability-management Technical vulnerability management | not-applicable | A-SEC-26, A-REPO-12 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| iso-27001 | backup-and-continuity Backup and continuity | not-applicable | A-DB-21, A-DEPLOY-4 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| pci-dss-4 | protect-stored-account-data Protect stored account data (Req 3) | not-applicable | A-SEC-12, A-DB-4, A-DB-19, A-SEC-32 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| pci-dss-4 | encrypt-transmission Encrypt transmission of cardholder data (Req 4) | not-applicable | A-SEC-11, A-DB-19 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| pci-dss-4 | secure-systems-and-software Secure systems and software (Req 6) | not-applicable | A-SEC-8, A-SEC-9, A-SEC-10, A-SEC-26, A-BUILD-15 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| pci-dss-4 | access-control Restrict and authenticate access (Req 7-8) | not-applicable | A-SEC-3, A-SEC-4, A-SEC-6, A-SEC-7 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| pci-dss-4 | logging-and-monitoring Log and monitor access (Req 10) | not-applicable | A-SEC-20, A-OBS-12 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| hipaa-security-rule | access-control Access control (164.312(a)) | not-applicable | A-SEC-3, A-SEC-4, A-SEC-7 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| hipaa-security-rule | audit-controls Audit controls (164.312(b)) | not-applicable | A-SEC-20, A-OBS-12 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| hipaa-security-rule | integrity Integrity (164.312(c)) | not-applicable | A-DB-14, A-SEC-9 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| hipaa-security-rule | transmission-security Transmission security (164.312(e)) | not-applicable | A-SEC-11, A-DB-19 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+| hipaa-security-rule | encryption-and-agreements Encryption and business-associate agreements | not-applicable | A-SEC-12, A-SEC-32 | E-1, E-6, E-45, E-46, E-47, E-48, E-49, E-50 | none |
+
+## Check ledger
+
+| Check | Cost tier | Outcome | Confidence | Weight | Evidence |
+|---|---|---|---|---:|---|
+| A-PRD-1 | screening | fail | Firm | 6.25 | E-1, E-5, E-7, E-43 |
+| A-PRD-2 | screening | fail | Firm | 6.25 | E-1, E-5, E-7, E-43 |
+| A-PRD-3 | screening | pass | Firm | 6.25 | E-1, E-5, E-7, E-30, E-32 |
+| A-PRD-4 | screening | fail | Firm | 6.25 | E-1, E-5, E-7, E-43 |
+| A-PRD-5 | screening | fail | Firm | 10 | E-17, E-21, E-43 |
+| A-PRD-6 | screening | fail | Firm | 6.66666667 | E-1, E-5, E-7, E-43 |
+| A-PRD-7 | screening | fail | Firm | 10 | E-1, E-5, E-7, E-43 |
+| A-PRD-8 | screening | pass | Firm | 10 | E-1, E-5, E-7, E-30, E-32 |
+| A-PRD-9 | screening | fail | Firm | 3.33333333 | E-1, E-5, E-7, E-43 |
+| A-PRD-10 | screening | pass | Firm | 3.33333333 | E-1, E-5, E-7, E-30, E-32 |
+| A-PRD-11 | screening | pass | Firm | 3.33333333 | E-1, E-5, E-7, E-30, E-32 |
+| A-PRD-12 | screening | not-applicable | Firm | 0.83333333 | E-6, E-43 |
+| A-PRD-13 | screening | pass | Firm | 0.83333333 | E-1, E-5, E-7, E-30, E-32 |
+| A-PRD-14 | screening | not-applicable | Firm | 0.83333333 | E-6, E-43 |
+| A-PRD-15 | screening | unknown | Tentative | 0.83333333 | E-40 |
+| A-PRD-16 | screening | not-applicable | Firm | 0.83333333 | E-6, E-43 |
+| A-PRD-17 | screening | not-applicable | Firm | 0.83333333 | E-6, E-43 |
+| A-PRD-18 | deep-trace | pass | Firm | 6.66666667 | E-1, E-5, E-7, E-30, E-32 |
+| A-PRD-19 | deep-trace | not-applicable | Firm | 10 | E-6, E-43 |
+| A-PRD-20 | deep-trace | not-applicable | Firm | 6.66666667 | E-6, E-43 |
+| A-PRD-21 | screening | not-applicable | Firm | 0 | E-6, E-43 |
+| A-ARCH-1 | screening | pass | Firm | 3.75 | E-7, E-8, E-15, E-26, E-23 |
+| A-ARCH-2 | screening | pass | Firm | 3.75 | E-7, E-8, E-15, E-26, E-23 |
+| A-ARCH-3 | screening | fail | Firm | 3.75 | E-8, E-44 |
+| A-ARCH-4 | screening | pass | Firm | 3.75 | E-7, E-8, E-15, E-26, E-23 |
+| A-ARCH-5 | screening | pass | Firm | 5 | E-7, E-8, E-15, E-26, E-23 |
+| A-ARCH-6 | screening | pass | Firm | 5 | E-7, E-8, E-15, E-26, E-23 |
+| A-ARCH-7 | screening | pass | Firm | 5 | E-7, E-8, E-15, E-26, E-23 |
+| A-ARCH-8 | screening | pass | Firm | 5 | E-7, E-8, E-15, E-26, E-23 |
+| A-ARCH-9 | screening | not-applicable | Firm | 7.5 | E-45, E-4 |
+| A-ARCH-10 | deep-trace | not-applicable | Firm | 7.5 | E-45, E-4 |
+| A-ARCH-11 | deep-trace | unknown | Tentative | 5 | E-8 |
+| A-ARCH-12 | screening | pass | Firm | 5 | E-7, E-8, E-15, E-26, E-23 |
+| A-ARCH-13 | deep-trace | pass | Firm | 15 | E-7, E-8, E-15, E-26, E-23 |
+| A-ARCH-14 | screening | pass | Firm | 1.66666667 | E-7, E-8, E-15, E-26, E-23 |
+| A-ARCH-15 | screening | not-applicable | Firm | 1.66666667 | E-45, E-4 |
+| A-ARCH-16 | screening | fail | Firm | 1.66666667 | E-13, E-41 |
+| A-ARCH-17 | screening | pass | Firm | 1.66666667 | E-7, E-8, E-15, E-26, E-23 |
+| A-ARCH-18 | deep-trace | pass | Firm | 1.66666667 | E-7, E-8, E-15, E-26, E-23 |
+| A-ARCH-19 | screening | pass | Firm | 1.66666667 | E-7, E-8, E-15, E-26, E-23 |
+| A-ARCH-20 | deep-trace | not-applicable | Firm | 5 | E-45, E-4 |
+| A-ARCH-21 | deep-trace | not-applicable | Firm | 5 | E-45, E-4 |
+| A-ARCH-22 | deep-trace | pass | Firm | 5 | E-7, E-8, E-15, E-26, E-23 |
+| A-ARCH-23 | screening | pass | Firm | 0 | E-7, E-8, E-15, E-26, E-23 |
+| A-STACK-1 | screening | pass | Firm | 5 | E-12, E-14, E-4, E-35 |
+| A-STACK-2 | screening | fail | Firm | 1.66666667 | E-7, E-8, E-44 |
+| A-STACK-3 | screening | pass | Firm | 5 | E-12, E-14, E-4, E-35 |
+| A-STACK-4 | screening | pass | Firm | 6.25 | E-12, E-14, E-4, E-35 |
+| A-STACK-5 | screening | pass | Firm | 1.66666667 | E-12, E-14, E-4, E-35 |
+| A-STACK-6 | screening | not-applicable | Firm | 1.66666667 | E-4, E-45 |
+| A-STACK-7 | screening | not-applicable | Firm | 1.66666667 | E-4, E-45 |
+| A-STACK-8 | screening | pass | Firm | 6.25 | E-12, E-14, E-4, E-35 |
+| A-STACK-9 | screening | pass | Firm | 1.66666667 | E-12, E-14, E-4, E-35 |
+| A-STACK-10 | screening | pass | Firm | 1.66666667 | E-12, E-14, E-4, E-35 |
+| A-STACK-11 | screening | fail | Firm | 1.66666667 | E-7, E-8, E-44 |
+| A-STACK-12 | screening | not-applicable | Firm | 1.66666667 | E-4, E-45 |
+| A-STACK-13 | screening | not-applicable | Firm | 5 | E-4, E-45 |
+| A-STACK-14 | deep-trace | pass | Firm | 8.33333333 | E-12, E-14, E-4, E-35 |
+| A-STACK-15 | deep-trace | pass | Firm | 8 | E-12, E-14, E-4, E-35 |
+| A-STACK-16 | screening | fail | Firm | 1.66666667 | E-7, E-8, E-44 |
+| A-STACK-17 | screening | fail | Firm | 1.66666667 | E-7, E-8, E-44 |
+| A-STACK-18 | screening | not-applicable | Firm | 1.66666667 | E-4, E-45 |
+| A-STACK-19 | deep-trace | not-applicable | Firm | 7 | E-4, E-45 |
+| A-STACK-20 | screening | fail | Firm | 1.66666667 | E-7, E-8, E-44 |
+| A-STACK-21 | screening | pass | Firm | 6.25 | E-12, E-14, E-4, E-35 |
+| A-STACK-22 | screening | fail | Firm | 8.33333333 | E-12, E-14, E-2 |
+| A-STACK-23 | screening | pass | Firm | 6.25 | E-12, E-14, E-4, E-35 |
+| A-STACK-24 | screening | unknown | Tentative | 8.33333333 | E-12, E-44 |
+| A-DB-1 | screening | pass | Firm | 3.66666667 | E-22, E-23, E-24, E-26, E-27 |
+| A-DB-2 | screening | pass | Firm | 3.66666667 | E-22, E-23, E-24, E-26, E-27 |
+| A-DB-3 | screening | pass | Firm | 3.66666667 | E-22, E-23, E-24, E-26, E-27 |
+| A-DB-4 | screening | not-applicable | Firm | 3.5 | E-46, E-45 |
+| A-DB-5 | screening | pass | Firm | 3.5 | E-22, E-23, E-24, E-26, E-27 |
+| A-DB-6 | screening | pass | Firm | 7 | E-22, E-23, E-24, E-26, E-27 |
+| A-DB-7 | screening | not-applicable | Firm | 7 | E-46, E-45 |
+| A-DB-8 | screening | pass | Firm | 5 | E-22, E-23, E-24, E-26, E-27 |
+| A-DB-9 | deep-trace | not-applicable | Firm | 5 | E-46, E-45 |
+| A-DB-10 | deep-trace | pass | Firm | 6.5 | E-22, E-23, E-24, E-26, E-27 |
+| A-DB-11 | screening | pass | Firm | 6.5 | E-22, E-23, E-24, E-26, E-27 |
+| A-DB-12 | deep-trace | pass | Firm | 6 | E-22, E-23, E-24, E-26, E-27 |
+| A-DB-13 | screening | pass | Firm | 6 | E-22, E-23, E-24, E-26, E-27 |
+| A-DB-14 | deep-trace | pass | Firm | 4.5 | E-22, E-23, E-24, E-26, E-27 |
+| A-DB-15 | deep-trace | pass | Firm | 4.5 | E-22, E-23, E-24, E-26, E-27 |
+| A-DB-16 | screening | pass | Firm | 3 | E-22, E-23, E-24, E-26, E-27 |
+| A-DB-17 | screening | fail | Firm | 3 | E-22, E-41 |
+| A-DB-18 | screening | pass | Firm | 6 | E-22, E-23, E-24, E-26, E-27 |
+| A-DB-19 | deep-trace | pass | Firm | 6 | E-22, E-23, E-24, E-26, E-27 |
+| A-DB-20 | screening | not-applicable | Firm | 4 | E-46, E-45 |
+| A-DB-21 | screening | pass | Firm | 1 | E-22, E-23, E-24, E-26, E-27 |
+| A-DB-22 | screening | pass | Firm | 0 | E-22, E-23, E-24, E-26, E-27 |
+| A-DB-23 | screening | not-applicable | Firm | 1 | E-46, E-45 |
+| A-DB-24 | deep-trace | not-applicable | Firm | 0 | E-46, E-45 |
+| A-SEC-1 | deep-trace | pass | Firm | 0 | E-15, E-19, E-20, E-28, E-29 |
+| A-SEC-2 | screening | pass | Firm | 0 | E-15, E-19, E-20, E-28, E-29 |
+| A-SEC-3 | deep-trace | pass | Firm | 6 | E-15, E-19, E-20, E-28, E-29 |
+| A-SEC-4 | deep-trace | not-applicable | Firm | 6 | E-45, E-47, E-50 |
+| A-SEC-5 | deep-trace | pass | Firm | 6 | E-15, E-19, E-20, E-28, E-29 |
+| A-SEC-6 | deep-trace | pass | Firm | 7.5 | E-15, E-19, E-20, E-28, E-29 |
+| A-SEC-7 | screening | pass | Firm | 7.5 | E-15, E-19, E-20, E-28, E-29 |
+| A-SEC-8 | deep-trace | pass | Firm | 5.33333333 | E-15, E-19, E-20, E-28, E-29 |
+| A-SEC-9 | deep-trace | not-applicable | Firm | 5.33333333 | E-45, E-47, E-50 |
+| A-SEC-10 | deep-trace | not-applicable | Firm | 5.33333333 | E-45, E-47, E-50 |
+| A-SEC-11 | screening | pass | Firm | 5.5 | E-15, E-19, E-20, E-28, E-29 |
+| A-SEC-12 | deep-trace | pass | Firm | 5.5 | E-15, E-19, E-20, E-28, E-29 |
+| A-SEC-13 | screening | pass | Firm | 2.66666667 | E-15, E-19, E-20, E-28, E-29 |
+| A-SEC-14 | screening | fail | Firm | 2.66666667 | E-13, E-40, E-41 |
+| A-SEC-15 | screening | pass | Firm | 4.5 | E-15, E-19, E-20, E-28, E-29 |
+| A-SEC-16 | screening | pass | Firm | 4.5 | E-15, E-19, E-20, E-28, E-29 |
+| A-SEC-17 | screening | pass | Firm | 3 | E-15, E-19, E-20, E-28, E-29 |
+| A-SEC-18 | screening | not-applicable | Firm | 3 | E-45, E-47, E-50 |
+| A-SEC-19 | deep-trace | fail | Firm | 6 | E-3, E-25 |
+| A-SEC-20 | screening | fail | Firm | 2 | E-17, E-21, E-29 |
+| A-SEC-21 | screening | not-applicable | Firm | 2 | E-45, E-47, E-50 |
+| A-SEC-22 | screening | not-applicable | Firm | 2 | E-45, E-47, E-50 |
+| A-SEC-23 | screening | not-applicable | Firm | 2 | E-45, E-47, E-50 |
+| A-SEC-24 | deep-trace | pass | Firm | 0 | E-15, E-19, E-20, E-28, E-29 |
+| A-SEC-25 | deep-trace | pass | Firm | 0 | E-15, E-19, E-20, E-28, E-29 |
+| A-SEC-26 | screening | pass | Firm | 3 | E-15, E-19, E-20, E-28, E-29 |
+| A-SEC-27 | deep-trace | unknown | Tentative | 2.66666667 | E-40 |
+| A-SEC-28 | deep-trace | pass | Firm | 0 | E-15, E-19, E-20, E-28, E-29 |
+| A-SEC-29 | deep-trace | pass | Firm | 0 | E-15, E-19, E-20, E-28, E-29 |
+| A-SEC-30 | deep-trace | pass | Firm | 0 | E-15, E-19, E-20, E-28, E-29 |
+| A-SEC-31 | deep-trace | not-applicable | Firm | 0 | E-45, E-47, E-50 |
+| A-SEC-32 | screening | not-applicable | Firm | 0 | E-45, E-47, E-50 |
+| A-SEC-33 | deep-trace | fail | Firm | 0 | E-3, E-25 |
+| A-UX-1 | screening | pass | Firm | 3.66666667 | E-1, E-30, E-31, E-33 |
+| A-UX-2 | deep-trace | pass | Firm | 3.66666667 | E-1, E-30, E-31, E-33 |
+| A-UX-3 | screening | pass | Firm | 3.25 | E-1, E-30, E-31, E-33 |
+| A-UX-4 | screening | pass | Firm | 3.25 | E-1, E-30, E-31, E-33 |
+| A-UX-5 | deep-trace | fail | Firm | 3.25 | E-28, E-11 |
+| A-UX-6 | screening | pass | Firm | 4 | E-1, E-30, E-31, E-33 |
+| A-UX-7 | screening | pass | Firm | 4 | E-1, E-30, E-31, E-33 |
+| A-UX-8 | deep-trace | not-applicable | Firm | 13 | E-48, E-6 |
+| A-UX-9 | screening | not-applicable | Firm | 7 | E-48, E-6 |
+| A-UX-10 | deep-trace | not-applicable | Firm | 3.66666667 | E-48, E-6 |
+| A-UX-11 | deep-trace | not-applicable | Firm | 3.66666667 | E-48, E-6 |
+| A-UX-12 | screening | not-applicable | Firm | 3.66666667 | E-48, E-6 |
+| A-UX-13 | screening | not-applicable | Firm | 8 | E-48, E-6 |
+| A-UX-14 | screening | not-applicable | Firm | 4 | E-48, E-6 |
+| A-UX-15 | screening | not-applicable | Firm | 4 | E-48, E-6 |
+| A-UX-16 | screening | not-applicable | Firm | 6 | E-48, E-6 |
+| A-UX-17 | deep-trace | not-applicable | Firm | 6 | E-48, E-6 |
+| A-UX-18 | screening | not-applicable | Firm | 4.5 | E-48, E-6 |
+| A-UX-19 | screening | not-applicable | Firm | 3.66666667 | E-48, E-6 |
+| A-UX-20 | screening | pass | Firm | 0 | E-1, E-30, E-31, E-33 |
+| A-UX-21 | deep-trace | not-applicable | Firm | 4.5 | E-48, E-6 |
+| A-UX-22 | screening | not-applicable | Firm | 3.25 | E-48, E-6 |
+| A-CODE-1 | screening | pass | Firm | 3.8 | E-13, E-36, E-16, E-31 |
+| A-CODE-2 | deep-trace | pass | Firm | 4.75 | E-13, E-36, E-16, E-31 |
+| A-CODE-3 | screening | pass | Firm | 4.75 | E-13, E-36, E-16, E-31 |
+| A-CODE-4 | screening | pass | Firm | 4.75 | E-13, E-36, E-16, E-31 |
+| A-CODE-5 | screening | pass | Firm | 3.8 | E-13, E-36, E-16, E-31 |
+| A-CODE-6 | screening | pass | Firm | 3.8 | E-13, E-36, E-16, E-31 |
+| A-CODE-7 | screening | pass | Firm | 3.8 | E-13, E-36, E-16, E-31 |
+| A-CODE-8 | deep-trace | pass | Firm | 3.8 | E-13, E-36, E-16, E-31 |
+| A-CODE-9 | screening | pass | Firm | 3.8 | E-13, E-36, E-16, E-31 |
+| A-CODE-10 | screening | pass | Firm | 3.8 | E-13, E-36, E-16, E-31 |
+| A-CODE-11 | screening | pass | Firm | 3.8 | E-13, E-36, E-16, E-31 |
+| A-CODE-12 | deep-trace | pass | Firm | 4 | E-13, E-36, E-16, E-31 |
+| A-CODE-13 | screening | pass | Firm | 4 | E-13, E-36, E-16, E-31 |
+| A-CODE-14 | deep-trace | pass | Firm | 4 | E-13, E-36, E-16, E-31 |
+| A-CODE-15 | screening | pass | Firm | 5 | E-13, E-36, E-16, E-31 |
+| A-CODE-16 | screening | pass | Firm | 5 | E-13, E-36, E-16, E-31 |
+| A-CODE-17 | screening | pass | Firm | 4.5 | E-13, E-36, E-16, E-31 |
+| A-CODE-18 | screening | pass | Firm | 6 | E-13, E-36, E-16, E-31 |
+| A-CODE-19 | screening | pass | Firm | 3 | E-13, E-36, E-16, E-31 |
+| A-CODE-20 | screening | pass | Firm | 3 | E-13, E-36, E-16, E-31 |
+| A-CODE-21 | screening | pass | Firm | 3.8 | E-13, E-36, E-16, E-31 |
+| A-CODE-22 | deep-trace | pass | Firm | 3.8 | E-13, E-36, E-16, E-31 |
+| A-CODE-23 | deep-trace | pass | Firm | 4.75 | E-13, E-36, E-16, E-31 |
+| A-CODE-24 | screening | pass | Firm | 4.5 | E-13, E-36, E-16, E-31 |
+| A-CODE-25 | deep-trace | pass | Firm | 0 | E-13, E-36, E-16, E-31 |
+| A-CODE-26 | deep-trace | pass | Firm | 0 | E-13, E-36, E-16, E-31 |
+| A-DNA-1 | screening | pass | Firm | 6 | E-36, E-25, E-17 |
+| A-DNA-2 | screening | pass | Firm | 7.5 | E-36, E-25, E-17 |
+| A-DNA-3 | screening | pass | Firm | 7.5 | E-36, E-25, E-17 |
+| A-DNA-4 | screening | pass | Firm | 8 | E-36, E-25, E-17 |
+| A-DNA-5 | screening | pass | Firm | 5 | E-36, E-25, E-17 |
+| A-DNA-6 | screening | pass | Firm | 6 | E-36, E-25, E-17 |
+| A-DNA-7 | screening | pass | Firm | 6 | E-36, E-25, E-17 |
+| A-DNA-8 | screening | pass | Firm | 3.33333333 | E-36, E-25, E-17 |
+| A-DNA-9 | screening | pass | Firm | 3.33333333 | E-36, E-25, E-17 |
+| A-DNA-10 | screening | pass | Firm | 3.33333333 | E-36, E-25, E-17 |
+| A-DNA-11 | screening | pass | Firm | 5 | E-36, E-25, E-17 |
+| A-DNA-12 | screening | pass | Firm | 5 | E-36, E-25, E-17 |
+| A-DNA-13 | deep-trace | pass | Firm | 5 | E-36, E-25, E-17 |
+| A-DNA-14 | screening | pass | Firm | 3.33333333 | E-36, E-25, E-17 |
+| A-DNA-15 | screening | pass | Firm | 3.33333333 | E-36, E-25, E-17 |
+| A-DNA-16 | screening | pass | Firm | 1.66666667 | E-36, E-25, E-17 |
+| A-DNA-17 | screening | pass | Firm | 2.66666667 | E-36, E-25, E-17 |
+| A-DNA-18 | screening | pass | Firm | 1.66666667 | E-36, E-25, E-17 |
+| A-DNA-19 | screening | pass | Firm | 1.66666667 | E-36, E-25, E-17 |
+| A-DNA-20 | deep-trace | pass | Firm | 3.33333333 | E-36, E-25, E-17 |
+| A-DNA-21 | screening | pass | Firm | 2.66666667 | E-36, E-25, E-17 |
+| A-DNA-22 | deep-trace | pass | Firm | 2.66666667 | E-36, E-25, E-17 |
+| A-DNA-23 | screening | pass | Firm | 6 | E-36, E-25, E-17 |
+| A-MEM-1 | screening | pass | Firm | 3.75 | E-37, E-38, E-51 |
+| A-MEM-2 | screening | fail | Firm | 3.75 | E-37, E-38, E-51 |
+| A-MEM-3 | screening | fail | Firm | 3.75 | E-37, E-38, E-51 |
+| A-MEM-4 | screening | fail | Firm | 3.75 | E-37, E-38, E-51 |
+| A-MEM-5 | screening | pass | Firm | 10 | E-37, E-38, E-51 |
+| A-MEM-6 | screening | pass | Firm | 3.75 | E-37, E-38, E-51 |
+| A-MEM-7 | screening | fail | Firm | 3 | E-37, E-38, E-51 |
+| A-MEM-8 | screening | fail | Firm | 3 | E-37, E-38, E-51 |
+| A-MEM-9 | deep-trace | pass | Firm | 5 | E-37, E-38, E-51 |
+| A-MEM-10 | deep-trace | pass | Firm | 5 | E-37, E-38, E-51 |
+| A-MEM-11 | deep-trace | pass | Firm | 7.5 | E-37, E-38, E-51 |
+| A-MEM-12 | screening | pass | Firm | 7.5 | E-37, E-38, E-51 |
+| A-MEM-13 | screening | pass | Firm | 3 | E-37, E-38, E-51 |
+| A-MEM-14 | deep-trace | pass | Firm | 3.75 | E-37, E-38, E-51 |
+| A-MEM-15 | screening | not-applicable | Firm | 3.75 | E-51 |
+| A-MEM-16 | screening | fail | Firm | 3.75 | E-13, E-41 |
+| A-MEM-17 | deep-trace | unknown | Tentative | 3.75 | E-40 |
+| A-MEM-18 | screening | fail | Firm | 3.75 | E-37, E-38, E-51 |
+| A-MEM-19 | screening | not-applicable | Firm | 0 | E-51 |
+| A-MEM-20 | screening | pass | Firm | 5 | E-37, E-38, E-51 |
+| A-MEM-21 | screening | fail | Firm | 3 | E-37, E-38, E-51 |
+| A-MEM-22 | screening | not-applicable | Firm | 3.75 | E-51 |
+| A-MEM-23 | screening | not-applicable | Firm | 3.75 | E-51 |
+| A-MEM-24 | screening | pass | Firm | 3 | E-37, E-38, E-51 |
+| A-REPO-1 | screening | pass | Firm | 3.5 | E-13, E-1, E-40, E-41 |
+| A-REPO-2 | screening | pass | Firm | 3.5 | E-13, E-1, E-40, E-41 |
+| A-REPO-3 | screening | pass | Firm | 7 | E-13, E-1, E-40, E-41 |
+| A-REPO-4 | deep-trace | pass | Firm | 4.5 | E-13, E-1, E-40, E-41 |
+| A-REPO-5 | screening | not-applicable | Firm | 4 | E-4, E-6 |
+| A-REPO-6 | screening | pass | Firm | 4.5 | E-13, E-1, E-40, E-41 |
+| A-REPO-7 | screening | pass | Firm | 4.5 | E-13, E-1, E-40, E-41 |
+| A-REPO-8 | screening | not-applicable | Firm | 3.5 | E-4, E-6 |
+| A-REPO-9 | screening | fail | Firm | 4 | E-13, E-40, E-41 |
+| A-REPO-10 | screening | pass | Firm | 4 | E-13, E-1, E-40, E-41 |
+| A-REPO-11 | deep-trace | pass | Firm | 4 | E-13, E-1, E-40, E-41 |
+| A-REPO-12 | screening | fail | Firm | 7 | E-13, E-40, E-41 |
+| A-REPO-13 | screening | not-applicable | Firm | 4 | E-4, E-6 |
+| A-REPO-14 | screening | pass | Firm | 4 | E-13, E-1, E-40, E-41 |
+| A-REPO-15 | screening | fail | Firm | 8 | E-13, E-40, E-41 |
+| A-REPO-16 | deep-trace | pass | Firm | 3.5 | E-13, E-1, E-40, E-41 |
+| A-REPO-17 | screening | pass | Firm | 3.5 | E-13, E-1, E-40, E-41 |
+| A-REPO-18 | screening | pass | Firm | 3.5 | E-13, E-1, E-40, E-41 |
+| A-REPO-19 | screening | pass | Firm | 3.5 | E-13, E-1, E-40, E-41 |
+| A-REPO-20 | screening | pass | Firm | 3.5 | E-13, E-1, E-40, E-41 |
+| A-REPO-21 | screening | fail | Firm | 4.5 | E-13, E-40, E-41 |
+| A-REPO-22 | screening | fail | Firm | 4 | E-13, E-40, E-41 |
+| A-REPO-23 | screening | not-applicable | Firm | 4 | E-4, E-6 |
+| A-REPO-24 | deep-trace | pass | Firm | 0 | E-13, E-1, E-40, E-41 |
+| A-BUILD-1 | screening | pass | Firm | 2.5 | E-34, E-13, E-30, E-39 |
+| A-BUILD-2 | screening | pass | Firm | 5 | E-34, E-13, E-30, E-39 |
+| A-BUILD-3 | screening | pass | Firm | 4 | E-34, E-13, E-30, E-39 |
+| A-BUILD-4 | deep-trace | pass | Firm | 5 | E-34, E-13, E-30, E-39 |
+| A-BUILD-5 | deep-trace | pass | Firm | 5 | E-34, E-13, E-30, E-39 |
+| A-BUILD-6 | deep-trace | pass | Firm | 4 | E-34, E-13, E-30, E-39 |
+| A-BUILD-7 | screening | pass | Firm | 4 | E-34, E-13, E-30, E-39 |
+| A-BUILD-8 | deep-trace | pass | Firm | 5 | E-34, E-13, E-30, E-39 |
+| A-BUILD-9 | deep-trace | pass | Firm | 5 | E-34, E-13, E-30, E-39 |
+| A-BUILD-10 | screening | pass | Firm | 5 | E-34, E-13, E-30, E-39 |
+| A-BUILD-11 | screening | pass | Firm | 10 | E-34, E-13, E-30, E-39 |
+| A-BUILD-12 | screening | pass | Firm | 7.5 | E-34, E-13, E-30, E-39 |
+| A-BUILD-13 | deep-trace | pass | Firm | 7.5 | E-34, E-13, E-30, E-39 |
+| A-BUILD-14 | screening | pass | Firm | 3.33333333 | E-34, E-13, E-30, E-39 |
+| A-BUILD-15 | screening | pass | Firm | 3.33333333 | E-34, E-13, E-30, E-39 |
+| A-BUILD-16 | screening | pass | Firm | 4 | E-34, E-13, E-30, E-39 |
+| A-BUILD-17 | screening | pass | Firm | 2.5 | E-34, E-13, E-30, E-39 |
+| A-BUILD-18 | screening | pass | Firm | 2.5 | E-34, E-13, E-30, E-39 |
+| A-BUILD-19 | deep-trace | pass | Firm | 5 | E-34, E-13, E-30, E-39 |
+| A-BUILD-20 | screening | pass | Firm | 2.5 | E-34, E-13, E-30, E-39 |
+| A-BUILD-21 | screening | pass | Firm | 3.33333333 | E-34, E-13, E-30, E-39 |
+| A-BUILD-22 | screening | pass | Firm | 4 | E-34, E-13, E-30, E-39 |
+| A-OBS-1 | screening | pass | Firm | 3.57142857 | E-17, E-21, E-10 |
+| A-OBS-2 | screening | pass | Firm | 3.57142857 | E-17, E-21, E-10 |
+| A-OBS-3 | screening | pass | Firm | 3.57142857 | E-17, E-21, E-10 |
+| A-OBS-4 | screening | pass | Firm | 3.57142857 | E-17, E-21, E-10 |
+| A-OBS-5 | screening | pass | Firm | 3.57142857 | E-17, E-21, E-10 |
+| A-OBS-6 | screening | pass | Firm | 3.57142857 | E-17, E-21, E-10 |
+| A-OBS-7 | screening | pass | Firm | 4 | E-17, E-21, E-10 |
+| A-OBS-8 | screening | pass | Firm | 4 | E-17, E-21, E-10 |
+| A-OBS-9 | screening | pass | Firm | 4 | E-17, E-21, E-10 |
+| A-OBS-10 | deep-trace | pass | Firm | 4 | E-17, E-21, E-10 |
+| A-OBS-11 | deep-trace | pass | Firm | 4 | E-17, E-21, E-10 |
+| A-OBS-12 | screening | pass | Firm | 4 | E-17, E-21, E-10 |
+| A-OBS-13 | screening | pass | Firm | 5 | E-17, E-21, E-10 |
+| A-OBS-14 | screening | pass | Firm | 5 | E-17, E-21, E-10 |
+| A-OBS-15 | screening | pass | Firm | 5 | E-17, E-21, E-10 |
+| A-OBS-16 | screening | pass | Firm | 5 | E-17, E-21, E-10 |
+| A-OBS-17 | deep-trace | pass | Firm | 5 | E-17, E-21, E-10 |
+| A-OBS-18 | screening | pass | Firm | 5 | E-17, E-21, E-10 |
+| A-OBS-19 | screening | pass | Firm | 5 | E-17, E-21, E-10 |
+| A-OBS-20 | screening | pass | Firm | 3.57142857 | E-17, E-21, E-10 |
+| A-OBS-21 | screening | pass | Firm | 4 | E-17, E-21, E-10 |
+| A-OBS-22 | deep-trace | pass | Firm | 4 | E-17, E-21, E-10 |
+| A-OBS-23 | deep-trace | pass | Firm | 4 | E-17, E-21, E-10 |
+| A-OBS-24 | deep-trace | pass | Firm | 4 | E-17, E-21, E-10 |
+
+## Evidence ledger
+
+| Evidence | Type | Location or scope | Provenance | Quote or result | SHA-256 | Redacted |
+|---|---|---|---|---|---|---|
+| E-1 | source | README.md:3 | source content hash | A local, restart-safe HTTP API for organization-scoped notes. | 48b776bbec64fa4fa52004477ebc430ec565493e08c2619ac97de1c80f0a3baa | no |
+| E-2 | source | README.md:8 | source content hash | Requires Node.js 22.13 or newer. | 48b776bbec64fa4fa52004477ebc430ec565493e08c2619ac97de1c80f0a3baa | no |
+| E-3 | source | README.md:77 | source content hash | application/problem+json. POST is not retry-safe. | 48b776bbec64fa4fa52004477ebc430ec565493e08c2619ac97de1c80f0a3baa | no |
+| E-4 | source | README.md:9 | source content hash | no third-party runtime or development dependencies and makes no external | 48b776bbec64fa4fa52004477ebc430ec565493e08c2619ac97de1c80f0a3baa | no |
+| E-5 | source | agents/context.md:13 | source content hash | The local Tenant Notes API and its two fixed organizations. | 3c41d919518cac4074d0b46f8be9d0048a35ed7d4142f48c16c81bc096fc174a | no |
+| E-6 | source | AGENTS.md:20 | source content hash | Structured exclusions: UI has no rendered surface; deploy and launch have no | 8c9ef5a8f00134ab476978a34153a85e6a9cbc920e9947821e00a1d4f788660c | no |
+| E-7 | source | docs/adr/001-local-tenant-isolation.md:14 | source content hash | Use one SQLite file per organization. Authentication hashes the supplied bearer | c547bb736abc5d02f3698a09fd7fc5fdf08390021cbee672e4bd5b9bc2b3acad | no |
+| E-8 | source | docs/adr/001-local-tenant-isolation.md:21 | source content hash | Flip point: a third organization is required, store-open time exceeds 100 ms | c547bb736abc5d02f3698a09fd7fc5fdf08390021cbee672e4bd5b9bc2b3acad | no |
+| E-9 | source | docs/adr/001-local-tenant-isolation.md:36 | source content hash | ## Rejected alternatives | c547bb736abc5d02f3698a09fd7fc5fdf08390021cbee672e4bd5b9bc2b3acad | no |
+| E-10 | source | docs/runbook.md:32 | source content hash | ## Recovery and rollback | d0f0cbd8c8771c92922bc71f357154b8e2600180426f4ee7e918162767880cd7 | no |
+| E-11 | source | docs/runbook.md:34 | source content hash | There is no backup promise. For evaluator data, stop the process and restore | d0f0cbd8c8771c92922bc71f357154b8e2600180426f4ee7e918162767880cd7 | no |
+| E-12 | source | package.json:7 | source content hash | "node": "&gt;=22.13 &lt;25" | 8e70a11b9e2e876dbb2f27ce626a95bba9e743bc8ffdc2ec8a0b6baacc8d404b | no |
+| E-13 | source | package.json:25 | source content hash | "verify": "npm run format:check &amp;&amp; npm run lint &amp;&amp; npm run typecheck &amp;&amp; npm run build &amp;&amp; npm run contract:check &amp;&amp; npm run test &amp;&amp; npm run hollow:check &amp;&amp; npm run pillars:check &amp;&amp; npm run supply-chain &amp;&amp; npm run secrets:check &amp;&amp; npm run smoke:offline" | 8e70a11b9e2e876dbb2f27ce626a95bba9e743bc8ffdc2ec8a0b6baacc8d404b | no |
+| E-14 | source | package-lock.json:11 | source content hash | "node": "&gt;=22.13 &lt;25" | d6d685697d0738160bb5402a252ead3b1e76e97ef0f0b9467f01ecae399d121d | no |
+| E-15 | source | src/app.ts:55 | source content hash | const principal = auth.authenticate( | c3495a274a992dcfee9cdfeed2ecda7794512e4690a40f5067c8a85de44a728c | no |
+| E-16 | source | src/app.ts:59 | source content hash | const result = executeNotesRoute( | c3495a274a992dcfee9cdfeed2ecda7794512e4690a40f5067c8a85de44a728c | no |
+| E-17 | source | src/app.ts:80 | source content hash | const problem = toProblem(error, url.pathname); | c3495a274a992dcfee9cdfeed2ecda7794512e4690a40f5067c8a85de44a728c | no |
+| E-18 | source | src/app.ts:163 | source content hash | function enforceBodyLimit(payload: unknown): void &#123; | c3495a274a992dcfee9cdfeed2ecda7794512e4690a40f5067c8a85de44a728c | no |
+| E-19 | source | src/auth.ts:101 | source content hash | if (stored.length === digest.length &amp;&amp; timingSafeEqual(stored, digest)) &#123; | 23e5fa4285adafdc364ae647c4e07d0e5fcbf1e094133cfee12022b5e6bcda13 | no |
+| E-20 | source | src/auth.ts:124 | source content hash | private isThrottled(ip: string): boolean &#123; | 23e5fa4285adafdc364ae647c4e07d0e5fcbf1e094133cfee12022b5e6bcda13 | no |
+| E-21 | source | src/auth.ts:138 | source content hash | this.logger.write(&#123; event: "auth_denial_spike", ip, outcome: "denied" &#125;); | 23e5fa4285adafdc364ae647c4e07d0e5fcbf1e094133cfee12022b5e6bcda13 | no |
+| E-22 | source | src/db/migrations/0001-init.sql:23 | source content hash | CREATE TABLE IF NOT EXISTS notes ( | 35b581f8d83cd290d137edb178c09031585e086fc9a7a35424c0a828891e12a4 | no |
+| E-23 | source | src/db/migrations/0001-init.sql:32 | source content hash | FOREIGN KEY (organization_id) REFERENCES organizations(public_id) ON DELETE RESTRICT, | 35b581f8d83cd290d137edb178c09031585e086fc9a7a35424c0a828891e12a4 | no |
+| E-24 | source | src/db/migrations/0001-init.sql:41 | source content hash | CREATE INDEX IF NOT EXISTS notes_organization_list_idx | 35b581f8d83cd290d137edb178c09031585e086fc9a7a35424c0a828891e12a4 | no |
+| E-25 | source | src/notes/repository.ts:33 | source content hash | `INSERT INTO notes | 3ee860cbcc1c57f4e2e6ed82e931195ea74982ba17bb4dfd62b1f8406825a402 | no |
+| E-26 | source | src/notes/repository.ts:69 | source content hash | `$&#123;SELECT_FIELDS&#125; WHERE organization_id = ? | 3ee860cbcc1c57f4e2e6ed82e931195ea74982ba17bb4dfd62b1f8406825a402 | no |
+| E-27 | source | src/notes/repository.ts:100 | source content hash | WHERE public_id = ? AND organization_id = ?` | 3ee860cbcc1c57f4e2e6ed82e931195ea74982ba17bb4dfd62b1f8406825a402 | no |
+| E-28 | source | src/notes/repository.ts:119 | source content hash | "DELETE FROM notes WHERE public_id = ? AND organization_id = ?", | 3ee860cbcc1c57f4e2e6ed82e931195ea74982ba17bb4dfd62b1f8406825a402 | no |
+| E-29 | source | src/logger.ts:13 | source content hash | function sanitize(event: Record&lt;string, unknown&gt;): Record&lt;string, unknown&gt; &#123; | cf26fe75802cfc9408404cdfdf2f027ac3294d2547d6c6b0e6c6535badaf8c98 | no |
+| E-30 | source | src/routes/contract.ts:1 | source content hash | export const openApiDocument = &#123; | 9b068038bc35f925f611227daf95519c401f991eb83621644051b6877a129ea5 | no |
+| E-31 | source | src/errors.ts:20 | source content hash | export function toProblem(error: unknown, instance: string): ProblemDetails &#123; | fcc1b09e1b6e325358f0381b26b8ae0df2784dcdacc1a3877104896b8f9a96f2 | no |
+| E-32 | source | tests/tenant-isolation.test.ts:23 | source content hash | test("known cross-organization ids are indistinguishable from absent ids", async () =&gt; &#123; | 68bc3d15aec0a09a672fcd7ad038696a327e2a300fb0591c55fd91cbb30c390e | no |
+| E-33 | source | tests/notes-crud.test.ts:5 | source content hash | test("organization members can complete CRUD across peer-owned notes", async () =&gt; &#123; | 7ea7258ca237299055dc6eb9d1deb09c5b3cc1a07b6926f82572fbc4371b9ff4 | no |
+| E-34 | source | scripts/build.mjs:5 | source content hash | const root = resolve(import.meta.dirname, ".."); | 895c19aae2158e790bf7cc72decda879fbd94d2ee636c7b364b87b37d4680377 | no |
+| E-35 | source | scripts/check-dependencies.mjs:3 | source content hash | const packageDocument = JSON.parse(readFileSync("package.json", "utf8")); | 8d576887c854895239c3ff6a7ac88b000ba60b782bc95bbd2fa64e6ac9043362 | no |
+| E-36 | source | CODEDNA.md:5 | source content hash | ## Canonical patterns | 3ad8ab5dcae4f052f5aace521d394aaf753728d1278c3f0ae72c785cd01b5829 | no |
+| E-37 | source | agents/context.md:1 | source content hash | --- | 3c41d919518cac4074d0b46f8be9d0048a35ed7d4142f48c16c81bc096fc174a | no |
+| E-38 | source | agents/quality.md:1 | source content hash | --- | 33f8496ce6c2962378d1ddbc42c41e54d580920206729f55b0660daf094c026c | no |
+| E-39 | source | artifacts/sbom.cdx.json:1 | source content hash | &#123; | 1ea484c345b2f53e2d39d4f0996d2bed29ab82a275cd8a7d8c0db1fe1ef29db4 | no |
+| E-40 | absence | repository root | git rev-parse --short HEAD | fatal: not a git repository | none | no |
+| E-41 | absence | repository root | rg --files -g '.github/workflows/**' -g '.gitlab-ci.yml' -g 'bitbucket-pipelines.yml' | 0 matches | none | no |
+| E-42 | absence | repository root | rg --files -g '.godplans/**' -g '*PLAN.mdx' | 0 matches | none | no |
+| E-43 | absence | repository root | rg --files &#124; rg '(^&#124;/)(product-brief&#124;PRD&#124;metrics&#124;risks&#124;assumptions)' | 0 matches | none | no |
+| E-44 | absence | repository root | rg --files &#124; rg '(^&#124;/)(\.stack-ready/&#124;docs/stack/&#124;\.nvmrc$&#124;\.tool-versions$)' | 0 matches | none | no |
+| E-45 | absence | src | rg -n 'fetch\(&#124;https?\.request&#124;WebSocket&#124;enqueue&#124;publish\(' src | 0 matches | none | no |
+| E-46 | absence | src | rg -n -i '\b(payment&#124;price&#124;amount&#124;currency&#124;invoice&#124;refund&#124;payout)\b' src | 0 matches | none | no |
+| E-47 | absence | src and package.json | rg -n -i '\b(openai&#124;anthropic&#124;langchain&#124;model call&#124;chat completion)\b' src package.json | 0 matches | none | no |
+| E-48 | absence | src | rg --files src &#124; rg '(components&#124;pages&#124;views&#124;\.tsx$&#124;\.css$)' | 0 matches | none | no |
+| E-49 | absence | repository root | rg --files &#124; rg '(sitemap&#124;robots\.txt&#124;next\.config&#124;public/index\.html)' | 0 matches | none | no |
+| E-50 | absence | repository root | rg --files &#124; rg '(Dockerfile&#124;terraform&#124;k8s&#124;helm&#124;fly\.toml&#124;render\.yaml&#124;Procfile)' | 0 matches | none | no |
+| E-51 | tool | none | godaudits 2.12.0; godaudits evidence . --output .godaudits/EVIDENCE.json | Pillars 1.1 present but compatible=false: loader has no structured YAML exclusions; pillar list fields and body headings fail the 1.1 validator. | none | no |
+
+## Strengths
+
+- Tenant isolation uses independent physical and logical boundaries. E-7 docs/adr/001-local-tenant-isolation.md:14: `Use one SQLite file per organization. Authentication hashes the supplied bearer`; E-26 src/notes/repository.ts:69:
+
+```text
+`${SELECT_FIELDS} WHERE organization_id = ?
+```; E-27 src/notes/repository.ts:100:
+
+```text
+WHERE public_id = ? AND organization_id = ?`
+```; E-23 src/db/migrations/0001-init.sql:32: `FOREIGN KEY (organization_id) REFERENCES organizations(public_id) ON DELETE RESTRICT,`; E-32 tests/tenant-isolation.test.ts:23: `test("known cross-organization ids are indistinguishable from absent ids", async () => {` Preserve: Keep store selection authentication-bound, every note query organization-scoped, and the composite owner/organization foreign key intact.
+
+- The dependency-free supply chain is enforced and inventoried. E-4 README.md:9: `no third-party runtime or development dependencies and makes no external`; E-12 package.json:7: `"node": ">=22.13 <25"`; E-35 scripts/check-dependencies.mjs:3: `const packageDocument = JSON.parse(readFileSync("package.json", "utf8"));`; E-39 artifacts/sbom.cdx.json:1: `{` Preserve: Retain the locked zero-dependency policy or update the SBOM and supply-chain gate with any deliberate dependency.
+
+- API promises map to contract, handlers, and static test definitions. E-1 README.md:3: `A local, restart-safe HTTP API for organization-scoped notes.`; E-30 src/routes/contract.ts:1: `export const openApiDocument = {`; E-16 src/app.ts:59: `const result = executeNotesRoute(`; E-33 tests/notes-crud.test.ts:5: `test("organization members can complete CRUD across peer-owned notes", async () => {`; E-32 tests/tenant-isolation.test.ts:23: `test("known cross-organization ids are indistinguishable from absent ids", async () => {` Preserve: Keep README, OpenAPI, route behavior, and black-box test definitions synchronized.
+
+- Shared error and logging boundaries redact sensitive fields. E-31 src/errors.ts:20: `export function toProblem(error: unknown, instance: string): ProblemDetails {`; E-17 src/app.ts:80: `const problem = toProblem(error, url.pathname);`; E-29 src/logger.ts:13: `function sanitize(event: Record<string, unknown>): Record<string, unknown> {` Preserve: Route new errors and log events through the central mapper and sanitizer.
+
+## Findings
+
+### product
+
+#### F-PRD-1 Product decisions are scattered without a lightweight owning brief [Medium | Firm | M]
+
+- Where: README.md:3
+- Evidence: E-1 README.md:3: `A local, restart-safe HTTP API for organization-scoped notes.`; E-5 agents/context.md:13: `The local Tenant Notes API and its two fixed organizations.`; E-7 docs/adr/001-local-tenant-isolation.md:14: `Use one SQLite file per organization. Authentication hashes the supplied bearer`; E-43 repository root: `0 matches`
+- Impact: A maintainer can reconstruct the evaluator and isolation promise, but not the appetite, cut rule, ranked acceptance criteria, full NFR disposition, or owned risks and assumptions.
+- Fix: Add docs/product-brief.md that reuses the README, context pillar, ADR, and existing tests while recording the missing product decisions.
+- Verify the fix: `rg -n '^## (Pre-flight|Primary user|Appetite|Requirements|NFRs|Risks|Assumptions)$|Given:|When:|Then:' docs/product-brief.md`
+- Checks: A-PRD-1, A-PRD-2, A-PRD-4, A-PRD-6, A-PRD-7, A-PRD-9
+- Status: open
+- Remediation: GA-301
+
+#### F-PRD-2 Product success is not computable from a metric-to-event contract [Medium | Firm | M]
+
+- Where: src/app.ts:80
+- Evidence: E-17 src/app.ts:80: `const problem = toProblem(error, url.pathname);`; E-21 src/auth.ts:138: `this.logger.write({ event: "auth_denial_spike", ip, outcome: "denied" });`; E-43 repository root: `0 matches`
+- Impact: The API emits useful operational events, but no named leading or lagging outcome, deadline, source, or computation establishes whether the evaluator product succeeds.
+- Fix: Add docs/metrics.md with at most five outcomes mapped to existing structured events or deterministic verification results.
+- Verify the fix: `rg -n '^## Metric|^(Number|Deadline|Outcome|Source|Event):' docs/metrics.md`
+- Checks: A-PRD-5
+- Status: open
+- Remediation: GA-302
+
+### architecture
+
+No findings. 23 checks were recorded in the ledger.
+
+### stack
+
+#### F-STACK-1 Stack decision provenance is incomplete [Medium | Firm | S]
+
+- Where: docs/adr/001-local-tenant-isolation.md:14
+- Evidence: E-7 docs/adr/001-local-tenant-isolation.md:14: `Use one SQLite file per organization. Authentication hashes the supplied bearer`; E-8 docs/adr/001-local-tenant-isolation.md:21: `Flip point: a third organization is required, store-open time exceeds 100 ms`; E-9 docs/adr/001-local-tenant-isolation.md:36: `## Rejected alternatives`; E-44 repository root: `0 matches`
+- Impact: The tenant-isolation ADR has concrete flip points and rejected alternatives, but lacks the dated preflight, planning horizon, support basis, and switching-cost record needed to revisit the runtime and database bundle safely.
+- Fix: Add a compact dated stack decision that incorporates the existing ADR and records domain/team/budget/time/regulatory basis, runner-up, 12-month ceiling, recheck condition, and engineer-week switching cost.
+- Verify the fix: `rg -n '^(Date|Domain|Team|Budget posture|Time-to-ship|Regulatory statement|Runner-up|Flip point|Scale ceiling|Switching cost|Re-check):' docs/stack/decision.md`
+- Checks: A-ARCH-3, A-STACK-2, A-STACK-11, A-STACK-16, A-STACK-17, A-STACK-20
+- Status: open
+- Remediation: GA-201
+
+#### F-STACK-2 README runtime support contradicts the manifest [Medium | Firm | S]
+
+- Where: package.json:7
+- Evidence: E-12 package.json:7: `"node": ">=22.13 <25"`; E-14 package-lock.json:11: `"node": ">=22.13 <25"`; E-2 README.md:8: `Requires Node.js 22.13 or newer.`
+- Impact: A user may select Node 25 or newer from the README while npm metadata explicitly rejects that runtime.
+- Fix: Choose the supported Node range and make package.json, package-lock.json, and README state the same contract.
+- Verify the fix: `node -e 'const p=require("./package.json");const r=require("fs").readFileSync("README.md","utf8");if(!r.includes(p.engines.node))process.exit(1)'`
+- Checks: A-STACK-22
+- Status: open
+- Remediation: GA-202
+
+### database
+
+No findings. 24 checks were recorded in the ledger.
+
+### security
+
+#### F-SEC-1 POST note creation has no retry idempotency contract [Medium | Firm | M]
+
+- Where: README.md:77
+- Evidence: E-3 README.md:77: `application/problem+json. POST is not retry-safe.`; E-25 src/notes/repository.ts:33:
+
+```text
+`INSERT INTO notes
+```
+- Impact: A client retry after an ambiguous response can create duplicate notes because no idempotency key is accepted or durably deduplicated.
+- Fix: Accept an Idempotency-Key for POST /v1/notes and persist a tenant-scoped unique key with the created note in the same SQLite transaction.
+- Verify the fix: `rg -n 'Idempotency-Key|idempotency' src openapi.json tests`
+- Checks: A-SEC-19, A-SEC-33
+- Status: open
+- Remediation: GA-303
+
+#### F-SEC-2 Ordinary authentication denials omit source identity from security logs [Low | Firm | S]
+
+- Where: src/app.ts:80
+- Evidence: E-17 src/app.ts:80: `const problem = toProblem(error, url.pathname);`; E-21 src/auth.ts:138: `this.logger.write({ event: "auth_denial_spike", ip, outcome: "denied" });`; E-29 src/logger.ts:13: `function sanitize(event: Record<string, unknown>): Record<string, unknown> {`
+- Impact: Operators can identify denial spikes, but cannot correlate individual denied requests to a source IP during an investigation.
+- Fix: Pass the normalized remote address into the centralized denial log while preserving token and note redaction.
+- Verify the fix: `rg -n 'request_denied.*(ip|remoteAddress)|sourceIp' src/app.ts tests`
+- Checks: A-SEC-20
+- Status: open
+- Remediation: GA-501
+
+### ux
+
+#### F-UX-1 Hard-deleted notes have no recovery path [Low | Firm | M]
+
+- Where: src/notes/repository.ts:119
+- Evidence: E-28 src/notes/repository.ts:119: `"DELETE FROM notes WHERE public_id = ? AND organization_id = ?",`; E-11 docs/runbook.md:34: `There is no backup promise. For evaluator data, stop the process and restore`
+- Impact: An accidental authenticated DELETE permanently removes evaluator notes, and the runbook explicitly provides no backup promise.
+- Fix: Either document hard delete as an intentional evaluator-only limit with a client confirmation requirement, or add a short retention trash state and restore operation.
+- Verify the fix: `rg -n 'trash|restore|delete confirmation|intentional hard delete' README.md docs src openapi.json`
+- Checks: A-UX-5
+- Status: open
+- Remediation: GA-502
+
+### code-quality
+
+No findings. 26 checks were recorded in the ledger.
+
+### style-genome
+
+No findings. 23 checks were recorded in the ledger.
+
+### agent-memory
+
+#### F-MEM-1 The claimed Pillars 1.1 memory is structurally incompatible [Medium | Firm | S]
+
+- Where: agents/context.md:1
+- Evidence: E-37 agents/context.md:1: `---`; E-38 agents/quality.md:1: `---`; E-51 tool: `Pillars 1.1 present but compatible=false: loader has no structured YAML exclusions; pillar list fields and body headings fail the 1.1 validator.`
+- Impact: Future agents receive useful content, but portable routing and complete Core concern accounting are ambiguous because the loader lacks structured exclusions and pillar frontmatter is not valid Pillars 1.1.
+- Fix: Convert exclusions and selector fields to the 1.1 schema, preserve the two always-loaded floor pillars, and make the repository validator use the same grammar as the declared standard.
+- Verify the fix: `node scripts/validate-pillars.mjs`
+- Checks: A-MEM-2, A-MEM-3, A-MEM-4, A-MEM-7, A-MEM-8, A-MEM-18, A-MEM-21
+- Status: open
+- Remediation: GA-203
+
+### repo
+
+#### F-REPO-1 The artifact has no version-control or CI provenance [High | Firm | M]
+
+- Where: see evidence ledger
+- Evidence: E-40 repository root: `fatal: not a git repository`; E-41 repository root: `0 matches`; E-13 package.json:25: `"verify": "npm run format:check && npm run lint && npm run typecheck && npm run build && npm run contract:check && npm run test && npm run hollow:check && npm run pillars:check && npm run supply-chain && npm run secrets:check && npm run smoke:offline"`
+- Impact: Reviewers cannot establish change history, tracked-artifact hygiene, branch protections, full-history secret scanning, or that the authoritative verification gate ran for this built artifact.
+- Fix: Place the artifact in a Git repository and add a least-privilege CI workflow that installs from the lockfile and runs npm run verify, including the Pillars, migration, dependency, secret, and architecture checks.
+- Verify the fix: `git rev-parse --is-inside-work-tree && rg -n 'npm run verify' .github/workflows`
+- Checks: A-ARCH-16, A-DB-17, A-SEC-14, A-MEM-16, A-REPO-9, A-REPO-12, A-REPO-15, A-REPO-21, A-REPO-22
+- Status: open
+- Remediation: GA-101
+
+### build
+
+No findings. 22 checks were recorded in the ledger.
+
+### observe
+
+No findings. 24 checks were recorded in the ledger.
+
+## Remediation plan
+
+## Phase 1: Stop the bleeding
+
+### Wave 1.1
+
+- [ ] GA-101 [W1.1] Establish Git and CI provenance for the authoritative gate
+  - Files: .github/workflows/ci.yml, .gitignore, package.json
+  - Depends on: none
+  - Reuses: the existing npm run verify chain
+  - Fixes: F-REPO-1
+  - Acceptance: The artifact is committed in Git and git rev-parse succeeds.; CI installs the lockfile with scripts disabled and runs npm run verify on push and pull request.; Secret and Pillars checks fail the workflow rather than soft-failing.
+  - Verify: `git rev-parse --is-inside-work-tree && rg -n 'npm ci.*ignore-scripts|npm run verify' .github/workflows/ci.yml`
+  - Checks: A-ARCH-16, A-DB-17, A-SEC-14, A-MEM-16, A-REPO-9, A-REPO-12, A-REPO-15, A-REPO-21, A-REPO-22
+
+## Phase 2: Remediation
+
+### Wave 2.1
+
+- [ ] GA-201 [W2.1] Complete the stack decision record
+  - Files: docs/stack/decision.md, docs/adr/001-local-tenant-isolation.md
+  - Depends on: none
+  - Reuses: ADR 001 flip points and rejected alternatives
+  - Fixes: F-STACK-1
+  - Acceptance: The record reuses the accepted isolation ADR instead of duplicating it.; It records a date, six-part preflight, 12-month ceiling, runner-up, switching cost, and re-check condition.
+  - Verify: `rg -n '^(Date|Domain|Team|Budget posture|Time-to-ship|Regulatory statement|Runner-up|Flip point|Scale ceiling|Switching cost|Re-check):' docs/stack/decision.md`
+  - Checks: A-ARCH-3, A-STACK-2, A-STACK-11, A-STACK-16, A-STACK-17, A-STACK-20
+
+### Wave 2.2
+
+- [ ] GA-202 [W2.2] Align the Node runtime support contract
+  - Files: package.json, package-lock.json, README.md
+  - Depends on: none
+  - Reuses: package.json engines as the canonical machine contract
+  - Fixes: F-STACK-2
+  - Acceptance: One supported Node range is chosen deliberately.; Manifest, lock metadata, and README state exactly the same range.
+  - Verify: `node -e 'const p=require("./package.json");const r=require("fs").readFileSync("README.md","utf8");if(!r.includes(p.engines.node))process.exit(1)'`
+  - Checks: A-STACK-22
+
+### Wave 2.3
+
+- [ ] GA-203 [W2.3] Make agent memory conform to Pillars 1.1
+  - Files: AGENTS.md, agents/context.md, agents/quality.md, agents/repo.md, scripts/validate-pillars.mjs, tests/pillars-routing.json
+  - Depends on: none
+  - Reuses: the existing context, quality, and repo pillar content
+  - Fixes: F-MEM-1
+  - Acceptance: Loader exclusions use structured name/reason records and all Core concerns are accounted for.; Frontmatter list fields and eight body sections validate under Pillars 1.1.; Routing fixtures cover whole-word matching and the two floor pillars remain always loaded.
+  - Verify: `node scripts/validate-pillars.mjs`
+  - Checks: A-MEM-2, A-MEM-3, A-MEM-4, A-MEM-7, A-MEM-8, A-MEM-18, A-MEM-21
+
+## Phase 3: Remediation
+
+### Wave 3.1
+
+- [ ] GA-301 [W3.1] Write the lightweight product brief
+  - Files: docs/product-brief.md
+  - Depends on: none
+  - Reuses: README scope, context pillar, ADR 001, and isolation tests
+  - Fixes: F-PRD-1
+  - Acceptance: Brief records primary user, appetite, cut rule, ranked GWT requirements, NFR dispositions, risks, and assumptions.; Existing README, context, ADR, OpenAPI, and tests are linked instead of copied.
+  - Verify: `rg -n '^## (Pre-flight|Primary user|Appetite|Requirements|NFRs|Risks|Assumptions)$|Given:|When:|Then:' docs/product-brief.md`
+  - Checks: A-PRD-1, A-PRD-2, A-PRD-4, A-PRD-6, A-PRD-7, A-PRD-9
+
+### Wave 3.2
+
+- [ ] GA-302 [W3.2] Define product metrics from existing events
+  - Files: docs/metrics.md, src/app.ts, src/auth.ts
+  - Depends on: none
+  - Reuses: note action logs, request_denied, auth_denial_spike, and deterministic verify results
+  - Fixes: F-PRD-2
+  - Acceptance: At most five numbered and deadlined outcomes include one leading and one lagging metric.; Every metric names an existing structured event or deterministic verification source and an exact computation.
+  - Verify: `rg -n '^## Metric|^(Number|Deadline|Outcome|Source|Event):' docs/metrics.md`
+  - Checks: A-PRD-5
+
+### Wave 3.3
+
+- [ ] GA-303 [W3.3] Make note creation idempotent
+  - Files: src/db/migrations/0002-idempotency.sql, src/notes/repository.ts, src/notes/routes.ts, src/notes/service.ts, src/routes/contract.ts, openapi.json, tests/notes-crud.test.ts
+  - Depends on: none
+  - Reuses: the existing SQLite repository boundary and OpenAPI generator
+  - Fixes: F-SEC-1
+  - Acceptance: POST accepts Idempotency-Key and documents its response semantics.; A tenant-scoped unique key and note creation commit in one transaction.; A regression test proves a replay returns the original result without a second note.; The migration is idempotent and covered by the authoritative verification gate.
+  - Verify: `rg -n 'Idempotency-Key|idempotency' src openapi.json tests`
+  - Checks: A-SEC-19, A-SEC-33
+
+## Phase 5: Remediation
+
+### Wave 5.1
+
+- [ ] GA-501 [W5.1] Include source IP in denied-request logs
+  - Files: src/app.ts, tests/auth.test.ts
+  - Depends on: none
+  - Reuses: the shared logger sanitizer
+  - Fixes: F-SEC-2
+  - Acceptance: Every authentication denial log includes the normalized remote address.; Bearer tokens and note title/body values remain redacted.; A static regression assertion covers the ordinary denial path and spike path.
+  - Verify: `rg -n 'request_denied.*(ip|remoteAddress)|sourceIp' src/app.ts tests`
+  - Checks: A-SEC-20
+
+### Wave 5.2
+
+- [ ] GA-502 [W5.2] Make hard-delete recovery semantics explicit
+  - Files: README.md, docs/runbook.md, openapi.json, src/routes/contract.ts
+  - Depends on: none
+  - Reuses: the current DELETE route and recovery runbook
+  - Fixes: F-UX-1
+  - Acceptance: The evaluator-only hard-delete decision and client confirmation expectation are explicit, or a trash/restore lifecycle is implemented.; OpenAPI and runbook agree on recovery behavior.
+  - Verify: `rg -n 'trash|restore|delete confirmation|intentional hard delete' README.md docs openapi.json src/routes/contract.ts`
+  - Checks: A-UX-5
+
+## Phase 6: Re-audit
+
+### Wave 6.1
+
+- [ ] GA-601 [W6.1] Re-run godaudits at the remediated commit
+  - Files: none
+  - Depends on: GA-101, GA-201, GA-202, GA-203, GA-301, GA-302, GA-303, GA-501, GA-502
+  - Reuses: the current check catalog and evidence fingerprint
+  - Fixes: none (final gate)
+  - Acceptance: Every active remediation task is complete.; Fresh evidence validates and score plus coverage deltas are recorded.
+  - Verify: `godaudits validate .godaudits/AUDIT.json --repo . --require-fresh-evidence`
+  - Checks: none
+
+## Accepted risks and open questions
+
+None.
+
+
+## Rules for remediating agents
+
+> [!IMPORTANT]
+> AUDIT.json is the machine source of truth. AUDIT.mdx is a generated view.
+> Run the task Verify command before changing task or finding state, then compile and validate both artifacts.
+> Never renumber findings or completed tasks. Finish with the final re-audit gate.
+
+## Session log
+
+- 2026-07-23 Fresh full static audit; no project execution, tests, network, or model calls.

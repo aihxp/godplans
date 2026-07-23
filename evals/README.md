@@ -44,8 +44,8 @@ GODPLANS_EVAL_RUNNER="$PWD/evals/runners/codex.sh" bash scripts/eval.sh
 ```
 
 Set `GODPLANS_EVAL_MODEL` or `GODPLANS_EVAL_REASONING_EFFORT` to override
-the local Codex defaults. The runner records both values and the CLI version in
-`RUNNER.txt` beside each artifact.
+the local Codex defaults. The runner records both values, CLI version, and
+actual input, cached-input, output, and total tokens in `RUNNER.txt`.
 
 The runner receives two arguments:
 
@@ -56,10 +56,10 @@ The runner receives two arguments:
 The runner is responsible for creating an isolated workspace, copying a
 sibling `INPUT/` directory when present, invoking the target agent with the
 request, and copying the resulting artifact to argument 2. For a plan case,
-the runner must retain the emitted executable validator beside the plan as
-`validate-plan.sh`. The harness requires that companion to be byte-identical
-to `GODPLANS_VALIDATOR`. The runner must return nonzero when the agent fails or
-an expected artifact is absent.
+the runner retains the executable validator and generated `PLAN.json` beside
+the plan. The harness requires the companion to be byte-identical to
+`GODPLANS_VALIDATOR` and the sidecar digest to match PLAN.mdx. The runner
+returns nonzero when the agent fails or an expected artifact is absent.
 
 The runner must also isolate the agent from any globally installed skills.
 Codex discovers skills in `$CODEX_HOME/skills` and `$HOME/.agents/skills`
@@ -71,7 +71,9 @@ throwaway `HOME` and a throwaway `CODEX_HOME` that carries only the copied
 `auth.json` and `config.toml`, never a `skills/` directory. The skill arm then
 links the project-local skill into its workspace; the control arm never does.
 That single link is the only intended difference between the two arms, and the
-`tests/eval-harness.sh` regression asserts it.
+`tests/eval-harness.sh` regression asserts it. Claude and Gemini runners use
+the same isolation rule and require provider API keys so authentication can be
+carried without copying a user home or its installed skills.
 
 `scripts/eval.sh` validates plan structure with the shipped plan validator,
 then applies every semantic expectation. Outputs are retained under
@@ -86,8 +88,9 @@ bash scripts/eval.sh --score-only --output "$PWD/evals/output"
 ```
 
 Score-only mode still rejects missing, non-executable, or drifted validator
-companions. Use `bash scripts/eval.sh --help` for case selection and output
-options.
+companions, missing sidecars, and sidecar digest drift. Every run writes
+`METRICS.json` with actual tokens per plan when the runner exposes usage. Use
+`bash scripts/eval.sh --help` for case selection and output options.
 
 ## Control arm
 
@@ -157,17 +160,68 @@ declares exactly one outcome.
 
 ## Publishing a baseline
 
-Run the complete matrix once per supported agent and model family, with
-`--baseline`, so the published record carries both arms. Commit the summary,
-runner version, model identifier, date, plan validator version, and the exact
-commit under `evals/baselines/`. Never publish a score without the raw
-generated artifacts needed to reproduce it, and never publish a skill score
-without the control score beside it: a number with no control is a
-conformance report being presented as evidence of value. Model-backed
-evaluations are release evidence, not a CI gate, because they require
-credentials and incur cost.
+Release evidence requires the full ten-case matrix across at least three model
+families, with both arms for every case. This is optional maintainer tooling,
+not part of skill execution:
 
-Two limits of the current harness, stated rather than hidden. Each case is a
-single sample, so a published delta carries no variance; repeat runs and
-report the spread before treating a delta as a measurement. And only one agent
-runner ships, so no result yet separates godplans' contribution from Codex's.
+```bash
+bash scripts/eval-matrix.sh --output "$PWD/evals/results/RUN-ID"
+```
+
+The default profiles are Codex, Claude, and Gemini. Each adapter uses the
+normal authentication already managed by its host CLI. Neither godplans nor
+the coordinator requires, reads, or prescribes provider credentials. A host that
+does not have all three CLIs can supply three alternative runner profiles
+through the same runner contract. The command rejects fewer than ten cases or
+three profiles. Commit `MATRIX.md`, `MATRIX.json`, every family's `EVAL.tsv`
+and `METRICS.json`, all generated plans and sidecars, all control plans, runner
+metadata, and CLI event logs together. A summary without raw artifacts is not
+publishable evidence.
+
+Never publish a skill score without the control score beside it. Each case is
+still one sample, so repeat runs and report spread before treating a delta as
+a stable measurement. The historical 1.8.0 three-case Codex baseline remains
+under `evals/baselines/` as provenance, but it does not meet the current
+publication minimum.
+
+## External anchor
+
+Internal expectations still descend from the product's own contracts. The
+blind external grader uses six criteria that contain no sibling-skill ids:
+decision completeness, falsifiability, execution actionability, risk targeting,
+proportionality, and internal consistency. Run at least five plan pairs through
+at least two isolated judges and publish the inter-rater gap:
+
+```bash
+node scripts/eval-external.js \
+  --matrix evals/results/RUN-ID \
+  --source-profile codex \
+  --judge claude=evals/runners/claude-grade.sh \
+  --judge gemini=evals/runners/gemini-grade.sh \
+  --output evals/external/results/RUN-ID
+```
+
+See `evals/external/README.md`. Judges receive arm labels A and B only, run
+with skills disabled by the host adapter, and are unblinded after every raw
+grade exists.
+
+## Build outcome
+
+Plan conformance is not the marketing thesis. `evals/outcomes/` adds the causal
+test: matched treatment and control plans go to the same fresh no-skill builder,
+then the input plan and arm identity are removed and the same fresh static
+godaudits pass audits both repositories. `SUMMARY.json` compares verifier
+status, open Critical plus High findings, and runner-reported plan and build
+tokens. The first published directional run found a -4 Critical plus High
+delta for treatment on `tenant-notes-api`, with both verifiers passing. It also
+found a 69.01 times planning-token cost versus control. See
+`evals/outcomes/README.md` and the retained result under
+`evals/outcomes/results/2026-07-23-tenant-notes-api-codex/`.
+
+## Context cost
+
+`evals/metrics/context-cost.json` publishes the native entry, portable core,
+generated full prompt, and per-module byte and estimated-token costs. The
+estimate is explicitly a byte-based approximation. Model-backed runs publish
+actual token usage in their `RUNNER.txt` and aggregate `METRICS.json`; actual
+tokens per plan are the release metric.

@@ -1,0 +1,342 @@
+# Implementation Plan: Offline Multi-Tenant Notes API
+
+## 1. Goal and success criteria
+
+Build a small JSON API in one six-hour implementation session. It runs on Node.js 22, uses only local files and the loopback network, and has no dependency on a cloud service, paid product, container, or internet connection at runtime.
+
+The implementation is complete when:
+
+- exactly two organizations and two users per organization can be initialized locally;
+- a bearer-authenticated user can create, list, read, update, and delete notes in their organization;
+- users in the same organization share that organization's notes;
+- a caller cannot discover, read, update, or delete another organization's note, even with its exact public ID;
+- notes survive a clean process stop and restart;
+- `openapi.json` is the single machine-readable API contract;
+- every error response uses the same documented envelope;
+- malformed and invalid requests are rejected before reaching persistence;
+- deterministic automated tests cover CRUD, authentication, validation, persistence, and tenant isolation;
+- the documented start and test commands work without any runtime network access.
+
+## 2. Fixed scope
+
+### Included
+
+- Bearer-token authentication for four pre-provisioned users.
+- Organization-wide note access: either user in an organization may operate on any note in that organization. `ownerId` records the creator and is immutable; it is not an additional authorization boundary.
+- Five note operations:
+  - `POST /notes`
+  - `GET /notes`
+  - `GET /notes/{noteId}`
+  - `PATCH /notes/{noteId}`
+  - `DELETE /notes/{noteId}`
+- A local SQLite database file.
+- A first-run initializer for the two organizations and four users.
+- OpenAPI 3.1 contract, automated tests, and concise local setup documentation.
+
+### Explicitly excluded
+
+- User or organization signup/management APIs.
+- Password login, sessions, token rotation, invitations, or roles.
+- Pagination, search, tags, sharing across organizations, attachments, and note history.
+- UI, SEO, public launch, cloud deployment, billing, analytics, and enterprise compliance.
+- Distributed/multi-process operation, remote databases, queues, caches, and external identity providers.
+
+These exclusions are intentional to keep the build achievable and testable within six hours.
+
+## 3. Technical shape
+
+Use Node.js 22 in ESM mode with built-in modules:
+
+- `node:http` for the server;
+- `node:sqlite` for the restart-safe local store;
+- `node:crypto` for opaque note IDs and token hashing;
+- `node:test` and built-in `fetch` for tests.
+
+Pin the supported runtime to a Node 22 minor that includes `node:sqlite` without an extra launch flag (for example, `engines.node: ">=22.13 <23"` and `.nvmrc` containing `22`). Fail at startup with a clear message if the module is unavailable. Using built-ins avoids package-registry access and native add-on installation, making a fresh checkout runnable offline when the required Node runtime is already present.
+
+Keep the code separated into a few small units rather than introducing a framework:
+
+```text
+package.json
+.nvmrc
+openapi.json                 # only machine-readable API contract
+README.md                    # local init/start/test instructions and demo identities
+src/
+  app.js                     # app factory, routing, JSON/error response boundary
+  auth.js                    # bearer parsing, token hashing, user lookup
+  validation.js              # reusable request validators
+  store.js                   # SQLite open/migrate and tenant-scoped statements
+  init.js                    # initialize exactly two orgs and four users
+  server.js                  # configuration, listen, graceful shutdown
+test/
+  helpers.js                 # temp DB/server, fixed users, tokens, clock, and IDs
+  contract.test.js
+  api.test.js
+  isolation.test.js
+  restart.test.js
+```
+
+`createApp` should accept a store, clock, and ID factory. Production supplies the real clock and `crypto.randomUUID`; tests supply fixed sequences. Do not introduce a dependency-injection library.
+
+## 4. Identity and authentication
+
+Provision these logical fixtures, with opaque internal string IDs rather than deriving organization membership from names:
+
+| Organization | Users |
+| --- | --- |
+| Organization A | User A1, User A2 |
+| Organization B | User B1, User B2 |
+
+The initializer accepts one token for each user through environment variables. If a token is omitted on a new database, generate a high-entropy token and print it once. Store only `SHA-256(token)` in SQLite. This is appropriate for randomly generated high-entropy API tokens; do not use it as a password-hashing design. Tests always supply four fixed, test-only tokens.
+
+For every protected request:
+
+1. Require exactly one `Authorization: Bearer <token>` value.
+2. Hash the token and look up the matching active user.
+3. Attach the trusted `userId` and `organizationId` from that database row to the request context.
+4. Return the same `401 UNAUTHENTICATED` response for missing, malformed, and unknown tokens, with `WWW-Authenticate: Bearer`.
+5. Never accept `ownerId` or `organizationId` from a request body, query string, or header.
+
+There are no unprotected note endpoints. The OpenAPI contract file itself need not be served by the process; it remains available locally.
+
+## 5. Data model and durability
+
+Create the schema through a small idempotent migration using `PRAGMA user_version`.
+
+### Tables
+
+**organizations**
+
+- `id TEXT PRIMARY KEY`
+- `name TEXT NOT NULL`
+
+**users**
+
+- `id TEXT PRIMARY KEY`
+- `organization_id TEXT NOT NULL REFERENCES organizations(id)`
+- `name TEXT NOT NULL`
+- `token_hash TEXT NOT NULL UNIQUE`
+- `UNIQUE (id, organization_id)` to support the composite note-owner foreign key
+
+**notes**
+
+- `id TEXT PRIMARY KEY` — UUID v4 generated by the server; never expose a row number
+- `title TEXT NOT NULL`
+- `body TEXT NOT NULL`
+- `owner_id TEXT NOT NULL`
+- `organization_id TEXT NOT NULL`
+- `created_at TEXT NOT NULL` — UTC ISO-8601
+- `updated_at TEXT NOT NULL` — UTC ISO-8601; initially equal to `created_at`
+- composite foreign key `(owner_id, organization_id)` referencing `users(id, organization_id)`, which prevents an owner from a different organization
+
+Add an index on `(organization_id, created_at DESC, id ASC)` for the list query. Enable `foreign_keys`, WAL journaling, a short busy timeout, and full synchronous durability when opening the database. Use transactions for migration and first-run identity initialization. Close the database on `SIGINT`/`SIGTERM`.
+
+The default database path is `./data/notes.sqlite`; allow `DATA_FILE` to override it. Create only the immediate data directory. Tests use a unique temporary on-disk database, not an in-memory database, so the restart behavior is real.
+
+## 6. Tenant boundary: make the safe path the only path
+
+The store module must not export an unscoped `getNoteById`, `updateNoteById`, or `deleteNoteById`. Export only operations whose signatures require the authenticated organization:
+
+- `createNote({ id, title, body, ownerId, organizationId, now })`
+- `listNotesForOrganization(organizationId)`
+- `getNoteForOrganization(noteId, organizationId)`
+- `updateNoteForOrganization(noteId, organizationId, changes, now)`
+- `deleteNoteForOrganization(noteId, organizationId)`
+
+Every read or mutation predicate includes both values:
+
+```sql
+WHERE id = ? AND organization_id = ?
+```
+
+The list predicate is `WHERE organization_id = ?`. Creation takes `ownerId` and `organizationId` only from the authenticated context. Update permits only `title` and `body`; owner, organization, ID, and timestamps are immutable. Check the affected-row count for update/delete.
+
+For read, update, and delete, return the identical `404 NOTE_NOT_FOUND` response whether the ID is absent or belongs to a different organization. Do not first perform an unscoped existence check, do not echo the supplied ID in an error, and do not return `403`; these rules avoid confirming that another tenant's note exists.
+
+## 7. HTTP contract
+
+Write `openapi.json` before handlers and treat it as the sole external contract. It should define:
+
+- OpenAPI `3.1.x`, JSON media types, and bearer authentication;
+- all five operations and their success/error statuses;
+- `Note`, `CreateNoteRequest`, `UpdateNoteRequest`, `NoteList`, `Error`, and validation-detail schemas;
+- field limits, required fields, `additionalProperties: false`, UUID format, and date-time format;
+- representative success, validation, authentication, and not-found examples;
+- operation IDs that map directly to the five handlers.
+
+### Success behavior
+
+| Operation | Status and body |
+| --- | --- |
+| Create | `201`, complete `Note`, and `Location: /notes/{id}` |
+| List | `200`, `{ "notes": [Note, ...] }`, ordered by `createdAt DESC`, then `id ASC` |
+| Read | `200`, complete `Note` |
+| Update | `200`, complete updated `Note` |
+| Delete | `204`, no body |
+
+Return note fields in lower camel case:
+
+`id`, `title`, `body`, `ownerId`, `organizationId`, `createdAt`, `updatedAt`.
+
+### One error envelope
+
+All non-2xx responses, including router-level and unexpected errors, have exactly this outer shape:
+
+```json
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Request validation failed",
+    "details": [
+      { "path": "title", "message": "must not be empty" }
+    ]
+  }
+}
+```
+
+`details` is always an array and is empty when no field-level detail applies. Use stable codes:
+
+- `INVALID_JSON` — 400
+- `VALIDATION_ERROR` — 400
+- `UNAUTHENTICATED` — 401
+- `NOTE_NOT_FOUND` — 404 for an absent or out-of-organization note
+- `ROUTE_NOT_FOUND` — 404
+- `METHOD_NOT_ALLOWED` — 405
+- `PAYLOAD_TOO_LARGE` — 413
+- `UNSUPPORTED_MEDIA_TYPE` — 415
+- `INTERNAL_ERROR` — 500, with no exception or stack details
+
+Log unexpected errors locally to stderr, but return only the generic envelope.
+
+## 8. Request validation
+
+Keep validation explicit and small, matching `openapi.json`:
+
+- Reject request bodies over 64 KiB before parsing.
+- For `POST` and `PATCH`, require `Content-Type: application/json` (allow a charset parameter).
+- Reject malformed JSON and non-object JSON values.
+- Reject unknown properties, including attempts to send `id`, `ownerId`, `organizationId`, `createdAt`, or `updatedAt`.
+- `POST /notes` requires exactly:
+  - `title`: string, trim outer whitespace, 1–200 characters after trimming;
+  - `body`: string, 0–50,000 characters.
+- `PATCH /notes/{id}`:
+  - allows only `title` and/or `body`;
+  - requires at least one of them;
+  - applies the same field limits as creation.
+- Validate `noteId` as a UUID before accessing the store; malformed IDs receive `400 VALIDATION_ERROR`.
+- Ignore no invalid input silently and perform no coercion except the documented title trim.
+
+Collect validation issues in stable field order so test output is deterministic.
+
+## 9. Implementation sequence and six-hour budget
+
+### 0:00–0:40 — Contract and scaffold
+
+- Create the Node 22 package scripts, module layout, runtime pin, and `openapi.json`.
+- Record the fixed response shapes, validation bounds, and organization-wide access rule.
+- Add a contract test that at least parses the JSON and asserts the expected path/method inventory, bearer security, shared error schema, and required response schemas.
+
+### 0:40–1:40 — Store, migration, and identities
+
+- Implement SQLite open/configuration, schema migration, and prepared statements.
+- Implement the four-user initializer and hashed token lookup.
+- Add focused tests for idempotent initialization and the composite owner/organization constraint.
+
+### 1:40–3:20 — HTTP/auth/validation and CRUD
+
+- Implement the app factory, exact route matching, bounded JSON parsing, centralized error serialization, and authentication.
+- Implement the five handlers using only tenant-scoped store functions.
+- Add happy-path tests as each handler lands.
+
+### 3:20–4:35 — Security and restart tests
+
+- Implement the full cross-organization matrix below.
+- Add missing/invalid authentication and validation cases.
+- Add a stop/reopen test using the same on-disk database.
+
+### 4:35–5:20 — Contract alignment and documentation
+
+- Compare handler paths, statuses, bodies, and errors to `openapi.json`.
+- Document `npm run init`, `npm start`, `npm test`, environment variables, token handling, and a few local `curl` examples.
+
+### 5:20–6:00 — Verification and buffer
+
+- Run all tests repeatedly from clean temporary directories.
+- Exercise initialize → start → CRUD → stop → start → read manually.
+- Fix only acceptance blockers. Defer convenience features and refactors that do not strengthen correctness.
+
+If time pressure occurs, preserve the tenant-isolation tests, durable storage, validation, and contract. Cut examples or internal refactoring before cutting security or acceptance coverage.
+
+## 10. Deterministic test plan
+
+Use `node --test --test-concurrency=1`. Each test suite creates a unique temporary directory, initializes a file-backed database with fixed IDs and tokens, starts the server on an ephemeral loopback port, and closes both server and store in teardown. Inject a sequence-based UUID factory and UTC clock so IDs, ordering, and timestamps are exact rather than timing-dependent.
+
+### Core behavior
+
+- All five endpoints reject missing, malformed, and unknown bearer tokens with the same 401 envelope.
+- User A1 creates a note; response fields, owner, organization, location header, and equal initial timestamps are exact.
+- User A2 can list, read, update, and delete A1's note, proving the intended organization-wide model.
+- A list contains only the caller's organization and has deterministic ordering.
+- A patch changes only supplied fields, preserves ID/owner/organization/created time, and advances updated time.
+- Delete returns 204 and a subsequent same-organization read returns 404.
+- Unknown well-formed IDs return the documented 404 envelope.
+
+### Exact cross-organization isolation proof
+
+Seed or create `noteB` as User B1, retain its exact public ID, full body, and timestamps, and create a distinct control note for Organization A. For **each** attacker token, User A1 and User A2:
+
+1. `GET /notes` returns the A control note and does not contain `noteB.id`, its title, or its body.
+2. `GET /notes/{noteB.id}` returns `404 NOTE_NOT_FOUND`; assert the response does not contain any B note field value.
+3. Compare that response's status, code, message, and details to a request for a valid but nonexistent UUID; they must be identical.
+4. `PATCH /notes/{noteB.id}` with a unique attacker title/body returns the same `404 NOTE_NOT_FOUND`.
+5. Immediately authenticate as User B1 and read `noteB`; assert title, body, owner, organization, `createdAt`, and `updatedAt` are byte-for-byte unchanged.
+6. `DELETE /notes/{noteB.id}` as the A attacker returns the same `404 NOTE_NOT_FOUND`.
+7. Immediately read as User B2; assert the complete original note still exists and remains unchanged.
+8. Query the test database directly as a final white-box check: exactly one row with `noteB.id` remains, its `organization_id` is B, and none of its mutable values changed.
+
+Then run a smaller reverse-direction case: User B1 cannot read, patch, or delete the A control note, and User A1 can still read it unchanged. This proves the boundary is symmetric rather than hard-coded specifically for A.
+
+Also attempt creation as User A1 with `organizationId` set to B and with `ownerId` set to B1. Both requests must fail validation as unknown fields, and direct database checks must show that no row was created.
+
+### Validation and error consistency
+
+- Malformed JSON, arrays/null/scalars, missing fields, unknown fields, blank/too-long titles, oversized bodies, empty patches, invalid UUIDs, wrong content type, and oversized payloads return their documented statuses and the one error envelope.
+- Unsupported routes and methods use that same envelope.
+- An injected handler/store failure returns only `500 INTERNAL_ERROR`; it does not expose SQL, paths, tokens, or a stack.
+
+### Restart safety
+
+1. Start against a temporary file path and initialize the four users.
+2. Create a note as A1 and capture the response.
+3. Close the HTTP server and SQLite connection cleanly.
+4. Construct a new store and server instance pointing at the same file, without reseeding or sharing in-memory objects.
+5. Read the note as A2 and assert every field equals the pre-restart response.
+6. Update it, restart once more, and assert the update also persisted.
+
+### Contract checks
+
+- `openapi.json` parses as JSON and declares exactly the five note operations.
+- Every operation declares bearer security and only `application/json` bodies where applicable.
+- All documented error responses reference the one `Error` schema.
+- Public behavioral tests assert response field names and statuses from the contract, catching common drift without adding a full contract-validation dependency.
+
+## 11. Final verification commands
+
+Plan these package scripts so the handoff is one short sequence:
+
+```sh
+npm run init
+npm test
+npm start
+```
+
+Acceptance is not based only on a green test count. Before handoff, review every store statement to confirm that note reads and mutations include `organization_id`, confirm no unscoped note lookup is exported, and manually perform one known-ID cross-organization read/update/delete attempt.
+
+## 12. Risks and deliberate tradeoffs
+
+- **Built-in SQLite maturity:** pin a compatible Node 22 minor and check availability immediately. Do not spend the six-hour window designing a second storage backend.
+- **Hand-written HTTP routing/validation:** keep only five routes, centralize parsing/errors, and rely on focused contract and behavior tests. A framework migration is outside scope.
+- **Static OpenAPI drift:** write the contract first and keep contract-facing assertions in tests. Do not create a second schema or generated contract.
+- **Token lifecycle:** high-entropy pre-provisioned local tokens are enough for this API; token management endpoints are deferred.
+- **SQLite tenancy enforcement:** SQLite has no row-level security here, so scoped repository APIs, composite foreign keys, code review, and adversarial tests form the boundary. Do not claim stronger database-enforced tenant isolation.
+- **Single-process design:** synchronous SQLite is acceptable for this small local service and reduces implementation risk. Horizontal scaling and high-throughput tuning are deliberately deferred.

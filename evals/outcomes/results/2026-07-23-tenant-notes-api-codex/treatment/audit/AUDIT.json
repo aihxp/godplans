@@ -1,0 +1,6179 @@
+{
+  "schema_version": "2.0",
+  "audit": {
+    "name": "tenant-notes-api",
+    "audit_version": 1,
+    "status": "reported",
+    "created": "2026-07-23",
+    "updated": "2026-07-23",
+    "mode": "fresh",
+    "plan_aware": false,
+    "budget": "full",
+    "commit": "no-git",
+    "archetype": "api-service",
+    "scale": "side-project",
+    "risk_profile": "security-critical",
+    "engine_version": "2.12.0",
+    "pack_version": "2.12.0",
+    "evidence_fingerprint_sha256": "26309afe733549572c16c929450fa6d3babc19aae9279f6c84536a9c1f736188",
+    "evidence_commit": "no-git",
+    "project_form": "api-service",
+    "secondary_forms": [],
+    "domain_overlays": [],
+    "capabilities": [
+      "static"
+    ],
+    "assumptions": [
+      "The artifact is a local evaluator target with no public deployment.",
+      "No input plan and no treatment or control label were supplied; only the built artifact is audited.",
+      "Static evidence cannot establish runtime latency, actual test outcomes, or current Node support status."
+    ]
+  },
+  "compliance": {
+    "result": "pass",
+    "screened": "2026-07-23",
+    "policy_pack": "provider-neutral@1"
+  },
+  "domains": [
+    {
+      "id": "product",
+      "status": "applicable",
+      "weight": 4,
+      "checks": [
+        {
+          "id": "A-PRD-1",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 6.25,
+          "evidence": [
+            "E-1",
+            "E-5",
+            "E-7",
+            "E-43"
+          ],
+          "finding_ids": [
+            "F-PRD-1"
+          ]
+        },
+        {
+          "id": "A-PRD-2",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 6.25,
+          "evidence": [
+            "E-1",
+            "E-5",
+            "E-7",
+            "E-43"
+          ],
+          "finding_ids": [
+            "F-PRD-1"
+          ]
+        },
+        {
+          "id": "A-PRD-3",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 6.25,
+          "evidence": [
+            "E-1",
+            "E-5",
+            "E-7",
+            "E-30",
+            "E-32"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-PRD-4",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 6.25,
+          "evidence": [
+            "E-1",
+            "E-5",
+            "E-7",
+            "E-43"
+          ],
+          "finding_ids": [
+            "F-PRD-1"
+          ]
+        },
+        {
+          "id": "A-PRD-5",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 10,
+          "evidence": [
+            "E-17",
+            "E-21",
+            "E-43"
+          ],
+          "finding_ids": [
+            "F-PRD-2"
+          ]
+        },
+        {
+          "id": "A-PRD-6",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 6.66666667,
+          "evidence": [
+            "E-1",
+            "E-5",
+            "E-7",
+            "E-43"
+          ],
+          "finding_ids": [
+            "F-PRD-1"
+          ]
+        },
+        {
+          "id": "A-PRD-7",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 10,
+          "evidence": [
+            "E-1",
+            "E-5",
+            "E-7",
+            "E-43"
+          ],
+          "finding_ids": [
+            "F-PRD-1"
+          ]
+        },
+        {
+          "id": "A-PRD-8",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 10,
+          "evidence": [
+            "E-1",
+            "E-5",
+            "E-7",
+            "E-30",
+            "E-32"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-PRD-9",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 3.33333333,
+          "evidence": [
+            "E-1",
+            "E-5",
+            "E-7",
+            "E-43"
+          ],
+          "finding_ids": [
+            "F-PRD-1"
+          ]
+        },
+        {
+          "id": "A-PRD-10",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.33333333,
+          "evidence": [
+            "E-1",
+            "E-5",
+            "E-7",
+            "E-30",
+            "E-32"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-PRD-11",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.33333333,
+          "evidence": [
+            "E-1",
+            "E-5",
+            "E-7",
+            "E-30",
+            "E-32"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-PRD-12",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 0.83333333,
+          "evidence": [
+            "E-6",
+            "E-43"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-PRD-13",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 0.83333333,
+          "evidence": [
+            "E-1",
+            "E-5",
+            "E-7",
+            "E-30",
+            "E-32"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-PRD-14",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 0.83333333,
+          "evidence": [
+            "E-6",
+            "E-43"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-PRD-15",
+          "outcome": "unknown",
+          "confidence": "Tentative",
+          "weight": 0.83333333,
+          "evidence": [
+            "E-40"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-PRD-16",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 0.83333333,
+          "evidence": [
+            "E-6",
+            "E-43"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-PRD-17",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 0.83333333,
+          "evidence": [
+            "E-6",
+            "E-43"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-PRD-18",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 6.66666667,
+          "evidence": [
+            "E-1",
+            "E-5",
+            "E-7",
+            "E-30",
+            "E-32"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-PRD-19",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 10,
+          "evidence": [
+            "E-6",
+            "E-43"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-PRD-20",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 6.66666667,
+          "evidence": [
+            "E-6",
+            "E-43"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-PRD-21",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 0,
+          "evidence": [
+            "E-6",
+            "E-43"
+          ],
+          "finding_ids": []
+        }
+      ],
+      "reason": "Full static pass for the product surface at side-project scale."
+    },
+    {
+      "id": "architecture",
+      "status": "applicable",
+      "weight": 9,
+      "checks": [
+        {
+          "id": "A-ARCH-1",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.75,
+          "evidence": [
+            "E-7",
+            "E-8",
+            "E-15",
+            "E-26",
+            "E-23"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-ARCH-2",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.75,
+          "evidence": [
+            "E-7",
+            "E-8",
+            "E-15",
+            "E-26",
+            "E-23"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-ARCH-3",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 3.75,
+          "evidence": [
+            "E-8",
+            "E-44"
+          ],
+          "finding_ids": [
+            "F-STACK-1"
+          ]
+        },
+        {
+          "id": "A-ARCH-4",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.75,
+          "evidence": [
+            "E-7",
+            "E-8",
+            "E-15",
+            "E-26",
+            "E-23"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-ARCH-5",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-7",
+            "E-8",
+            "E-15",
+            "E-26",
+            "E-23"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-ARCH-6",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-7",
+            "E-8",
+            "E-15",
+            "E-26",
+            "E-23"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-ARCH-7",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-7",
+            "E-8",
+            "E-15",
+            "E-26",
+            "E-23"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-ARCH-8",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-7",
+            "E-8",
+            "E-15",
+            "E-26",
+            "E-23"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-ARCH-9",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 7.5,
+          "evidence": [
+            "E-45",
+            "E-4"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-ARCH-10",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 7.5,
+          "evidence": [
+            "E-45",
+            "E-4"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-ARCH-11",
+          "outcome": "unknown",
+          "confidence": "Tentative",
+          "weight": 5,
+          "evidence": [
+            "E-8"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-ARCH-12",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-7",
+            "E-8",
+            "E-15",
+            "E-26",
+            "E-23"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-ARCH-13",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 15,
+          "evidence": [
+            "E-7",
+            "E-8",
+            "E-15",
+            "E-26",
+            "E-23"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-ARCH-14",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 1.66666667,
+          "evidence": [
+            "E-7",
+            "E-8",
+            "E-15",
+            "E-26",
+            "E-23"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-ARCH-15",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 1.66666667,
+          "evidence": [
+            "E-45",
+            "E-4"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-ARCH-16",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 1.66666667,
+          "evidence": [
+            "E-13",
+            "E-41"
+          ],
+          "finding_ids": [
+            "F-REPO-1"
+          ]
+        },
+        {
+          "id": "A-ARCH-17",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 1.66666667,
+          "evidence": [
+            "E-7",
+            "E-8",
+            "E-15",
+            "E-26",
+            "E-23"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-ARCH-18",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 1.66666667,
+          "evidence": [
+            "E-7",
+            "E-8",
+            "E-15",
+            "E-26",
+            "E-23"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-ARCH-19",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 1.66666667,
+          "evidence": [
+            "E-7",
+            "E-8",
+            "E-15",
+            "E-26",
+            "E-23"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-ARCH-20",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-45",
+            "E-4"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-ARCH-21",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-45",
+            "E-4"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-ARCH-22",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-7",
+            "E-8",
+            "E-15",
+            "E-26",
+            "E-23"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-ARCH-23",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 0,
+          "evidence": [
+            "E-7",
+            "E-8",
+            "E-15",
+            "E-26",
+            "E-23"
+          ],
+          "finding_ids": []
+        }
+      ],
+      "reason": "Full static pass for the architecture surface at side-project scale."
+    },
+    {
+      "id": "stack",
+      "status": "applicable",
+      "weight": 3,
+      "checks": [
+        {
+          "id": "A-STACK-1",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-12",
+            "E-14",
+            "E-4",
+            "E-35"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-STACK-2",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 1.66666667,
+          "evidence": [
+            "E-7",
+            "E-8",
+            "E-44"
+          ],
+          "finding_ids": [
+            "F-STACK-1"
+          ]
+        },
+        {
+          "id": "A-STACK-3",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-12",
+            "E-14",
+            "E-4",
+            "E-35"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-STACK-4",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 6.25,
+          "evidence": [
+            "E-12",
+            "E-14",
+            "E-4",
+            "E-35"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-STACK-5",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 1.66666667,
+          "evidence": [
+            "E-12",
+            "E-14",
+            "E-4",
+            "E-35"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-STACK-6",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 1.66666667,
+          "evidence": [
+            "E-4",
+            "E-45"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-STACK-7",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 1.66666667,
+          "evidence": [
+            "E-4",
+            "E-45"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-STACK-8",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 6.25,
+          "evidence": [
+            "E-12",
+            "E-14",
+            "E-4",
+            "E-35"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-STACK-9",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 1.66666667,
+          "evidence": [
+            "E-12",
+            "E-14",
+            "E-4",
+            "E-35"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-STACK-10",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 1.66666667,
+          "evidence": [
+            "E-12",
+            "E-14",
+            "E-4",
+            "E-35"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-STACK-11",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 1.66666667,
+          "evidence": [
+            "E-7",
+            "E-8",
+            "E-44"
+          ],
+          "finding_ids": [
+            "F-STACK-1"
+          ]
+        },
+        {
+          "id": "A-STACK-12",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 1.66666667,
+          "evidence": [
+            "E-4",
+            "E-45"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-STACK-13",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-4",
+            "E-45"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-STACK-14",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 8.33333333,
+          "evidence": [
+            "E-12",
+            "E-14",
+            "E-4",
+            "E-35"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-STACK-15",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 8,
+          "evidence": [
+            "E-12",
+            "E-14",
+            "E-4",
+            "E-35"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-STACK-16",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 1.66666667,
+          "evidence": [
+            "E-7",
+            "E-8",
+            "E-44"
+          ],
+          "finding_ids": [
+            "F-STACK-1"
+          ]
+        },
+        {
+          "id": "A-STACK-17",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 1.66666667,
+          "evidence": [
+            "E-7",
+            "E-8",
+            "E-44"
+          ],
+          "finding_ids": [
+            "F-STACK-1"
+          ]
+        },
+        {
+          "id": "A-STACK-18",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 1.66666667,
+          "evidence": [
+            "E-4",
+            "E-45"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-STACK-19",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 7,
+          "evidence": [
+            "E-4",
+            "E-45"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-STACK-20",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 1.66666667,
+          "evidence": [
+            "E-7",
+            "E-8",
+            "E-44"
+          ],
+          "finding_ids": [
+            "F-STACK-1"
+          ]
+        },
+        {
+          "id": "A-STACK-21",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 6.25,
+          "evidence": [
+            "E-12",
+            "E-14",
+            "E-4",
+            "E-35"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-STACK-22",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 8.33333333,
+          "evidence": [
+            "E-12",
+            "E-14",
+            "E-2"
+          ],
+          "finding_ids": [
+            "F-STACK-2"
+          ]
+        },
+        {
+          "id": "A-STACK-23",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 6.25,
+          "evidence": [
+            "E-12",
+            "E-14",
+            "E-4",
+            "E-35"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-STACK-24",
+          "outcome": "unknown",
+          "confidence": "Tentative",
+          "weight": 8.33333333,
+          "evidence": [
+            "E-12",
+            "E-44"
+          ],
+          "finding_ids": []
+        }
+      ],
+      "reason": "Full static pass for the stack surface at side-project scale."
+    },
+    {
+      "id": "database",
+      "status": "applicable",
+      "weight": 9,
+      "checks": [
+        {
+          "id": "A-DB-1",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.66666667,
+          "evidence": [
+            "E-22",
+            "E-23",
+            "E-24",
+            "E-26",
+            "E-27"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DB-2",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.66666667,
+          "evidence": [
+            "E-22",
+            "E-23",
+            "E-24",
+            "E-26",
+            "E-27"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DB-3",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.66666667,
+          "evidence": [
+            "E-22",
+            "E-23",
+            "E-24",
+            "E-26",
+            "E-27"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DB-4",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 3.5,
+          "evidence": [
+            "E-46",
+            "E-45"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DB-5",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.5,
+          "evidence": [
+            "E-22",
+            "E-23",
+            "E-24",
+            "E-26",
+            "E-27"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DB-6",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 7,
+          "evidence": [
+            "E-22",
+            "E-23",
+            "E-24",
+            "E-26",
+            "E-27"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DB-7",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 7,
+          "evidence": [
+            "E-46",
+            "E-45"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DB-8",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-22",
+            "E-23",
+            "E-24",
+            "E-26",
+            "E-27"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DB-9",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-46",
+            "E-45"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DB-10",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 6.5,
+          "evidence": [
+            "E-22",
+            "E-23",
+            "E-24",
+            "E-26",
+            "E-27"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DB-11",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 6.5,
+          "evidence": [
+            "E-22",
+            "E-23",
+            "E-24",
+            "E-26",
+            "E-27"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DB-12",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 6,
+          "evidence": [
+            "E-22",
+            "E-23",
+            "E-24",
+            "E-26",
+            "E-27"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DB-13",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 6,
+          "evidence": [
+            "E-22",
+            "E-23",
+            "E-24",
+            "E-26",
+            "E-27"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DB-14",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4.5,
+          "evidence": [
+            "E-22",
+            "E-23",
+            "E-24",
+            "E-26",
+            "E-27"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DB-15",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4.5,
+          "evidence": [
+            "E-22",
+            "E-23",
+            "E-24",
+            "E-26",
+            "E-27"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DB-16",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3,
+          "evidence": [
+            "E-22",
+            "E-23",
+            "E-24",
+            "E-26",
+            "E-27"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DB-17",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 3,
+          "evidence": [
+            "E-22",
+            "E-41"
+          ],
+          "finding_ids": [
+            "F-REPO-1"
+          ]
+        },
+        {
+          "id": "A-DB-18",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 6,
+          "evidence": [
+            "E-22",
+            "E-23",
+            "E-24",
+            "E-26",
+            "E-27"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DB-19",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 6,
+          "evidence": [
+            "E-22",
+            "E-23",
+            "E-24",
+            "E-26",
+            "E-27"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DB-20",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-46",
+            "E-45"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DB-21",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 1,
+          "evidence": [
+            "E-22",
+            "E-23",
+            "E-24",
+            "E-26",
+            "E-27"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DB-22",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 0,
+          "evidence": [
+            "E-22",
+            "E-23",
+            "E-24",
+            "E-26",
+            "E-27"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DB-23",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 1,
+          "evidence": [
+            "E-46",
+            "E-45"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DB-24",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 0,
+          "evidence": [
+            "E-46",
+            "E-45"
+          ],
+          "finding_ids": []
+        }
+      ],
+      "reason": "Full static pass for the database surface at side-project scale."
+    },
+    {
+      "id": "security",
+      "status": "applicable",
+      "weight": 23,
+      "checks": [
+        {
+          "id": "A-SEC-1",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 0,
+          "evidence": [
+            "E-15",
+            "E-19",
+            "E-20",
+            "E-28",
+            "E-29"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-SEC-2",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 0,
+          "evidence": [
+            "E-15",
+            "E-19",
+            "E-20",
+            "E-28",
+            "E-29"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-SEC-3",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 6,
+          "evidence": [
+            "E-15",
+            "E-19",
+            "E-20",
+            "E-28",
+            "E-29"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-SEC-4",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 6,
+          "evidence": [
+            "E-45",
+            "E-47",
+            "E-50"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-SEC-5",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 6,
+          "evidence": [
+            "E-15",
+            "E-19",
+            "E-20",
+            "E-28",
+            "E-29"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-SEC-6",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 7.5,
+          "evidence": [
+            "E-15",
+            "E-19",
+            "E-20",
+            "E-28",
+            "E-29"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-SEC-7",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 7.5,
+          "evidence": [
+            "E-15",
+            "E-19",
+            "E-20",
+            "E-28",
+            "E-29"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-SEC-8",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5.33333333,
+          "evidence": [
+            "E-15",
+            "E-19",
+            "E-20",
+            "E-28",
+            "E-29"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-SEC-9",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 5.33333333,
+          "evidence": [
+            "E-45",
+            "E-47",
+            "E-50"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-SEC-10",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 5.33333333,
+          "evidence": [
+            "E-45",
+            "E-47",
+            "E-50"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-SEC-11",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5.5,
+          "evidence": [
+            "E-15",
+            "E-19",
+            "E-20",
+            "E-28",
+            "E-29"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-SEC-12",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5.5,
+          "evidence": [
+            "E-15",
+            "E-19",
+            "E-20",
+            "E-28",
+            "E-29"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-SEC-13",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 2.66666667,
+          "evidence": [
+            "E-15",
+            "E-19",
+            "E-20",
+            "E-28",
+            "E-29"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-SEC-14",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 2.66666667,
+          "evidence": [
+            "E-13",
+            "E-40",
+            "E-41"
+          ],
+          "finding_ids": [
+            "F-REPO-1"
+          ]
+        },
+        {
+          "id": "A-SEC-15",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4.5,
+          "evidence": [
+            "E-15",
+            "E-19",
+            "E-20",
+            "E-28",
+            "E-29"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-SEC-16",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4.5,
+          "evidence": [
+            "E-15",
+            "E-19",
+            "E-20",
+            "E-28",
+            "E-29"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-SEC-17",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3,
+          "evidence": [
+            "E-15",
+            "E-19",
+            "E-20",
+            "E-28",
+            "E-29"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-SEC-18",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 3,
+          "evidence": [
+            "E-45",
+            "E-47",
+            "E-50"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-SEC-19",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 6,
+          "evidence": [
+            "E-3",
+            "E-25"
+          ],
+          "finding_ids": [
+            "F-SEC-1"
+          ]
+        },
+        {
+          "id": "A-SEC-20",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 2,
+          "evidence": [
+            "E-17",
+            "E-21",
+            "E-29"
+          ],
+          "finding_ids": [
+            "F-SEC-2"
+          ]
+        },
+        {
+          "id": "A-SEC-21",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 2,
+          "evidence": [
+            "E-45",
+            "E-47",
+            "E-50"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-SEC-22",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 2,
+          "evidence": [
+            "E-45",
+            "E-47",
+            "E-50"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-SEC-23",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 2,
+          "evidence": [
+            "E-45",
+            "E-47",
+            "E-50"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-SEC-24",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 0,
+          "evidence": [
+            "E-15",
+            "E-19",
+            "E-20",
+            "E-28",
+            "E-29"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-SEC-25",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 0,
+          "evidence": [
+            "E-15",
+            "E-19",
+            "E-20",
+            "E-28",
+            "E-29"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-SEC-26",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3,
+          "evidence": [
+            "E-15",
+            "E-19",
+            "E-20",
+            "E-28",
+            "E-29"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-SEC-27",
+          "outcome": "unknown",
+          "confidence": "Tentative",
+          "weight": 2.66666667,
+          "evidence": [
+            "E-40"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-SEC-28",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 0,
+          "evidence": [
+            "E-15",
+            "E-19",
+            "E-20",
+            "E-28",
+            "E-29"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-SEC-29",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 0,
+          "evidence": [
+            "E-15",
+            "E-19",
+            "E-20",
+            "E-28",
+            "E-29"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-SEC-30",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 0,
+          "evidence": [
+            "E-15",
+            "E-19",
+            "E-20",
+            "E-28",
+            "E-29"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-SEC-31",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 0,
+          "evidence": [
+            "E-45",
+            "E-47",
+            "E-50"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-SEC-32",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 0,
+          "evidence": [
+            "E-45",
+            "E-47",
+            "E-50"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-SEC-33",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 0,
+          "evidence": [
+            "E-3",
+            "E-25"
+          ],
+          "finding_ids": [
+            "F-SEC-1"
+          ]
+        }
+      ],
+      "reason": "Full static pass for the security surface at side-project scale."
+    },
+    {
+      "id": "llm",
+      "status": "excluded",
+      "weight": 7,
+      "checks": [],
+      "reason": "No model call exists in source or the dependency graph."
+    },
+    {
+      "id": "ux",
+      "status": "applicable",
+      "weight": 4,
+      "checks": [
+        {
+          "id": "A-UX-1",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.66666667,
+          "evidence": [
+            "E-1",
+            "E-30",
+            "E-31",
+            "E-33"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-UX-2",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.66666667,
+          "evidence": [
+            "E-1",
+            "E-30",
+            "E-31",
+            "E-33"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-UX-3",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.25,
+          "evidence": [
+            "E-1",
+            "E-30",
+            "E-31",
+            "E-33"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-UX-4",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.25,
+          "evidence": [
+            "E-1",
+            "E-30",
+            "E-31",
+            "E-33"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-UX-5",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 3.25,
+          "evidence": [
+            "E-28",
+            "E-11"
+          ],
+          "finding_ids": [
+            "F-UX-1"
+          ]
+        },
+        {
+          "id": "A-UX-6",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-1",
+            "E-30",
+            "E-31",
+            "E-33"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-UX-7",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-1",
+            "E-30",
+            "E-31",
+            "E-33"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-UX-8",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 13,
+          "evidence": [
+            "E-48",
+            "E-6"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-UX-9",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 7,
+          "evidence": [
+            "E-48",
+            "E-6"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-UX-10",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 3.66666667,
+          "evidence": [
+            "E-48",
+            "E-6"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-UX-11",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 3.66666667,
+          "evidence": [
+            "E-48",
+            "E-6"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-UX-12",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 3.66666667,
+          "evidence": [
+            "E-48",
+            "E-6"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-UX-13",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 8,
+          "evidence": [
+            "E-48",
+            "E-6"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-UX-14",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-48",
+            "E-6"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-UX-15",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-48",
+            "E-6"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-UX-16",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 6,
+          "evidence": [
+            "E-48",
+            "E-6"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-UX-17",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 6,
+          "evidence": [
+            "E-48",
+            "E-6"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-UX-18",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 4.5,
+          "evidence": [
+            "E-48",
+            "E-6"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-UX-19",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 3.66666667,
+          "evidence": [
+            "E-48",
+            "E-6"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-UX-20",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 0,
+          "evidence": [
+            "E-1",
+            "E-30",
+            "E-31",
+            "E-33"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-UX-21",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 4.5,
+          "evidence": [
+            "E-48",
+            "E-6"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-UX-22",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 3.25,
+          "evidence": [
+            "E-48",
+            "E-6"
+          ],
+          "finding_ids": []
+        }
+      ],
+      "reason": "Full static pass for the ux surface at side-project scale."
+    },
+    {
+      "id": "ui",
+      "status": "excluded",
+      "weight": 2,
+      "checks": [],
+      "reason": "The API owns no rendered pixels or component surface."
+    },
+    {
+      "id": "seo",
+      "status": "excluded",
+      "weight": 1,
+      "checks": [],
+      "reason": "The local JSON API has no public crawlable content."
+    },
+    {
+      "id": "code-quality",
+      "status": "applicable",
+      "weight": 9,
+      "checks": [
+        {
+          "id": "A-CODE-1",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.8,
+          "evidence": [
+            "E-13",
+            "E-36",
+            "E-16",
+            "E-31"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-CODE-2",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4.75,
+          "evidence": [
+            "E-13",
+            "E-36",
+            "E-16",
+            "E-31"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-CODE-3",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4.75,
+          "evidence": [
+            "E-13",
+            "E-36",
+            "E-16",
+            "E-31"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-CODE-4",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4.75,
+          "evidence": [
+            "E-13",
+            "E-36",
+            "E-16",
+            "E-31"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-CODE-5",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.8,
+          "evidence": [
+            "E-13",
+            "E-36",
+            "E-16",
+            "E-31"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-CODE-6",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.8,
+          "evidence": [
+            "E-13",
+            "E-36",
+            "E-16",
+            "E-31"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-CODE-7",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.8,
+          "evidence": [
+            "E-13",
+            "E-36",
+            "E-16",
+            "E-31"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-CODE-8",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.8,
+          "evidence": [
+            "E-13",
+            "E-36",
+            "E-16",
+            "E-31"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-CODE-9",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.8,
+          "evidence": [
+            "E-13",
+            "E-36",
+            "E-16",
+            "E-31"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-CODE-10",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.8,
+          "evidence": [
+            "E-13",
+            "E-36",
+            "E-16",
+            "E-31"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-CODE-11",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.8,
+          "evidence": [
+            "E-13",
+            "E-36",
+            "E-16",
+            "E-31"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-CODE-12",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-13",
+            "E-36",
+            "E-16",
+            "E-31"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-CODE-13",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-13",
+            "E-36",
+            "E-16",
+            "E-31"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-CODE-14",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-13",
+            "E-36",
+            "E-16",
+            "E-31"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-CODE-15",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-13",
+            "E-36",
+            "E-16",
+            "E-31"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-CODE-16",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-13",
+            "E-36",
+            "E-16",
+            "E-31"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-CODE-17",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4.5,
+          "evidence": [
+            "E-13",
+            "E-36",
+            "E-16",
+            "E-31"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-CODE-18",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 6,
+          "evidence": [
+            "E-13",
+            "E-36",
+            "E-16",
+            "E-31"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-CODE-19",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3,
+          "evidence": [
+            "E-13",
+            "E-36",
+            "E-16",
+            "E-31"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-CODE-20",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3,
+          "evidence": [
+            "E-13",
+            "E-36",
+            "E-16",
+            "E-31"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-CODE-21",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.8,
+          "evidence": [
+            "E-13",
+            "E-36",
+            "E-16",
+            "E-31"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-CODE-22",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.8,
+          "evidence": [
+            "E-13",
+            "E-36",
+            "E-16",
+            "E-31"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-CODE-23",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4.75,
+          "evidence": [
+            "E-13",
+            "E-36",
+            "E-16",
+            "E-31"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-CODE-24",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4.5,
+          "evidence": [
+            "E-13",
+            "E-36",
+            "E-16",
+            "E-31"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-CODE-25",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 0,
+          "evidence": [
+            "E-13",
+            "E-36",
+            "E-16",
+            "E-31"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-CODE-26",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 0,
+          "evidence": [
+            "E-13",
+            "E-36",
+            "E-16",
+            "E-31"
+          ],
+          "finding_ids": []
+        }
+      ],
+      "reason": "Full static pass for the code-quality surface at side-project scale."
+    },
+    {
+      "id": "style-genome",
+      "status": "applicable",
+      "weight": 2,
+      "checks": [
+        {
+          "id": "A-DNA-1",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 6,
+          "evidence": [
+            "E-36",
+            "E-25",
+            "E-17"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DNA-2",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 7.5,
+          "evidence": [
+            "E-36",
+            "E-25",
+            "E-17"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DNA-3",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 7.5,
+          "evidence": [
+            "E-36",
+            "E-25",
+            "E-17"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DNA-4",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 8,
+          "evidence": [
+            "E-36",
+            "E-25",
+            "E-17"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DNA-5",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-36",
+            "E-25",
+            "E-17"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DNA-6",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 6,
+          "evidence": [
+            "E-36",
+            "E-25",
+            "E-17"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DNA-7",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 6,
+          "evidence": [
+            "E-36",
+            "E-25",
+            "E-17"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DNA-8",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.33333333,
+          "evidence": [
+            "E-36",
+            "E-25",
+            "E-17"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DNA-9",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.33333333,
+          "evidence": [
+            "E-36",
+            "E-25",
+            "E-17"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DNA-10",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.33333333,
+          "evidence": [
+            "E-36",
+            "E-25",
+            "E-17"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DNA-11",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-36",
+            "E-25",
+            "E-17"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DNA-12",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-36",
+            "E-25",
+            "E-17"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DNA-13",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-36",
+            "E-25",
+            "E-17"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DNA-14",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.33333333,
+          "evidence": [
+            "E-36",
+            "E-25",
+            "E-17"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DNA-15",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.33333333,
+          "evidence": [
+            "E-36",
+            "E-25",
+            "E-17"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DNA-16",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 1.66666667,
+          "evidence": [
+            "E-36",
+            "E-25",
+            "E-17"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DNA-17",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 2.66666667,
+          "evidence": [
+            "E-36",
+            "E-25",
+            "E-17"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DNA-18",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 1.66666667,
+          "evidence": [
+            "E-36",
+            "E-25",
+            "E-17"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DNA-19",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 1.66666667,
+          "evidence": [
+            "E-36",
+            "E-25",
+            "E-17"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DNA-20",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.33333333,
+          "evidence": [
+            "E-36",
+            "E-25",
+            "E-17"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DNA-21",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 2.66666667,
+          "evidence": [
+            "E-36",
+            "E-25",
+            "E-17"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DNA-22",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 2.66666667,
+          "evidence": [
+            "E-36",
+            "E-25",
+            "E-17"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-DNA-23",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 6,
+          "evidence": [
+            "E-36",
+            "E-25",
+            "E-17"
+          ],
+          "finding_ids": []
+        }
+      ],
+      "reason": "Full static pass for the style-genome surface at side-project scale."
+    },
+    {
+      "id": "agent-memory",
+      "status": "applicable",
+      "weight": 1,
+      "checks": [
+        {
+          "id": "A-MEM-1",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.75,
+          "evidence": [
+            "E-37",
+            "E-38",
+            "E-51"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-MEM-2",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 3.75,
+          "evidence": [
+            "E-37",
+            "E-38",
+            "E-51"
+          ],
+          "finding_ids": [
+            "F-MEM-1"
+          ]
+        },
+        {
+          "id": "A-MEM-3",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 3.75,
+          "evidence": [
+            "E-37",
+            "E-38",
+            "E-51"
+          ],
+          "finding_ids": [
+            "F-MEM-1"
+          ]
+        },
+        {
+          "id": "A-MEM-4",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 3.75,
+          "evidence": [
+            "E-37",
+            "E-38",
+            "E-51"
+          ],
+          "finding_ids": [
+            "F-MEM-1"
+          ]
+        },
+        {
+          "id": "A-MEM-5",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 10,
+          "evidence": [
+            "E-37",
+            "E-38",
+            "E-51"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-MEM-6",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.75,
+          "evidence": [
+            "E-37",
+            "E-38",
+            "E-51"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-MEM-7",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 3,
+          "evidence": [
+            "E-37",
+            "E-38",
+            "E-51"
+          ],
+          "finding_ids": [
+            "F-MEM-1"
+          ]
+        },
+        {
+          "id": "A-MEM-8",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 3,
+          "evidence": [
+            "E-37",
+            "E-38",
+            "E-51"
+          ],
+          "finding_ids": [
+            "F-MEM-1"
+          ]
+        },
+        {
+          "id": "A-MEM-9",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-37",
+            "E-38",
+            "E-51"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-MEM-10",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-37",
+            "E-38",
+            "E-51"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-MEM-11",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 7.5,
+          "evidence": [
+            "E-37",
+            "E-38",
+            "E-51"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-MEM-12",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 7.5,
+          "evidence": [
+            "E-37",
+            "E-38",
+            "E-51"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-MEM-13",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3,
+          "evidence": [
+            "E-37",
+            "E-38",
+            "E-51"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-MEM-14",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.75,
+          "evidence": [
+            "E-37",
+            "E-38",
+            "E-51"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-MEM-15",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 3.75,
+          "evidence": [
+            "E-51"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-MEM-16",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 3.75,
+          "evidence": [
+            "E-13",
+            "E-41"
+          ],
+          "finding_ids": [
+            "F-REPO-1"
+          ]
+        },
+        {
+          "id": "A-MEM-17",
+          "outcome": "unknown",
+          "confidence": "Tentative",
+          "weight": 3.75,
+          "evidence": [
+            "E-40"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-MEM-18",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 3.75,
+          "evidence": [
+            "E-37",
+            "E-38",
+            "E-51"
+          ],
+          "finding_ids": [
+            "F-MEM-1"
+          ]
+        },
+        {
+          "id": "A-MEM-19",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 0,
+          "evidence": [
+            "E-51"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-MEM-20",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-37",
+            "E-38",
+            "E-51"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-MEM-21",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 3,
+          "evidence": [
+            "E-37",
+            "E-38",
+            "E-51"
+          ],
+          "finding_ids": [
+            "F-MEM-1"
+          ]
+        },
+        {
+          "id": "A-MEM-22",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 3.75,
+          "evidence": [
+            "E-51"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-MEM-23",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 3.75,
+          "evidence": [
+            "E-51"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-MEM-24",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3,
+          "evidence": [
+            "E-37",
+            "E-38",
+            "E-51"
+          ],
+          "finding_ids": []
+        }
+      ],
+      "reason": "Full static pass for the agent-memory surface at side-project scale."
+    },
+    {
+      "id": "repo",
+      "status": "applicable",
+      "weight": 4,
+      "checks": [
+        {
+          "id": "A-REPO-1",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.5,
+          "evidence": [
+            "E-13",
+            "E-1",
+            "E-40",
+            "E-41"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-REPO-2",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.5,
+          "evidence": [
+            "E-13",
+            "E-1",
+            "E-40",
+            "E-41"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-REPO-3",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 7,
+          "evidence": [
+            "E-13",
+            "E-1",
+            "E-40",
+            "E-41"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-REPO-4",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4.5,
+          "evidence": [
+            "E-13",
+            "E-1",
+            "E-40",
+            "E-41"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-REPO-5",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-4",
+            "E-6"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-REPO-6",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4.5,
+          "evidence": [
+            "E-13",
+            "E-1",
+            "E-40",
+            "E-41"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-REPO-7",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4.5,
+          "evidence": [
+            "E-13",
+            "E-1",
+            "E-40",
+            "E-41"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-REPO-8",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 3.5,
+          "evidence": [
+            "E-4",
+            "E-6"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-REPO-9",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-13",
+            "E-40",
+            "E-41"
+          ],
+          "finding_ids": [
+            "F-REPO-1"
+          ]
+        },
+        {
+          "id": "A-REPO-10",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-13",
+            "E-1",
+            "E-40",
+            "E-41"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-REPO-11",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-13",
+            "E-1",
+            "E-40",
+            "E-41"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-REPO-12",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 7,
+          "evidence": [
+            "E-13",
+            "E-40",
+            "E-41"
+          ],
+          "finding_ids": [
+            "F-REPO-1"
+          ]
+        },
+        {
+          "id": "A-REPO-13",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-4",
+            "E-6"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-REPO-14",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-13",
+            "E-1",
+            "E-40",
+            "E-41"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-REPO-15",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 8,
+          "evidence": [
+            "E-13",
+            "E-40",
+            "E-41"
+          ],
+          "finding_ids": [
+            "F-REPO-1"
+          ]
+        },
+        {
+          "id": "A-REPO-16",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.5,
+          "evidence": [
+            "E-13",
+            "E-1",
+            "E-40",
+            "E-41"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-REPO-17",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.5,
+          "evidence": [
+            "E-13",
+            "E-1",
+            "E-40",
+            "E-41"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-REPO-18",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.5,
+          "evidence": [
+            "E-13",
+            "E-1",
+            "E-40",
+            "E-41"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-REPO-19",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.5,
+          "evidence": [
+            "E-13",
+            "E-1",
+            "E-40",
+            "E-41"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-REPO-20",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.5,
+          "evidence": [
+            "E-13",
+            "E-1",
+            "E-40",
+            "E-41"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-REPO-21",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 4.5,
+          "evidence": [
+            "E-13",
+            "E-40",
+            "E-41"
+          ],
+          "finding_ids": [
+            "F-REPO-1"
+          ]
+        },
+        {
+          "id": "A-REPO-22",
+          "outcome": "fail",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-13",
+            "E-40",
+            "E-41"
+          ],
+          "finding_ids": [
+            "F-REPO-1"
+          ]
+        },
+        {
+          "id": "A-REPO-23",
+          "outcome": "not-applicable",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-4",
+            "E-6"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-REPO-24",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 0,
+          "evidence": [
+            "E-13",
+            "E-1",
+            "E-40",
+            "E-41"
+          ],
+          "finding_ids": []
+        }
+      ],
+      "reason": "Full static pass for the repo surface at side-project scale."
+    },
+    {
+      "id": "build",
+      "status": "applicable",
+      "weight": 7,
+      "checks": [
+        {
+          "id": "A-BUILD-1",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 2.5,
+          "evidence": [
+            "E-34",
+            "E-13",
+            "E-30",
+            "E-39"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-BUILD-2",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-34",
+            "E-13",
+            "E-30",
+            "E-39"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-BUILD-3",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-34",
+            "E-13",
+            "E-30",
+            "E-39"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-BUILD-4",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-34",
+            "E-13",
+            "E-30",
+            "E-39"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-BUILD-5",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-34",
+            "E-13",
+            "E-30",
+            "E-39"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-BUILD-6",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-34",
+            "E-13",
+            "E-30",
+            "E-39"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-BUILD-7",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-34",
+            "E-13",
+            "E-30",
+            "E-39"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-BUILD-8",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-34",
+            "E-13",
+            "E-30",
+            "E-39"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-BUILD-9",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-34",
+            "E-13",
+            "E-30",
+            "E-39"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-BUILD-10",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-34",
+            "E-13",
+            "E-30",
+            "E-39"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-BUILD-11",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 10,
+          "evidence": [
+            "E-34",
+            "E-13",
+            "E-30",
+            "E-39"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-BUILD-12",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 7.5,
+          "evidence": [
+            "E-34",
+            "E-13",
+            "E-30",
+            "E-39"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-BUILD-13",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 7.5,
+          "evidence": [
+            "E-34",
+            "E-13",
+            "E-30",
+            "E-39"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-BUILD-14",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.33333333,
+          "evidence": [
+            "E-34",
+            "E-13",
+            "E-30",
+            "E-39"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-BUILD-15",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.33333333,
+          "evidence": [
+            "E-34",
+            "E-13",
+            "E-30",
+            "E-39"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-BUILD-16",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-34",
+            "E-13",
+            "E-30",
+            "E-39"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-BUILD-17",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 2.5,
+          "evidence": [
+            "E-34",
+            "E-13",
+            "E-30",
+            "E-39"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-BUILD-18",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 2.5,
+          "evidence": [
+            "E-34",
+            "E-13",
+            "E-30",
+            "E-39"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-BUILD-19",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-34",
+            "E-13",
+            "E-30",
+            "E-39"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-BUILD-20",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 2.5,
+          "evidence": [
+            "E-34",
+            "E-13",
+            "E-30",
+            "E-39"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-BUILD-21",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.33333333,
+          "evidence": [
+            "E-34",
+            "E-13",
+            "E-30",
+            "E-39"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-BUILD-22",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-34",
+            "E-13",
+            "E-30",
+            "E-39"
+          ],
+          "finding_ids": []
+        }
+      ],
+      "reason": "Full static pass for the build surface at side-project scale."
+    },
+    {
+      "id": "roadmap",
+      "status": "excluded",
+      "weight": 2,
+      "checks": [],
+      "reason": "No plan, roadmap, or tracker artifact exists; delivery reality is evaluated in repository."
+    },
+    {
+      "id": "deploy",
+      "status": "excluded",
+      "weight": 7,
+      "checks": [],
+      "reason": "The built artifact has no public deployment target or deployment configuration."
+    },
+    {
+      "id": "observe",
+      "status": "applicable",
+      "weight": 5,
+      "checks": [
+        {
+          "id": "A-OBS-1",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.57142857,
+          "evidence": [
+            "E-17",
+            "E-21",
+            "E-10"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-OBS-2",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.57142857,
+          "evidence": [
+            "E-17",
+            "E-21",
+            "E-10"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-OBS-3",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.57142857,
+          "evidence": [
+            "E-17",
+            "E-21",
+            "E-10"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-OBS-4",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.57142857,
+          "evidence": [
+            "E-17",
+            "E-21",
+            "E-10"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-OBS-5",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.57142857,
+          "evidence": [
+            "E-17",
+            "E-21",
+            "E-10"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-OBS-6",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.57142857,
+          "evidence": [
+            "E-17",
+            "E-21",
+            "E-10"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-OBS-7",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-17",
+            "E-21",
+            "E-10"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-OBS-8",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-17",
+            "E-21",
+            "E-10"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-OBS-9",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-17",
+            "E-21",
+            "E-10"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-OBS-10",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-17",
+            "E-21",
+            "E-10"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-OBS-11",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-17",
+            "E-21",
+            "E-10"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-OBS-12",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-17",
+            "E-21",
+            "E-10"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-OBS-13",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-17",
+            "E-21",
+            "E-10"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-OBS-14",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-17",
+            "E-21",
+            "E-10"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-OBS-15",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-17",
+            "E-21",
+            "E-10"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-OBS-16",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-17",
+            "E-21",
+            "E-10"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-OBS-17",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-17",
+            "E-21",
+            "E-10"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-OBS-18",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-17",
+            "E-21",
+            "E-10"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-OBS-19",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 5,
+          "evidence": [
+            "E-17",
+            "E-21",
+            "E-10"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-OBS-20",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 3.57142857,
+          "evidence": [
+            "E-17",
+            "E-21",
+            "E-10"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-OBS-21",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-17",
+            "E-21",
+            "E-10"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-OBS-22",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-17",
+            "E-21",
+            "E-10"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-OBS-23",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-17",
+            "E-21",
+            "E-10"
+          ],
+          "finding_ids": []
+        },
+        {
+          "id": "A-OBS-24",
+          "outcome": "pass",
+          "confidence": "Firm",
+          "weight": 4,
+          "evidence": [
+            "E-17",
+            "E-21",
+            "E-10"
+          ],
+          "finding_ids": []
+        }
+      ],
+      "reason": "Full static pass for the observe surface at side-project scale."
+    },
+    {
+      "id": "launch",
+      "status": "excluded",
+      "weight": 1,
+      "checks": [],
+      "reason": "The local evaluator artifact has no public launch target."
+    }
+  ],
+  "standards": [
+    {
+      "framework": "owasp-web-2025",
+      "category": "A01:2025",
+      "title": "Broken Access Control",
+      "status": "pass",
+      "checks": [
+        "A-SEC-3",
+        "A-SEC-4",
+        "A-SEC-5",
+        "A-SEC-10"
+      ],
+      "evidence": [
+        "E-15",
+        "E-19",
+        "E-20",
+        "E-28",
+        "E-29",
+        "E-45",
+        "E-47",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "owasp-web-2025",
+      "category": "A02:2025",
+      "title": "Security Misconfiguration",
+      "status": "pass",
+      "checks": [
+        "A-SEC-15",
+        "A-SEC-16",
+        "A-SEC-22"
+      ],
+      "evidence": [
+        "E-15",
+        "E-19",
+        "E-20",
+        "E-28",
+        "E-29",
+        "E-45",
+        "E-47",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "owasp-web-2025",
+      "category": "A03:2025",
+      "title": "Software Supply Chain Failures",
+      "status": "pass",
+      "checks": [
+        "A-SEC-17",
+        "A-SEC-18",
+        "A-SEC-26"
+      ],
+      "evidence": [
+        "E-15",
+        "E-19",
+        "E-20",
+        "E-28",
+        "E-29",
+        "E-45",
+        "E-47",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "owasp-web-2025",
+      "category": "A04:2025",
+      "title": "Cryptographic Failures",
+      "status": "pass",
+      "checks": [
+        "A-SEC-11",
+        "A-SEC-12",
+        "A-SEC-13"
+      ],
+      "evidence": [
+        "E-15",
+        "E-19",
+        "E-20",
+        "E-28",
+        "E-29"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "owasp-web-2025",
+      "category": "A05:2025",
+      "title": "Injection",
+      "status": "pass",
+      "checks": [
+        "A-SEC-8",
+        "A-SEC-9",
+        "A-SEC-10"
+      ],
+      "evidence": [
+        "E-15",
+        "E-19",
+        "E-20",
+        "E-28",
+        "E-29",
+        "E-45",
+        "E-47",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "owasp-web-2025",
+      "category": "A06:2025",
+      "title": "Insecure Design",
+      "status": "pass",
+      "checks": [
+        "A-SEC-1",
+        "A-SEC-2",
+        "A-SEC-16",
+        "A-SEC-24",
+        "A-SEC-25"
+      ],
+      "evidence": [
+        "E-15",
+        "E-19",
+        "E-20",
+        "E-28",
+        "E-29"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "owasp-web-2025",
+      "category": "A07:2025",
+      "title": "Authentication Failures",
+      "status": "pass",
+      "checks": [
+        "A-SEC-6",
+        "A-SEC-7"
+      ],
+      "evidence": [
+        "E-15",
+        "E-19",
+        "E-20",
+        "E-28",
+        "E-29"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "owasp-web-2025",
+      "category": "A08:2025",
+      "title": "Software or Data Integrity Failures",
+      "status": "fail",
+      "checks": [
+        "A-SEC-10",
+        "A-SEC-17",
+        "A-SEC-19",
+        "A-SEC-22"
+      ],
+      "evidence": [
+        "E-45",
+        "E-47",
+        "E-50",
+        "E-15",
+        "E-19",
+        "E-20",
+        "E-28",
+        "E-29",
+        "E-3",
+        "E-25"
+      ],
+      "finding_ids": [
+        "F-SEC-1"
+      ]
+    },
+    {
+      "framework": "owasp-web-2025",
+      "category": "A09:2025",
+      "title": "Security Logging and Alerting Failures",
+      "status": "fail",
+      "checks": [
+        "A-SEC-20",
+        "A-OBS-7",
+        "A-OBS-8",
+        "A-OBS-9",
+        "A-OBS-22"
+      ],
+      "evidence": [
+        "E-17",
+        "E-21",
+        "E-29",
+        "E-10"
+      ],
+      "finding_ids": [
+        "F-SEC-2"
+      ]
+    },
+    {
+      "framework": "owasp-web-2025",
+      "category": "A10:2025",
+      "title": "Mishandling Exceptional Conditions",
+      "status": "pass",
+      "checks": [
+        "A-SEC-28",
+        "A-CODE-12",
+        "A-CODE-13",
+        "A-CODE-14",
+        "A-ARCH-8",
+        "A-ARCH-9",
+        "A-DB-14",
+        "A-DB-15",
+        "A-DEPLOY-4",
+        "A-DEPLOY-16",
+        "A-OBS-22"
+      ],
+      "evidence": [
+        "E-15",
+        "E-19",
+        "E-20",
+        "E-28",
+        "E-29",
+        "E-13",
+        "E-36",
+        "E-16",
+        "E-31",
+        "E-7",
+        "E-8",
+        "E-26",
+        "E-23",
+        "E-45",
+        "E-4",
+        "E-22",
+        "E-24",
+        "E-27",
+        "E-17",
+        "E-21",
+        "E-10"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "gdpr-eu",
+      "category": "lawful-basis-and-consent",
+      "title": "Lawful basis and consent (Art 6-7)",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-31",
+        "A-UX-17"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "gdpr-eu",
+      "category": "data-subject-rights",
+      "title": "Data subject rights (Art 12-22)",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-21"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "gdpr-eu",
+      "category": "security-of-processing",
+      "title": "Security of processing (Art 32)",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-3",
+        "A-SEC-11",
+        "A-SEC-12",
+        "A-SEC-20",
+        "A-DB-19"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "gdpr-eu",
+      "category": "data-minimization-and-retention",
+      "title": "Data minimization and retention (Art 5)",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-21",
+        "A-DB-7",
+        "A-DB-21"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "gdpr-eu",
+      "category": "records-and-transfers",
+      "title": "Records of processing and transfers (Art 30, 44-49)",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-32"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "gdpr-eu",
+      "category": "privacy-by-design",
+      "title": "Data protection by design and default (Art 25)",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-2",
+        "A-SEC-12"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "ccpa-cpra",
+      "category": "consumer-rights",
+      "title": "Consumer rights to know, delete, correct",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-21"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "ccpa-cpra",
+      "category": "opt-out-of-sale-and-sharing",
+      "title": "Opt-out of sale and sharing",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-31",
+        "A-UX-17"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "ccpa-cpra",
+      "category": "reasonable-security",
+      "title": "Reasonable security safeguards",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-3",
+        "A-SEC-11",
+        "A-SEC-12"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "ccpa-cpra",
+      "category": "data-inventory",
+      "title": "Data inventory and records",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-32"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "pipeda-ca",
+      "category": "consent",
+      "title": "Consent (Principle 3)",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-31"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "pipeda-ca",
+      "category": "safeguards",
+      "title": "Safeguards (Principle 7)",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-11",
+        "A-SEC-12",
+        "A-SEC-3"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "pipeda-ca",
+      "category": "access-and-accuracy",
+      "title": "Individual access and accuracy (Principles 9-10)",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-21"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "pipeda-ca",
+      "category": "accountability",
+      "title": "Accountability (Principle 1)",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-32",
+        "A-SEC-20"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "wcag-2.2-aa",
+      "category": "perceivable",
+      "title": "Perceivable",
+      "status": "not-applicable",
+      "checks": [
+        "A-UI-3",
+        "A-UI-21",
+        "A-UI-17"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "wcag-2.2-aa",
+      "category": "operable",
+      "title": "Operable",
+      "status": "not-applicable",
+      "checks": [
+        "A-UI-4",
+        "A-UI-6",
+        "A-UI-7",
+        "A-UI-24",
+        "A-UI-20",
+        "A-UX-8"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "wcag-2.2-aa",
+      "category": "understandable",
+      "title": "Understandable",
+      "status": "not-applicable",
+      "checks": [
+        "A-UX-7",
+        "A-UX-9",
+        "A-UI-8"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "wcag-2.2-aa",
+      "category": "robust",
+      "title": "Robust",
+      "status": "not-applicable",
+      "checks": [
+        "A-UI-2",
+        "A-UI-9"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "aoda-on",
+      "category": "web-content-accessibility",
+      "title": "Information and communications - web content",
+      "status": "not-applicable",
+      "checks": [
+        "A-UI-3",
+        "A-UI-4",
+        "A-UI-6",
+        "A-UI-21",
+        "A-UI-24",
+        "A-UX-8"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "ada-508",
+      "category": "web-content-accessibility",
+      "title": "Accessible web content and software",
+      "status": "not-applicable",
+      "checks": [
+        "A-UI-2",
+        "A-UI-3",
+        "A-UI-4",
+        "A-UI-21",
+        "A-UX-8"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "soc2-tsc",
+      "category": "security-common-criteria",
+      "title": "Security (common criteria)",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-3",
+        "A-SEC-4",
+        "A-SEC-5",
+        "A-SEC-6",
+        "A-SEC-7",
+        "A-SEC-20",
+        "A-SEC-17"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "soc2-tsc",
+      "category": "change-management",
+      "title": "Change management",
+      "status": "not-applicable",
+      "checks": [
+        "A-DEPLOY-1",
+        "A-DEPLOY-8",
+        "A-DEPLOY-9",
+        "A-REPO-13"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "soc2-tsc",
+      "category": "availability",
+      "title": "Availability",
+      "status": "not-applicable",
+      "checks": [
+        "A-OBS-3",
+        "A-DEPLOY-11",
+        "A-DB-21"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "soc2-tsc",
+      "category": "confidentiality",
+      "title": "Confidentiality",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-11",
+        "A-SEC-12",
+        "A-DB-19"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "soc2-tsc",
+      "category": "processing-integrity",
+      "title": "Processing integrity",
+      "status": "not-applicable",
+      "checks": [
+        "A-DB-9",
+        "A-DB-14",
+        "A-DB-24"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "soc2-tsc",
+      "category": "privacy",
+      "title": "Privacy",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-21",
+        "A-SEC-31"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "iso-27001",
+      "category": "access-control",
+      "title": "Access control",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-3",
+        "A-SEC-4",
+        "A-SEC-5"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "iso-27001",
+      "category": "cryptography",
+      "title": "Cryptography",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-11",
+        "A-SEC-12"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "iso-27001",
+      "category": "logging-and-monitoring",
+      "title": "Logging and monitoring",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-20",
+        "A-OBS-12"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "iso-27001",
+      "category": "secure-development",
+      "title": "Secure development",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-8",
+        "A-SEC-9",
+        "A-SEC-10",
+        "A-CODE-8",
+        "A-BUILD-15"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "iso-27001",
+      "category": "supplier-and-supply-chain",
+      "title": "Supplier and supply-chain security",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-17",
+        "A-CODE-17"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "iso-27001",
+      "category": "vulnerability-management",
+      "title": "Technical vulnerability management",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-26",
+        "A-REPO-12"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "iso-27001",
+      "category": "backup-and-continuity",
+      "title": "Backup and continuity",
+      "status": "not-applicable",
+      "checks": [
+        "A-DB-21",
+        "A-DEPLOY-4"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "pci-dss-4",
+      "category": "protect-stored-account-data",
+      "title": "Protect stored account data (Req 3)",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-12",
+        "A-DB-4",
+        "A-DB-19",
+        "A-SEC-32"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "pci-dss-4",
+      "category": "encrypt-transmission",
+      "title": "Encrypt transmission of cardholder data (Req 4)",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-11",
+        "A-DB-19"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "pci-dss-4",
+      "category": "secure-systems-and-software",
+      "title": "Secure systems and software (Req 6)",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-8",
+        "A-SEC-9",
+        "A-SEC-10",
+        "A-SEC-26",
+        "A-BUILD-15"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "pci-dss-4",
+      "category": "access-control",
+      "title": "Restrict and authenticate access (Req 7-8)",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-3",
+        "A-SEC-4",
+        "A-SEC-6",
+        "A-SEC-7"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "pci-dss-4",
+      "category": "logging-and-monitoring",
+      "title": "Log and monitor access (Req 10)",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-20",
+        "A-OBS-12"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "hipaa-security-rule",
+      "category": "access-control",
+      "title": "Access control (164.312(a))",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-3",
+        "A-SEC-4",
+        "A-SEC-7"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "hipaa-security-rule",
+      "category": "audit-controls",
+      "title": "Audit controls (164.312(b))",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-20",
+        "A-OBS-12"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "hipaa-security-rule",
+      "category": "integrity",
+      "title": "Integrity (164.312(c))",
+      "status": "not-applicable",
+      "checks": [
+        "A-DB-14",
+        "A-SEC-9"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "hipaa-security-rule",
+      "category": "transmission-security",
+      "title": "Transmission security (164.312(e))",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-11",
+        "A-DB-19"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    },
+    {
+      "framework": "hipaa-security-rule",
+      "category": "encryption-and-agreements",
+      "title": "Encryption and business-associate agreements",
+      "status": "not-applicable",
+      "checks": [
+        "A-SEC-12",
+        "A-SEC-32"
+      ],
+      "evidence": [
+        "E-1",
+        "E-6",
+        "E-45",
+        "E-46",
+        "E-47",
+        "E-48",
+        "E-49",
+        "E-50"
+      ],
+      "finding_ids": []
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E-1",
+      "type": "source",
+      "path": "README.md",
+      "line": 3,
+      "quote": "A local, restart-safe HTTP API for organization-scoped notes.",
+      "sha256": "48b776bbec64fa4fa52004477ebc430ec565493e08c2619ac97de1c80f0a3baa",
+      "redacted": false
+    },
+    {
+      "id": "E-2",
+      "type": "source",
+      "path": "README.md",
+      "line": 8,
+      "quote": "Requires Node.js 22.13 or newer.",
+      "sha256": "48b776bbec64fa4fa52004477ebc430ec565493e08c2619ac97de1c80f0a3baa",
+      "redacted": false
+    },
+    {
+      "id": "E-3",
+      "type": "source",
+      "path": "README.md",
+      "line": 77,
+      "quote": "application/problem+json. POST is not retry-safe.",
+      "sha256": "48b776bbec64fa4fa52004477ebc430ec565493e08c2619ac97de1c80f0a3baa",
+      "redacted": false
+    },
+    {
+      "id": "E-4",
+      "type": "source",
+      "path": "README.md",
+      "line": 9,
+      "quote": "no third-party runtime or development dependencies and makes no external",
+      "sha256": "48b776bbec64fa4fa52004477ebc430ec565493e08c2619ac97de1c80f0a3baa",
+      "redacted": false
+    },
+    {
+      "id": "E-5",
+      "type": "source",
+      "path": "agents/context.md",
+      "line": 13,
+      "quote": "The local Tenant Notes API and its two fixed organizations.",
+      "sha256": "3c41d919518cac4074d0b46f8be9d0048a35ed7d4142f48c16c81bc096fc174a",
+      "redacted": false
+    },
+    {
+      "id": "E-6",
+      "type": "source",
+      "path": "AGENTS.md",
+      "line": 20,
+      "quote": "Structured exclusions: UI has no rendered surface; deploy and launch have no",
+      "sha256": "8c9ef5a8f00134ab476978a34153a85e6a9cbc920e9947821e00a1d4f788660c",
+      "redacted": false
+    },
+    {
+      "id": "E-7",
+      "type": "source",
+      "path": "docs/adr/001-local-tenant-isolation.md",
+      "line": 14,
+      "quote": "Use one SQLite file per organization. Authentication hashes the supplied bearer",
+      "sha256": "c547bb736abc5d02f3698a09fd7fc5fdf08390021cbee672e4bd5b9bc2b3acad",
+      "redacted": false
+    },
+    {
+      "id": "E-8",
+      "type": "source",
+      "path": "docs/adr/001-local-tenant-isolation.md",
+      "line": 21,
+      "quote": "Flip point: a third organization is required, store-open time exceeds 100 ms",
+      "sha256": "c547bb736abc5d02f3698a09fd7fc5fdf08390021cbee672e4bd5b9bc2b3acad",
+      "redacted": false
+    },
+    {
+      "id": "E-9",
+      "type": "source",
+      "path": "docs/adr/001-local-tenant-isolation.md",
+      "line": 36,
+      "quote": "## Rejected alternatives",
+      "sha256": "c547bb736abc5d02f3698a09fd7fc5fdf08390021cbee672e4bd5b9bc2b3acad",
+      "redacted": false
+    },
+    {
+      "id": "E-10",
+      "type": "source",
+      "path": "docs/runbook.md",
+      "line": 32,
+      "quote": "## Recovery and rollback",
+      "sha256": "d0f0cbd8c8771c92922bc71f357154b8e2600180426f4ee7e918162767880cd7",
+      "redacted": false
+    },
+    {
+      "id": "E-11",
+      "type": "source",
+      "path": "docs/runbook.md",
+      "line": 34,
+      "quote": "There is no backup promise. For evaluator data, stop the process and restore",
+      "sha256": "d0f0cbd8c8771c92922bc71f357154b8e2600180426f4ee7e918162767880cd7",
+      "redacted": false
+    },
+    {
+      "id": "E-12",
+      "type": "source",
+      "path": "package.json",
+      "line": 7,
+      "quote": "\"node\": \">=22.13 <25\"",
+      "sha256": "8e70a11b9e2e876dbb2f27ce626a95bba9e743bc8ffdc2ec8a0b6baacc8d404b",
+      "redacted": false
+    },
+    {
+      "id": "E-13",
+      "type": "source",
+      "path": "package.json",
+      "line": 25,
+      "quote": "\"verify\": \"npm run format:check && npm run lint && npm run typecheck && npm run build && npm run contract:check && npm run test && npm run hollow:check && npm run pillars:check && npm run supply-chain && npm run secrets:check && npm run smoke:offline\"",
+      "sha256": "8e70a11b9e2e876dbb2f27ce626a95bba9e743bc8ffdc2ec8a0b6baacc8d404b",
+      "redacted": false
+    },
+    {
+      "id": "E-14",
+      "type": "source",
+      "path": "package-lock.json",
+      "line": 11,
+      "quote": "\"node\": \">=22.13 <25\"",
+      "sha256": "d6d685697d0738160bb5402a252ead3b1e76e97ef0f0b9467f01ecae399d121d",
+      "redacted": false
+    },
+    {
+      "id": "E-15",
+      "type": "source",
+      "path": "src/app.ts",
+      "line": 55,
+      "quote": "const principal = auth.authenticate(",
+      "sha256": "c3495a274a992dcfee9cdfeed2ecda7794512e4690a40f5067c8a85de44a728c",
+      "redacted": false
+    },
+    {
+      "id": "E-16",
+      "type": "source",
+      "path": "src/app.ts",
+      "line": 59,
+      "quote": "const result = executeNotesRoute(",
+      "sha256": "c3495a274a992dcfee9cdfeed2ecda7794512e4690a40f5067c8a85de44a728c",
+      "redacted": false
+    },
+    {
+      "id": "E-17",
+      "type": "source",
+      "path": "src/app.ts",
+      "line": 80,
+      "quote": "const problem = toProblem(error, url.pathname);",
+      "sha256": "c3495a274a992dcfee9cdfeed2ecda7794512e4690a40f5067c8a85de44a728c",
+      "redacted": false
+    },
+    {
+      "id": "E-18",
+      "type": "source",
+      "path": "src/app.ts",
+      "line": 163,
+      "quote": "function enforceBodyLimit(payload: unknown): void {",
+      "sha256": "c3495a274a992dcfee9cdfeed2ecda7794512e4690a40f5067c8a85de44a728c",
+      "redacted": false
+    },
+    {
+      "id": "E-19",
+      "type": "source",
+      "path": "src/auth.ts",
+      "line": 101,
+      "quote": "if (stored.length === digest.length && timingSafeEqual(stored, digest)) {",
+      "sha256": "23e5fa4285adafdc364ae647c4e07d0e5fcbf1e094133cfee12022b5e6bcda13",
+      "redacted": false
+    },
+    {
+      "id": "E-20",
+      "type": "source",
+      "path": "src/auth.ts",
+      "line": 124,
+      "quote": "private isThrottled(ip: string): boolean {",
+      "sha256": "23e5fa4285adafdc364ae647c4e07d0e5fcbf1e094133cfee12022b5e6bcda13",
+      "redacted": false
+    },
+    {
+      "id": "E-21",
+      "type": "source",
+      "path": "src/auth.ts",
+      "line": 138,
+      "quote": "this.logger.write({ event: \"auth_denial_spike\", ip, outcome: \"denied\" });",
+      "sha256": "23e5fa4285adafdc364ae647c4e07d0e5fcbf1e094133cfee12022b5e6bcda13",
+      "redacted": false
+    },
+    {
+      "id": "E-22",
+      "type": "source",
+      "path": "src/db/migrations/0001-init.sql",
+      "line": 23,
+      "quote": "CREATE TABLE IF NOT EXISTS notes (",
+      "sha256": "35b581f8d83cd290d137edb178c09031585e086fc9a7a35424c0a828891e12a4",
+      "redacted": false
+    },
+    {
+      "id": "E-23",
+      "type": "source",
+      "path": "src/db/migrations/0001-init.sql",
+      "line": 32,
+      "quote": "FOREIGN KEY (organization_id) REFERENCES organizations(public_id) ON DELETE RESTRICT,",
+      "sha256": "35b581f8d83cd290d137edb178c09031585e086fc9a7a35424c0a828891e12a4",
+      "redacted": false
+    },
+    {
+      "id": "E-24",
+      "type": "source",
+      "path": "src/db/migrations/0001-init.sql",
+      "line": 41,
+      "quote": "CREATE INDEX IF NOT EXISTS notes_organization_list_idx",
+      "sha256": "35b581f8d83cd290d137edb178c09031585e086fc9a7a35424c0a828891e12a4",
+      "redacted": false
+    },
+    {
+      "id": "E-25",
+      "type": "source",
+      "path": "src/notes/repository.ts",
+      "line": 33,
+      "quote": "`INSERT INTO notes",
+      "sha256": "3ee860cbcc1c57f4e2e6ed82e931195ea74982ba17bb4dfd62b1f8406825a402",
+      "redacted": false
+    },
+    {
+      "id": "E-26",
+      "type": "source",
+      "path": "src/notes/repository.ts",
+      "line": 69,
+      "quote": "`${SELECT_FIELDS} WHERE organization_id = ?",
+      "sha256": "3ee860cbcc1c57f4e2e6ed82e931195ea74982ba17bb4dfd62b1f8406825a402",
+      "redacted": false
+    },
+    {
+      "id": "E-27",
+      "type": "source",
+      "path": "src/notes/repository.ts",
+      "line": 100,
+      "quote": "WHERE public_id = ? AND organization_id = ?`",
+      "sha256": "3ee860cbcc1c57f4e2e6ed82e931195ea74982ba17bb4dfd62b1f8406825a402",
+      "redacted": false
+    },
+    {
+      "id": "E-28",
+      "type": "source",
+      "path": "src/notes/repository.ts",
+      "line": 119,
+      "quote": "\"DELETE FROM notes WHERE public_id = ? AND organization_id = ?\",",
+      "sha256": "3ee860cbcc1c57f4e2e6ed82e931195ea74982ba17bb4dfd62b1f8406825a402",
+      "redacted": false
+    },
+    {
+      "id": "E-29",
+      "type": "source",
+      "path": "src/logger.ts",
+      "line": 13,
+      "quote": "function sanitize(event: Record<string, unknown>): Record<string, unknown> {",
+      "sha256": "cf26fe75802cfc9408404cdfdf2f027ac3294d2547d6c6b0e6c6535badaf8c98",
+      "redacted": false
+    },
+    {
+      "id": "E-30",
+      "type": "source",
+      "path": "src/routes/contract.ts",
+      "line": 1,
+      "quote": "export const openApiDocument = {",
+      "sha256": "9b068038bc35f925f611227daf95519c401f991eb83621644051b6877a129ea5",
+      "redacted": false
+    },
+    {
+      "id": "E-31",
+      "type": "source",
+      "path": "src/errors.ts",
+      "line": 20,
+      "quote": "export function toProblem(error: unknown, instance: string): ProblemDetails {",
+      "sha256": "fcc1b09e1b6e325358f0381b26b8ae0df2784dcdacc1a3877104896b8f9a96f2",
+      "redacted": false
+    },
+    {
+      "id": "E-32",
+      "type": "source",
+      "path": "tests/tenant-isolation.test.ts",
+      "line": 23,
+      "quote": "test(\"known cross-organization ids are indistinguishable from absent ids\", async () => {",
+      "sha256": "68bc3d15aec0a09a672fcd7ad038696a327e2a300fb0591c55fd91cbb30c390e",
+      "redacted": false
+    },
+    {
+      "id": "E-33",
+      "type": "source",
+      "path": "tests/notes-crud.test.ts",
+      "line": 5,
+      "quote": "test(\"organization members can complete CRUD across peer-owned notes\", async () => {",
+      "sha256": "7ea7258ca237299055dc6eb9d1deb09c5b3cc1a07b6926f82572fbc4371b9ff4",
+      "redacted": false
+    },
+    {
+      "id": "E-34",
+      "type": "source",
+      "path": "scripts/build.mjs",
+      "line": 5,
+      "quote": "const root = resolve(import.meta.dirname, \"..\");",
+      "sha256": "895c19aae2158e790bf7cc72decda879fbd94d2ee636c7b364b87b37d4680377",
+      "redacted": false
+    },
+    {
+      "id": "E-35",
+      "type": "source",
+      "path": "scripts/check-dependencies.mjs",
+      "line": 3,
+      "quote": "const packageDocument = JSON.parse(readFileSync(\"package.json\", \"utf8\"));",
+      "sha256": "8d576887c854895239c3ff6a7ac88b000ba60b782bc95bbd2fa64e6ac9043362",
+      "redacted": false
+    },
+    {
+      "id": "E-36",
+      "type": "source",
+      "path": "CODEDNA.md",
+      "line": 5,
+      "quote": "## Canonical patterns",
+      "sha256": "3ad8ab5dcae4f052f5aace521d394aaf753728d1278c3f0ae72c785cd01b5829",
+      "redacted": false
+    },
+    {
+      "id": "E-37",
+      "type": "source",
+      "path": "agents/context.md",
+      "line": 1,
+      "quote": "---",
+      "sha256": "3c41d919518cac4074d0b46f8be9d0048a35ed7d4142f48c16c81bc096fc174a",
+      "redacted": false
+    },
+    {
+      "id": "E-38",
+      "type": "source",
+      "path": "agents/quality.md",
+      "line": 1,
+      "quote": "---",
+      "sha256": "33f8496ce6c2962378d1ddbc42c41e54d580920206729f55b0660daf094c026c",
+      "redacted": false
+    },
+    {
+      "id": "E-39",
+      "type": "source",
+      "path": "artifacts/sbom.cdx.json",
+      "line": 1,
+      "quote": "{",
+      "sha256": "1ea484c345b2f53e2d39d4f0996d2bed29ab82a275cd8a7d8c0db1fe1ef29db4",
+      "redacted": false
+    },
+    {
+      "id": "E-40",
+      "type": "absence",
+      "command": "git rev-parse --short HEAD",
+      "scope": "repository root",
+      "quote": "fatal: not a git repository",
+      "redacted": false
+    },
+    {
+      "id": "E-41",
+      "type": "absence",
+      "command": "rg --files -g '.github/workflows/**' -g '.gitlab-ci.yml' -g 'bitbucket-pipelines.yml'",
+      "scope": "repository root",
+      "quote": "0 matches",
+      "redacted": false
+    },
+    {
+      "id": "E-42",
+      "type": "absence",
+      "command": "rg --files -g '.godplans/**' -g '*PLAN.mdx'",
+      "scope": "repository root",
+      "quote": "0 matches",
+      "redacted": false
+    },
+    {
+      "id": "E-43",
+      "type": "absence",
+      "command": "rg --files | rg '(^|/)(product-brief|PRD|metrics|risks|assumptions)'",
+      "scope": "repository root",
+      "quote": "0 matches",
+      "redacted": false
+    },
+    {
+      "id": "E-44",
+      "type": "absence",
+      "command": "rg --files | rg '(^|/)(\\.stack-ready/|docs/stack/|\\.nvmrc$|\\.tool-versions$)'",
+      "scope": "repository root",
+      "quote": "0 matches",
+      "redacted": false
+    },
+    {
+      "id": "E-45",
+      "type": "absence",
+      "command": "rg -n 'fetch\\(|https?\\.request|WebSocket|enqueue|publish\\(' src",
+      "scope": "src",
+      "quote": "0 matches",
+      "redacted": false
+    },
+    {
+      "id": "E-46",
+      "type": "absence",
+      "command": "rg -n -i '\\b(payment|price|amount|currency|invoice|refund|payout)\\b' src",
+      "scope": "src",
+      "quote": "0 matches",
+      "redacted": false
+    },
+    {
+      "id": "E-47",
+      "type": "absence",
+      "command": "rg -n -i '\\b(openai|anthropic|langchain|model call|chat completion)\\b' src package.json",
+      "scope": "src and package.json",
+      "quote": "0 matches",
+      "redacted": false
+    },
+    {
+      "id": "E-48",
+      "type": "absence",
+      "command": "rg --files src | rg '(components|pages|views|\\.tsx$|\\.css$)'",
+      "scope": "src",
+      "quote": "0 matches",
+      "redacted": false
+    },
+    {
+      "id": "E-49",
+      "type": "absence",
+      "command": "rg --files | rg '(sitemap|robots\\.txt|next\\.config|public/index\\.html)'",
+      "scope": "repository root",
+      "quote": "0 matches",
+      "redacted": false
+    },
+    {
+      "id": "E-50",
+      "type": "absence",
+      "command": "rg --files | rg '(Dockerfile|terraform|k8s|helm|fly\\.toml|render\\.yaml|Procfile)'",
+      "scope": "repository root",
+      "quote": "0 matches",
+      "redacted": false
+    },
+    {
+      "id": "E-51",
+      "type": "tool",
+      "tool": "godaudits",
+      "tool_version": "2.12.0",
+      "command": "godaudits evidence . --output .godaudits/EVIDENCE.json",
+      "quote": "Pillars 1.1 present but compatible=false: loader has no structured YAML exclusions; pillar list fields and body headings fail the 1.1 validator.",
+      "redacted": false
+    }
+  ],
+  "strengths": [
+    {
+      "title": "Tenant isolation uses independent physical and logical boundaries",
+      "evidence": [
+        "E-7",
+        "E-26",
+        "E-27",
+        "E-23",
+        "E-32"
+      ],
+      "preserve": "Keep store selection authentication-bound, every note query organization-scoped, and the composite owner/organization foreign key intact."
+    },
+    {
+      "title": "The dependency-free supply chain is enforced and inventoried",
+      "evidence": [
+        "E-4",
+        "E-12",
+        "E-35",
+        "E-39"
+      ],
+      "preserve": "Retain the locked zero-dependency policy or update the SBOM and supply-chain gate with any deliberate dependency."
+    },
+    {
+      "title": "API promises map to contract, handlers, and static test definitions",
+      "evidence": [
+        "E-1",
+        "E-30",
+        "E-16",
+        "E-33",
+        "E-32"
+      ],
+      "preserve": "Keep README, OpenAPI, route behavior, and black-box test definitions synchronized."
+    },
+    {
+      "title": "Shared error and logging boundaries redact sensitive fields",
+      "evidence": [
+        "E-31",
+        "E-17",
+        "E-29"
+      ],
+      "preserve": "Route new errors and log events through the central mapper and sanitizer."
+    }
+  ],
+  "findings": [
+    {
+      "id": "F-REPO-1",
+      "domain": "repo",
+      "title": "The artifact has no version-control or CI provenance",
+      "severity": "High",
+      "confidence": "Firm",
+      "effort": "M",
+      "evidence": [
+        "E-40",
+        "E-41",
+        "E-13"
+      ],
+      "impact": "Reviewers cannot establish change history, tracked-artifact hygiene, branch protections, full-history secret scanning, or that the authoritative verification gate ran for this built artifact.",
+      "fix": "Place the artifact in a Git repository and add a least-privilege CI workflow that installs from the lockfile and runs npm run verify, including the Pillars, migration, dependency, secret, and architecture checks.",
+      "verify": "git rev-parse --is-inside-work-tree && rg -n 'npm run verify' .github/workflows",
+      "checks": [
+        "A-ARCH-16",
+        "A-DB-17",
+        "A-SEC-14",
+        "A-MEM-16",
+        "A-REPO-9",
+        "A-REPO-12",
+        "A-REPO-15",
+        "A-REPO-21",
+        "A-REPO-22"
+      ],
+      "status": "open",
+      "remediation": [
+        "GA-101"
+      ]
+    },
+    {
+      "id": "F-PRD-1",
+      "domain": "product",
+      "title": "Product decisions are scattered without a lightweight owning brief",
+      "severity": "Medium",
+      "confidence": "Firm",
+      "effort": "M",
+      "evidence": [
+        "E-1",
+        "E-5",
+        "E-7",
+        "E-43"
+      ],
+      "impact": "A maintainer can reconstruct the evaluator and isolation promise, but not the appetite, cut rule, ranked acceptance criteria, full NFR disposition, or owned risks and assumptions.",
+      "fix": "Add docs/product-brief.md that reuses the README, context pillar, ADR, and existing tests while recording the missing product decisions.",
+      "verify": "rg -n '^## (Pre-flight|Primary user|Appetite|Requirements|NFRs|Risks|Assumptions)$|Given:|When:|Then:' docs/product-brief.md",
+      "checks": [
+        "A-PRD-1",
+        "A-PRD-2",
+        "A-PRD-4",
+        "A-PRD-6",
+        "A-PRD-7",
+        "A-PRD-9"
+      ],
+      "status": "open",
+      "remediation": [
+        "GA-301"
+      ]
+    },
+    {
+      "id": "F-PRD-2",
+      "domain": "product",
+      "title": "Product success is not computable from a metric-to-event contract",
+      "severity": "Medium",
+      "confidence": "Firm",
+      "effort": "M",
+      "evidence": [
+        "E-17",
+        "E-21",
+        "E-43"
+      ],
+      "impact": "The API emits useful operational events, but no named leading or lagging outcome, deadline, source, or computation establishes whether the evaluator product succeeds.",
+      "fix": "Add docs/metrics.md with at most five outcomes mapped to existing structured events or deterministic verification results.",
+      "verify": "rg -n '^## Metric|^(Number|Deadline|Outcome|Source|Event):' docs/metrics.md",
+      "checks": [
+        "A-PRD-5"
+      ],
+      "status": "open",
+      "remediation": [
+        "GA-302"
+      ]
+    },
+    {
+      "id": "F-STACK-1",
+      "domain": "stack",
+      "title": "Stack decision provenance is incomplete",
+      "severity": "Medium",
+      "confidence": "Firm",
+      "effort": "S",
+      "evidence": [
+        "E-7",
+        "E-8",
+        "E-9",
+        "E-44"
+      ],
+      "impact": "The tenant-isolation ADR has concrete flip points and rejected alternatives, but lacks the dated preflight, planning horizon, support basis, and switching-cost record needed to revisit the runtime and database bundle safely.",
+      "fix": "Add a compact dated stack decision that incorporates the existing ADR and records domain/team/budget/time/regulatory basis, runner-up, 12-month ceiling, recheck condition, and engineer-week switching cost.",
+      "verify": "rg -n '^(Date|Domain|Team|Budget posture|Time-to-ship|Regulatory statement|Runner-up|Flip point|Scale ceiling|Switching cost|Re-check):' docs/stack/decision.md",
+      "checks": [
+        "A-ARCH-3",
+        "A-STACK-2",
+        "A-STACK-11",
+        "A-STACK-16",
+        "A-STACK-17",
+        "A-STACK-20"
+      ],
+      "status": "open",
+      "remediation": [
+        "GA-201"
+      ]
+    },
+    {
+      "id": "F-STACK-2",
+      "domain": "stack",
+      "title": "README runtime support contradicts the manifest",
+      "severity": "Medium",
+      "confidence": "Firm",
+      "effort": "S",
+      "evidence": [
+        "E-12",
+        "E-14",
+        "E-2"
+      ],
+      "impact": "A user may select Node 25 or newer from the README while npm metadata explicitly rejects that runtime.",
+      "fix": "Choose the supported Node range and make package.json, package-lock.json, and README state the same contract.",
+      "verify": "node -e 'const p=require(\"./package.json\");const r=require(\"fs\").readFileSync(\"README.md\",\"utf8\");if(!r.includes(p.engines.node))process.exit(1)'",
+      "checks": [
+        "A-STACK-22"
+      ],
+      "status": "open",
+      "remediation": [
+        "GA-202"
+      ]
+    },
+    {
+      "id": "F-MEM-1",
+      "domain": "agent-memory",
+      "title": "The claimed Pillars 1.1 memory is structurally incompatible",
+      "severity": "Medium",
+      "confidence": "Firm",
+      "effort": "S",
+      "evidence": [
+        "E-37",
+        "E-38",
+        "E-51"
+      ],
+      "impact": "Future agents receive useful content, but portable routing and complete Core concern accounting are ambiguous because the loader lacks structured exclusions and pillar frontmatter is not valid Pillars 1.1.",
+      "fix": "Convert exclusions and selector fields to the 1.1 schema, preserve the two always-loaded floor pillars, and make the repository validator use the same grammar as the declared standard.",
+      "verify": "node scripts/validate-pillars.mjs",
+      "checks": [
+        "A-MEM-2",
+        "A-MEM-3",
+        "A-MEM-4",
+        "A-MEM-7",
+        "A-MEM-8",
+        "A-MEM-18",
+        "A-MEM-21"
+      ],
+      "status": "open",
+      "remediation": [
+        "GA-203"
+      ]
+    },
+    {
+      "id": "F-SEC-1",
+      "domain": "security",
+      "title": "POST note creation has no retry idempotency contract",
+      "severity": "Medium",
+      "confidence": "Firm",
+      "effort": "M",
+      "evidence": [
+        "E-3",
+        "E-25"
+      ],
+      "impact": "A client retry after an ambiguous response can create duplicate notes because no idempotency key is accepted or durably deduplicated.",
+      "fix": "Accept an Idempotency-Key for POST /v1/notes and persist a tenant-scoped unique key with the created note in the same SQLite transaction.",
+      "verify": "rg -n 'Idempotency-Key|idempotency' src openapi.json tests",
+      "checks": [
+        "A-SEC-19",
+        "A-SEC-33"
+      ],
+      "status": "open",
+      "remediation": [
+        "GA-303"
+      ]
+    },
+    {
+      "id": "F-SEC-2",
+      "domain": "security",
+      "title": "Ordinary authentication denials omit source identity from security logs",
+      "severity": "Low",
+      "confidence": "Firm",
+      "effort": "S",
+      "evidence": [
+        "E-17",
+        "E-21",
+        "E-29"
+      ],
+      "impact": "Operators can identify denial spikes, but cannot correlate individual denied requests to a source IP during an investigation.",
+      "fix": "Pass the normalized remote address into the centralized denial log while preserving token and note redaction.",
+      "verify": "rg -n 'request_denied.*(ip|remoteAddress)|sourceIp' src/app.ts tests",
+      "checks": [
+        "A-SEC-20"
+      ],
+      "status": "open",
+      "remediation": [
+        "GA-501"
+      ]
+    },
+    {
+      "id": "F-UX-1",
+      "domain": "ux",
+      "title": "Hard-deleted notes have no recovery path",
+      "severity": "Low",
+      "confidence": "Firm",
+      "effort": "M",
+      "evidence": [
+        "E-28",
+        "E-11"
+      ],
+      "impact": "An accidental authenticated DELETE permanently removes evaluator notes, and the runbook explicitly provides no backup promise.",
+      "fix": "Either document hard delete as an intentional evaluator-only limit with a client confirmation requirement, or add a short retention trash state and restore operation.",
+      "verify": "rg -n 'trash|restore|delete confirmation|intentional hard delete' README.md docs src openapi.json",
+      "checks": [
+        "A-UX-5"
+      ],
+      "status": "open",
+      "remediation": [
+        "GA-502"
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "id": "GA-101",
+      "phase": 1,
+      "wave": "1.1",
+      "title": "Establish Git and CI provenance for the authoritative gate",
+      "parallel": false,
+      "files": [
+        ".github/workflows/ci.yml",
+        ".gitignore",
+        "package.json"
+      ],
+      "depends_on": [],
+      "reuses": "the existing npm run verify chain",
+      "fixes": [
+        "F-REPO-1"
+      ],
+      "acceptance": [
+        "The artifact is committed in Git and git rev-parse succeeds.",
+        "CI installs the lockfile with scripts disabled and runs npm run verify on push and pull request.",
+        "Secret and Pillars checks fail the workflow rather than soft-failing."
+      ],
+      "verify": "git rev-parse --is-inside-work-tree && rg -n 'npm ci.*ignore-scripts|npm run verify' .github/workflows/ci.yml",
+      "checks": [
+        "A-ARCH-16",
+        "A-DB-17",
+        "A-SEC-14",
+        "A-MEM-16",
+        "A-REPO-9",
+        "A-REPO-12",
+        "A-REPO-15",
+        "A-REPO-21",
+        "A-REPO-22"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "GA-201",
+      "phase": 2,
+      "wave": "2.1",
+      "title": "Complete the stack decision record",
+      "parallel": false,
+      "files": [
+        "docs/stack/decision.md",
+        "docs/adr/001-local-tenant-isolation.md"
+      ],
+      "depends_on": [],
+      "reuses": "ADR 001 flip points and rejected alternatives",
+      "fixes": [
+        "F-STACK-1"
+      ],
+      "acceptance": [
+        "The record reuses the accepted isolation ADR instead of duplicating it.",
+        "It records a date, six-part preflight, 12-month ceiling, runner-up, switching cost, and re-check condition."
+      ],
+      "verify": "rg -n '^(Date|Domain|Team|Budget posture|Time-to-ship|Regulatory statement|Runner-up|Flip point|Scale ceiling|Switching cost|Re-check):' docs/stack/decision.md",
+      "checks": [
+        "A-ARCH-3",
+        "A-STACK-2",
+        "A-STACK-11",
+        "A-STACK-16",
+        "A-STACK-17",
+        "A-STACK-20"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "GA-202",
+      "phase": 2,
+      "wave": "2.2",
+      "title": "Align the Node runtime support contract",
+      "parallel": false,
+      "files": [
+        "package.json",
+        "package-lock.json",
+        "README.md"
+      ],
+      "depends_on": [],
+      "reuses": "package.json engines as the canonical machine contract",
+      "fixes": [
+        "F-STACK-2"
+      ],
+      "acceptance": [
+        "One supported Node range is chosen deliberately.",
+        "Manifest, lock metadata, and README state exactly the same range."
+      ],
+      "verify": "node -e 'const p=require(\"./package.json\");const r=require(\"fs\").readFileSync(\"README.md\",\"utf8\");if(!r.includes(p.engines.node))process.exit(1)'",
+      "checks": [
+        "A-STACK-22"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "GA-203",
+      "phase": 2,
+      "wave": "2.3",
+      "title": "Make agent memory conform to Pillars 1.1",
+      "parallel": false,
+      "files": [
+        "AGENTS.md",
+        "agents/context.md",
+        "agents/quality.md",
+        "agents/repo.md",
+        "scripts/validate-pillars.mjs",
+        "tests/pillars-routing.json"
+      ],
+      "depends_on": [],
+      "reuses": "the existing context, quality, and repo pillar content",
+      "fixes": [
+        "F-MEM-1"
+      ],
+      "acceptance": [
+        "Loader exclusions use structured name/reason records and all Core concerns are accounted for.",
+        "Frontmatter list fields and eight body sections validate under Pillars 1.1.",
+        "Routing fixtures cover whole-word matching and the two floor pillars remain always loaded."
+      ],
+      "verify": "node scripts/validate-pillars.mjs",
+      "checks": [
+        "A-MEM-2",
+        "A-MEM-3",
+        "A-MEM-4",
+        "A-MEM-7",
+        "A-MEM-8",
+        "A-MEM-18",
+        "A-MEM-21"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "GA-301",
+      "phase": 3,
+      "wave": "3.1",
+      "title": "Write the lightweight product brief",
+      "parallel": false,
+      "files": [
+        "docs/product-brief.md"
+      ],
+      "depends_on": [],
+      "reuses": "README scope, context pillar, ADR 001, and isolation tests",
+      "fixes": [
+        "F-PRD-1"
+      ],
+      "acceptance": [
+        "Brief records primary user, appetite, cut rule, ranked GWT requirements, NFR dispositions, risks, and assumptions.",
+        "Existing README, context, ADR, OpenAPI, and tests are linked instead of copied."
+      ],
+      "verify": "rg -n '^## (Pre-flight|Primary user|Appetite|Requirements|NFRs|Risks|Assumptions)$|Given:|When:|Then:' docs/product-brief.md",
+      "checks": [
+        "A-PRD-1",
+        "A-PRD-2",
+        "A-PRD-4",
+        "A-PRD-6",
+        "A-PRD-7",
+        "A-PRD-9"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "GA-302",
+      "phase": 3,
+      "wave": "3.2",
+      "title": "Define product metrics from existing events",
+      "parallel": false,
+      "files": [
+        "docs/metrics.md",
+        "src/app.ts",
+        "src/auth.ts"
+      ],
+      "depends_on": [],
+      "reuses": "note action logs, request_denied, auth_denial_spike, and deterministic verify results",
+      "fixes": [
+        "F-PRD-2"
+      ],
+      "acceptance": [
+        "At most five numbered and deadlined outcomes include one leading and one lagging metric.",
+        "Every metric names an existing structured event or deterministic verification source and an exact computation."
+      ],
+      "verify": "rg -n '^## Metric|^(Number|Deadline|Outcome|Source|Event):' docs/metrics.md",
+      "checks": [
+        "A-PRD-5"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "GA-303",
+      "phase": 3,
+      "wave": "3.3",
+      "title": "Make note creation idempotent",
+      "parallel": false,
+      "files": [
+        "src/db/migrations/0002-idempotency.sql",
+        "src/notes/repository.ts",
+        "src/notes/routes.ts",
+        "src/notes/service.ts",
+        "src/routes/contract.ts",
+        "openapi.json",
+        "tests/notes-crud.test.ts"
+      ],
+      "depends_on": [],
+      "reuses": "the existing SQLite repository boundary and OpenAPI generator",
+      "fixes": [
+        "F-SEC-1"
+      ],
+      "acceptance": [
+        "POST accepts Idempotency-Key and documents its response semantics.",
+        "A tenant-scoped unique key and note creation commit in one transaction.",
+        "A regression test proves a replay returns the original result without a second note.",
+        "The migration is idempotent and covered by the authoritative verification gate."
+      ],
+      "verify": "rg -n 'Idempotency-Key|idempotency' src openapi.json tests",
+      "checks": [
+        "A-SEC-19",
+        "A-SEC-33"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "GA-501",
+      "phase": 5,
+      "wave": "5.1",
+      "title": "Include source IP in denied-request logs",
+      "parallel": false,
+      "files": [
+        "src/app.ts",
+        "tests/auth.test.ts"
+      ],
+      "depends_on": [],
+      "reuses": "the shared logger sanitizer",
+      "fixes": [
+        "F-SEC-2"
+      ],
+      "acceptance": [
+        "Every authentication denial log includes the normalized remote address.",
+        "Bearer tokens and note title/body values remain redacted.",
+        "A static regression assertion covers the ordinary denial path and spike path."
+      ],
+      "verify": "rg -n 'request_denied.*(ip|remoteAddress)|sourceIp' src/app.ts tests",
+      "checks": [
+        "A-SEC-20"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "GA-502",
+      "phase": 5,
+      "wave": "5.2",
+      "title": "Make hard-delete recovery semantics explicit",
+      "parallel": false,
+      "files": [
+        "README.md",
+        "docs/runbook.md",
+        "openapi.json",
+        "src/routes/contract.ts"
+      ],
+      "depends_on": [],
+      "reuses": "the current DELETE route and recovery runbook",
+      "fixes": [
+        "F-UX-1"
+      ],
+      "acceptance": [
+        "The evaluator-only hard-delete decision and client confirmation expectation are explicit, or a trash/restore lifecycle is implemented.",
+        "OpenAPI and runbook agree on recovery behavior."
+      ],
+      "verify": "rg -n 'trash|restore|delete confirmation|intentional hard delete' README.md docs openapi.json src/routes/contract.ts",
+      "checks": [
+        "A-UX-5"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "GA-601",
+      "phase": 6,
+      "wave": "6.1",
+      "title": "Re-run godaudits at the remediated commit",
+      "parallel": false,
+      "files": [],
+      "depends_on": [
+        "GA-101",
+        "GA-201",
+        "GA-202",
+        "GA-203",
+        "GA-301",
+        "GA-302",
+        "GA-303",
+        "GA-501",
+        "GA-502"
+      ],
+      "reuses": "the current check catalog and evidence fingerprint",
+      "fixes": [],
+      "acceptance": [
+        "Every active remediation task is complete.",
+        "Fresh evidence validates and score plus coverage deltas are recorded."
+      ],
+      "verify": "godaudits validate .godaudits/AUDIT.json --repo . --require-fresh-evidence",
+      "checks": [],
+      "status": "open",
+      "final_gate": true
+    }
+  ],
+  "accepted_risks": [],
+  "open_questions": [],
+  "session_log": [
+    {
+      "date": "2026-07-23",
+      "summary": "Fresh full static audit; no project execution, tests, network, or model calls."
+    }
+  ],
+  "computed": {
+    "coverage": {
+      "applicable": 235,
+      "evaluated": 230,
+      "passed": 196,
+      "failed": 34,
+      "unknown": 5,
+      "not_applicable": 55,
+      "percent": 98
+    },
+    "domains": {
+      "product": {
+        "raw_score": 69,
+        "score": 69,
+        "cap": null,
+        "evidence_basis": "mostly Firm"
+      },
+      "architecture": {
+        "raw_score": 95,
+        "score": 95,
+        "cap": null,
+        "evidence_basis": "mostly Firm"
+      },
+      "stack": {
+        "raw_score": 89,
+        "score": 89,
+        "cap": null,
+        "evidence_basis": "mostly Firm"
+      },
+      "database": {
+        "raw_score": 97,
+        "score": 97,
+        "cap": null,
+        "evidence_basis": "mostly Firm"
+      },
+      "security": {
+        "raw_score": 92,
+        "score": 92,
+        "cap": null,
+        "evidence_basis": "mostly Firm"
+      },
+      "ux": {
+        "raw_score": 97,
+        "score": 97,
+        "cap": null,
+        "evidence_basis": "mostly Firm"
+      },
+      "code-quality": {
+        "raw_score": 100,
+        "score": 100,
+        "cap": null,
+        "evidence_basis": "mostly Firm"
+      },
+      "style-genome": {
+        "raw_score": 100,
+        "score": 100,
+        "cap": null,
+        "evidence_basis": "mostly Firm"
+      },
+      "agent-memory": {
+        "raw_score": 83,
+        "score": 83,
+        "cap": null,
+        "evidence_basis": "mostly Firm"
+      },
+      "repo": {
+        "raw_score": 76,
+        "score": 76,
+        "cap": null,
+        "evidence_basis": "mostly Firm"
+      },
+      "build": {
+        "raw_score": 100,
+        "score": 100,
+        "cap": null,
+        "evidence_basis": "mostly Firm"
+      },
+      "observe": {
+        "raw_score": 100,
+        "score": 100,
+        "cap": null,
+        "evidence_basis": "mostly Firm"
+      }
+    },
+    "overall": {
+      "raw_score": 93,
+      "score": 93,
+      "verdict": "audit-proof",
+      "grade_method": "static-read",
+      "grade_scope": "an arithmetic roll-up of model-assigned pass/fail from a source read, not a test result, scan, or certification",
+      "evidence_basis": "mostly Firm",
+      "coverage_cap": 100,
+      "critical_cap": 100,
+      "weak_domain_cap": 100
+    },
+    "counts": {
+      "findings_total": 9,
+      "critical": 0,
+      "high": 1,
+      "medium": 6,
+      "low": 2,
+      "accepted_risk": 0,
+      "tasks_total": 10,
+      "tasks_done": 0
+    }
+  }
+}

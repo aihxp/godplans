@@ -1,0 +1,15 @@
+{
+  "name": "offline-multi-tenant-notes-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A durable, offline, multi-tenant JSON notes API",
+  "engines": {
+    "node": ">=22.13 <23"
+  },
+  "scripts": {
+    "init": "node src/init.js",
+    "start": "node src/server.js",
+    "test": "node --test --test-concurrency=1"
+  }
+}

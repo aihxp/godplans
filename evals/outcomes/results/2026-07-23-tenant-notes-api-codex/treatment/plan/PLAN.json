@@ -1,0 +1,547 @@
+{
+   "applicability" : [
+      {
+         "domain" : "agent-memory",
+         "reason" : "A thin loader and three small pillars keep execution aligned without a full program",
+         "status" : "applicable"
+      },
+      {
+         "domain" : "architecture",
+         "reason" : "Tenant storage, authentication, public ids, wire format, and trust boundaries are load-bearing",
+         "status" : "applicable"
+      },
+      {
+         "domain" : "build",
+         "reason" : "Authenticated CRUD must be delivered as a real vertical slice",
+         "status" : "applicable"
+      },
+      {
+         "domain" : "code-quality",
+         "reason" : "Deterministic tests and a six-hour handoff require a small enforced quality baseline",
+         "status" : "applicable"
+      },
+      {
+         "domain" : "database",
+         "reason" : "Notes and identities must persist across restart with tenant constraints",
+         "status" : "applicable"
+      },
+      {
+         "domain" : "deploy",
+         "reason" : "The evaluation runs as a local Node process and explicitly excludes cloud deployment",
+         "status" : "excluded"
+      },
+      {
+         "domain" : "launch",
+         "reason" : "The evaluation ends at local verification and has no public activation",
+         "status" : "excluded"
+      },
+      {
+         "domain" : "llm",
+         "reason" : "The API performs deterministic note CRUD and makes no model calls",
+         "status" : "excluded"
+      },
+      {
+         "domain" : "observe",
+         "reason" : "Trigger: before the first non-evaluator user or uptime promise. Local logs and health ship now; backend, SLO, paging, and runbook infrastructure remain reversible without service commitments",
+         "status" : "deferred"
+      },
+      {
+         "domain" : "product",
+         "reason" : "The six-hour gate needs an explicit user, outcome, cut policy, and negative scope",
+         "status" : "applicable"
+      },
+      {
+         "domain" : "repo",
+         "reason" : "The evaluator needs a reproducible local repository and one verification command",
+         "status" : "applicable"
+      },
+      {
+         "domain" : "roadmap",
+         "reason" : "The six-hour appetite requires dependency order and hard cut rules",
+         "status" : "applicable"
+      },
+      {
+         "domain" : "security",
+         "reason" : "Bearer authentication and multi-tenant CRUD create an IDOR boundary",
+         "status" : "applicable"
+      },
+      {
+         "domain" : "seo",
+         "reason" : "There is no crawlable page or public discovery surface",
+         "status" : "excluded"
+      },
+      {
+         "domain" : "stack",
+         "reason" : "Offline runtime, Node.js 22, and the time cap eliminate service-backed choices",
+         "status" : "applicable"
+      },
+      {
+         "domain" : "style-genome",
+         "reason" : "Greenfield naming and error conventions must be fixed before the first handler",
+         "status" : "applicable"
+      },
+      {
+         "domain" : "ui",
+         "reason" : "The deliverable is an HTTP contract with no rendered pixels",
+         "status" : "excluded"
+      },
+      {
+         "domain" : "ux",
+         "reason" : "The developer-facing contract needs predictable recovery-oriented errors",
+         "status" : "applicable"
+      }
+   ],
+   "archetype" : "api-service",
+   "created" : "2026-07-23",
+   "decisions" : [
+      {
+         "falsifier" : {
+            "failure_boundary" : "a third organization is required or opening configured stores consumes more than 100 ms p95",
+            "replan_action" : "return to planning and evaluate replacing fixed tenant files with a local authorization directory plus dynamic tenant registry or a shared PostgreSQL design with forced row-level security",
+            "signal" : "organization count and store-open duration from startup validation"
+         },
+         "id" : "D1",
+         "title" : "Use one relational database file per organization"
+      },
+      {
+         "falsifier" : {
+            "failure_boundary" : "the credential requirement changes to create, rotate, revoke, or recover a credential through the API",
+            "replan_action" : "return to planning and redesign authentication around a bounded identity lifecycle before adding any credential endpoint",
+            "signal" : "evaluator setup attempts and authentication failures from redacted security logs"
+         },
+         "id" : "D2",
+         "title" : "Use opaque bearer tokens mapped to immutable seeded principals"
+      },
+      {
+         "falsifier" : {
+            "failure_boundary" : "a required operation cannot be expressed without breaking an existing `/v1` request or response",
+            "replan_action" : "return to planning and redesign the breaking surface as `/v2` with an explicit compatibility and retirement path",
+            "signal" : "contract change log and consumer fixture failures"
+         },
+         "id" : "D3",
+         "title" : "Use REST JSON under `/v1` with UUID public ids"
+      },
+      {
+         "falsifier" : {
+            "failure_boundary" : "any mounted route is absent from `openapi.json` or any error escapes in another shape",
+            "replan_action" : "return to planning and replace the drifting generator or handler so one contract generator and one root error handler remain",
+            "signal" : "contract test diffs and responses not matching the Problem Details schema"
+         },
+         "id" : "D4",
+         "title" : "Generate one OpenAPI contract from runtime schemas and emit one error envelope"
+      },
+      {
+         "falsifier" : {
+            "failure_boundary" : "package acquisition is forbidden, a second process writes the same files, or sustained demand exceeds 10 requests per second",
+            "replan_action" : "return to planning and switch to the native runner-up for no-package setup or adopt a service database for multi-writer demand",
+            "signal" : "`npm run verify`, store lock errors, and the measured organization and writer counts"
+         },
+         "id" : "D5",
+         "title" : "Pin a small Node.js 22 stack with no runtime service"
+      }
+   ],
+   "format" : "godplans/plan-json@1",
+   "input_digest" : "sha256:108cd9f004f8eb0a427ecd6a51f2e06dd95032e63ff496d9f22aa26f7176f061",
+   "metrics" : {
+      "domains" : [
+         {
+            "active" : 2,
+            "domain" : "agent-memory",
+            "historical" : 2,
+            "superseded" : 0,
+            "supersession_rate" : 0
+         },
+         {
+            "active" : 3,
+            "domain" : "architecture",
+            "historical" : 3,
+            "superseded" : 0,
+            "supersession_rate" : 0
+         },
+         {
+            "active" : 6,
+            "domain" : "build",
+            "historical" : 6,
+            "superseded" : 0,
+            "supersession_rate" : 0
+         },
+         {
+            "active" : 6,
+            "domain" : "code-quality",
+            "historical" : 6,
+            "superseded" : 0,
+            "supersession_rate" : 0
+         },
+         {
+            "active" : 2,
+            "domain" : "database",
+            "historical" : 2,
+            "superseded" : 0,
+            "supersession_rate" : 0
+         },
+         {
+            "active" : 7,
+            "domain" : "product",
+            "historical" : 7,
+            "superseded" : 0,
+            "supersession_rate" : 0
+         },
+         {
+            "active" : 3,
+            "domain" : "repo",
+            "historical" : 3,
+            "superseded" : 0,
+            "supersession_rate" : 0
+         },
+         {
+            "active" : 1,
+            "domain" : "roadmap",
+            "historical" : 1,
+            "superseded" : 0,
+            "supersession_rate" : 0
+         },
+         {
+            "active" : 5,
+            "domain" : "security",
+            "historical" : 5,
+            "superseded" : 0,
+            "supersession_rate" : 0
+         },
+         {
+            "active" : 1,
+            "domain" : "stack",
+            "historical" : 1,
+            "superseded" : 0,
+            "supersession_rate" : 0
+         },
+         {
+            "active" : 1,
+            "domain" : "style-genome",
+            "historical" : 1,
+            "superseded" : 0,
+            "supersession_rate" : 0
+         },
+         {
+            "active" : 1,
+            "domain" : "ux",
+            "historical" : 1,
+            "superseded" : 0,
+            "supersession_rate" : 0
+         }
+      ],
+      "task_history" : {
+         "active" : 7,
+         "historical" : 7,
+         "superseded" : 0,
+         "supersession_rate" : 0,
+         "survival_rate" : 1
+      }
+   },
+   "mode" : "greenfield",
+   "name" : "tenant-notes-api",
+   "phases" : [
+      {
+         "name" : "Contract and isolated persistence",
+         "number" : 1,
+         "tasks" : [
+            "GP-101",
+            "GP-102",
+            "GP-103"
+         ]
+      },
+      {
+         "name" : "Note CRUD and adversarial isolation",
+         "number" : 2,
+         "tasks" : [
+            "GP-201",
+            "GP-202",
+            "GP-203"
+         ]
+      },
+      {
+         "name" : "Verification",
+         "number" : 3,
+         "tasks" : [
+            "GP-301"
+         ]
+      }
+   ],
+   "plan_digest" : "sha256:a7a21f366124e70865204928efbaace90a3ede8e5e689f8ea33a9bf010c6982f",
+   "plan_version" : 1,
+   "product_form" : "api-or-service",
+   "progress" : {
+      "phases_done" : 0,
+      "phases_total" : 3,
+      "tasks_done" : 0,
+      "tasks_total" : 7
+   },
+   "public_release" : false,
+   "source_revision" : "none",
+   "status" : "planning",
+   "superseded_tasks" : [],
+   "tasks" : [
+      {
+         "acceptance" : "package scripts pin Node 22 and exact dependencies from D5; Biome, AST budgets, and strict TypeScript are the only quality tools; dependency intake records registry, publisher, downloads, license, and advisory evidence before install and produces a lockfile; ADR contains `Flip point:`, `Blast radius:`, and two rejected alternatives; loader, pillars, routing fixtures, root attributes, and Tier 1 inventory match the plan",
+         "depends_on" : [],
+         "done" : false,
+         "files" : "package.json, package-lock.json, tsconfig.json, biome.json, .npmrc, .editorconfig, .gitattributes, .gitignore, AGENTS.md, agents/context.md, agents/repo.md, agents/quality.md, CODEDNA.md, docs/adr/001-local-tenant-isolation.md, scripts/check-source-budgets.ts, scripts/check-dependencies.ts, scripts/hollow-check.ts, scripts/validate-pillars.mjs, tests/pillars-routing.json",
+         "id" : "GP-101",
+         "phase" : 1,
+         "requirements" : [
+            "R-1.4",
+            "R-PRD-1",
+            "R-PRD-2",
+            "R-PRD-8",
+            "R-PRD-11",
+            "R-PRD-15",
+            "R-STACK-1",
+            "R-STACK-4",
+            "R-STACK-8",
+            "R-STACK-12",
+            "R-STACK-14",
+            "R-CODE-1",
+            "R-CODE-5",
+            "R-CODE-6",
+            "R-CODE-17",
+            "R-DNA-1",
+            "R-DNA-14",
+            "R-DNA-16",
+            "R-DNA-18",
+            "R-MEM-1",
+            "R-MEM-2",
+            "R-MEM-5",
+            "R-MEM-16",
+            "R-MEM-18",
+            "R-MEM-21",
+            "R-REPO-1",
+            "R-REPO-3",
+            "R-REPO-4",
+            "R-REPO-10",
+            "R-REPO-11",
+            "R-REPO-14",
+            "R-REPO-17",
+            "R-REPO-18",
+            "R-REPO-20",
+            "R-BUILD-14"
+         ],
+         "reuses" : "D1 through D5, the glossary, the style genome, and the agent-memory contract in this plan",
+         "verify" : "`npm ci --ignore-scripts && npm run format:check && npm run lint && npm run typecheck && npm run pillars:check && npm run supply-chain`",
+         "wave" : "W1.1"
+      },
+      {
+         "acceptance" : "seed requires four generated token values, stores only hashes with eight-hour expiry, and documents rotate-by-reseed in README; each store contains one organization and two users with mode `0600`; all DDL CHECK, foreign-key child indexes, composite owner-organization integrity, and list index exist; migration up/down and duplicate-token startup failure are deterministic tests",
+         "depends_on" : [
+            "GP-101"
+         ],
+         "done" : false,
+         "files" : "config/identities.json, src/config.ts, src/db/migrations/0001-init.sql, src/db/migrate.ts, src/db/open-store.ts, src/db/seed.ts, tests/db.test.ts, tests/helpers/stores.ts",
+         "id" : "GP-102",
+         "phase" : 1,
+         "requirements" : [
+            "R-1.1",
+            "R-1.5",
+            "R-PRD-7",
+            "R-DB-1",
+            "R-DB-2",
+            "R-DB-5",
+            "R-DB-6",
+            "R-DB-8",
+            "R-DB-10",
+            "R-DB-17",
+            "R-DB-19",
+            "R-DB-22",
+            "R-SEC-8",
+            "R-SEC-12",
+            "R-SEC-13",
+            "R-BUILD-3"
+         ],
+         "reuses" : "physical tenant choice D1, token choice D2, and database invariants in `## Architecture`",
+         "verify" : "`npm test -- tests/db.test.ts`",
+         "wave" : "W1.1"
+      },
+      {
+         "acceptance" : "every protected route passes constant-time token verification and the failed-auth limiter; missing, expired, and invalid tokens return the documented Problem Details; POST plus GET persists and rereads one real note while rejecting identity fields and bodies above 16 KiB; generated `openapi.json` matches mounted routes and the phase-one smoke passes with external network calls disabled",
+         "depends_on" : [
+            "GP-102"
+         ],
+         "done" : false,
+         "files" : "src/app.ts, src/auth.ts, src/errors.ts, src/schemas.ts, src/routes/contract.ts, src/notes/repository.ts, src/notes/service.ts, src/notes/routes.ts, scripts/generate-openapi.ts, scripts/offline-smoke.ts, openapi.json, README.md, tests/auth.test.ts, tests/contract.test.ts, tests/phase1-smoke.test.ts",
+         "id" : "GP-103",
+         "phase" : 1,
+         "requirements" : [
+            "R-1.1",
+            "R-1.2",
+            "R-1.4",
+            "R-PRD-3",
+            "R-PRD-4",
+            "R-PRD-5",
+            "R-PRD-6",
+            "R-PRD-10",
+            "R-PRD-13",
+            "R-ARCH-13",
+            "R-ARCH-20",
+            "R-SEC-1",
+            "R-SEC-3",
+            "R-SEC-4",
+            "R-SEC-5",
+            "R-SEC-13",
+            "R-SEC-16",
+            "R-SEC-19",
+            "R-SEC-24",
+            "R-UX-1",
+            "R-UX-2",
+            "R-UX-6",
+            "R-UX-7",
+            "R-UX-20",
+            "R-CODE-2",
+            "R-CODE-8",
+            "R-CODE-9",
+            "R-CODE-10",
+            "R-CODE-12",
+            "R-BUILD-4",
+            "R-BUILD-5",
+            "R-BUILD-10",
+            "R-BUILD-13"
+         ],
+         "reuses" : "canonical endpoint shape, D2 bearer lookup, D3 versioning, D4 envelope, and GP-102 store opener",
+         "verify" : "`npm run contract:check && npm test -- tests/auth.test.ts tests/contract.test.ts tests/phase1-smoke.test.ts && npm run smoke:offline -- --phase1`",
+         "wave" : "W1.1"
+      },
+      {
+         "acceptance" : "POST, list, GET, PATCH, and DELETE return the statuses and DTOs in `openapi.json`; owner and organization are derived and immutable; every load and mutation includes organization id in prepared SQL; cursor pagination is stable and same-organization peers can read and update while owner remains the creator; contract and README examples change in the same task",
+         "depends_on" : [
+            "GP-103"
+         ],
+         "done" : false,
+         "files" : "src/notes/repository.ts, src/notes/service.ts, src/notes/routes.ts, src/notes/cursor.ts, openapi.json, README.md, tests/notes-crud.test.ts",
+         "id" : "GP-201",
+         "phase" : 2,
+         "requirements" : [
+            "R-1.2",
+            "R-1.6",
+            "R-PRD-6",
+            "R-ARCH-5",
+            "R-ARCH-6",
+            "R-DB-10",
+            "R-DB-12",
+            "R-DB-14",
+            "R-SEC-3",
+            "R-SEC-4",
+            "R-CODE-3",
+            "R-CODE-8",
+            "R-CODE-9",
+            "R-CODE-10",
+            "R-CODE-14",
+            "R-CODE-15",
+            "R-CODE-18",
+            "R-BUILD-4",
+            "R-BUILD-5",
+            "R-BUILD-10",
+            "R-BUILD-13",
+            "R-BUILD-16"
+         ],
+         "reuses" : "canonical route shape from GP-103, prepared store access from GP-102, root error mapping, injected clock, and injected id source",
+         "verify" : "`npm test -- tests/notes-crud.test.ts && npm run contract:check && npm run hollow:check`",
+         "wave" : "W2.1"
+      },
+      {
+         "acceptance" : "the five exact cases in `## Trust boundaries and threat model` execute through HTTP injection; patch and delete denial each re-read B's note and assert every original field; restart closes all connections, reconstructs the app from the same directory, and rereads the same public note; tests perform no external network call and pass in either file order",
+         "depends_on" : [
+            "GP-201"
+         ],
+         "done" : false,
+         "files" : "tests/tenant-isolation.test.ts, tests/restart.test.ts, tests/helpers/fakes.ts",
+         "id" : "GP-202",
+         "phase" : 2,
+         "requirements" : [
+            "R-1.3",
+            "R-1.5",
+            "R-PRD-9",
+            "R-SEC-3",
+            "R-SEC-25",
+            "R-CODE-8",
+            "R-CODE-10",
+            "R-CODE-24",
+            "R-BUILD-13"
+         ],
+         "reuses" : "mounted app fixture, deterministic clock and UUID source, and GP-201 public HTTP routes",
+         "verify" : "`npm test -- tests/tenant-isolation.test.ts tests/restart.test.ts`",
+         "wave" : "W2.1"
+      },
+      {
+         "acceptance" : "`/healthz` returns 503 Problem Details when either store cannot answer `SELECT 1`; API responses carry no-store and nosniff with no wildcard CORS, and 31 failed auth attempts from one IP produce 429 Problem Details; security logs redact credentials and content, then emit a local spike event at 10 denials per minute; locked install, high-advisory audit, CycloneDX SBOM, and tracked-secret scan pass; README reaches token generation, seed, start, CRUD, and `npm run verify` in at most five Quick Start commands",
+         "depends_on" : [
+            "GP-202"
+         ],
+         "done" : false,
+         "files" : "src/health.ts, src/logger.ts, src/security-headers.ts, README.md, docs/runbook.md, artifacts/sbom.cdx.json, scripts/scan-secrets.ts, tests/health.test.ts, tests/logging.test.ts, tests/hardening.test.ts",
+         "id" : "GP-203",
+         "phase" : 2,
+         "requirements" : [
+            "R-1.7",
+            "R-PRD-7",
+            "R-SEC-12",
+            "R-SEC-13",
+            "R-SEC-15",
+            "R-SEC-16",
+            "R-SEC-17",
+            "R-SEC-20",
+            "R-SEC-24",
+            "R-CODE-17",
+            "R-CODE-18",
+            "R-CODE-19",
+            "R-CODE-20",
+            "R-REPO-7",
+            "R-REPO-16",
+            "R-REPO-19",
+            "R-REPO-21",
+            "R-BUILD-15"
+         ],
+         "reuses" : "D5 local process, GP-102 store checks, GP-103 root logger, and GP-201 CRUD fixture",
+         "verify" : "`npm test -- tests/health.test.ts tests/logging.test.ts tests/hardening.test.ts && npm run supply-chain && npm run secrets:check && npm run smoke:offline`",
+         "wave" : "W2.1"
+      },
+      {
+         "acceptance" : "format, AST budgets, strict typecheck, build, contract, supply-chain, secret, Pillars, unit, integration, and end-to-end checks all pass twice; offline smoke succeeds with external network calls disabled; hollow scan finds no unowned marker, placeholder route, raw console log, identity field binding, or direct SQL in route files; runtime components, single writers, and tenant boundaries match `## Architecture`",
+         "depends_on" : [
+            "GP-203"
+         ],
+         "done" : false,
+         "files" : "none",
+         "id" : "GP-301",
+         "phase" : 3,
+         "requirements" : [
+            "R-1.1",
+            "R-1.2",
+            "R-1.3",
+            "R-1.4",
+            "R-1.5",
+            "R-1.6",
+            "R-1.7",
+            "R-PRD-5",
+            "R-PRD-9",
+            "R-ARCH-17",
+            "R-CODE-7",
+            "R-CODE-21",
+            "R-CODE-22",
+            "R-CODE-24",
+            "R-MEM-16",
+            "R-MEM-17",
+            "R-MEM-22",
+            "R-REPO-3",
+            "R-REPO-14",
+            "R-REPO-17",
+            "R-REPO-19",
+            "R-REPO-20",
+            "R-ROAD-15",
+            "R-ROAD-17",
+            "R-ROAD-20"
+         ],
+         "reuses" : "every local check, test fixture, contract generator, offline smoke, and phase checkpoint",
+         "verify" : "`npm run verify && npm run verify`",
+         "wave" : "W3.1"
+      }
+   ],
+   "updated" : "2026-07-23",
+   "validated_at" : "2026-07-23T05:04:00Z"
+}

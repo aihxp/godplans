@@ -1,0 +1,191 @@
+
+> tenant-notes-api@1.0.0 test
+> node --experimental-strip-types --test tests/*.test.ts
+
+TAP version 13
+# (node:59897) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: bearer authentication
+    # Subtest: returns the same Problem Details shape for missing and invalid tokens
+    ok 1 - returns the same Problem Details shape for missing and invalid tokens
+      ---
+      duration_ms: 25.685125
+      type: 'test'
+      ...
+    # Subtest: derives the owner and organization from a valid token
+    ok 2 - derives the owner and organization from a valid token
+      ---
+      duration_ms: 14.037
+      type: 'test'
+      ...
+    # Subtest: rejects an expired token with the generic authentication response
+    ok 3 - rejects an expired token with the generic authentication response
+      ---
+      duration_ms: 17.996125
+      type: 'test'
+      ...
+    # Subtest: throttles the thirty-first failed attempt and emits one spike event
+    ok 4 - throttles the thirty-first failed attempt and emits one spike event
+      ---
+      duration_ms: 22.329042
+      type: 'test'
+      ...
+    1..4
+ok 1 - bearer authentication
+  ---
+  duration_ms: 80.64725
+  type: 'suite'
+  ...
+# (node:59898) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: HTTP contract
+    # Subtest: matches the committed OpenAPI document
+    ok 1 - matches the committed OpenAPI document
+      ---
+      duration_ms: 1.167875
+      type: 'test'
+      ...
+    # Subtest: rejects identity injection and unknown fields
+    ok 2 - rejects identity injection and unknown fields
+      ---
+      duration_ms: 20.810083
+      type: 'test'
+      ...
+    # Subtest: sets private-response headers without wildcard CORS
+    ok 3 - sets private-response headers without wildcard CORS
+      ---
+      duration_ms: 12.9185
+      type: 'test'
+      ...
+    1..3
+ok 2 - HTTP contract
+  ---
+  duration_ms: 35.39325
+  type: 'suite'
+  ...
+# (node:59899) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: tenant stores
+    # Subtest: create two constrained mode-0600 stores with two users each
+    ok 1 - create two constrained mode-0600 stores with two users each
+      ---
+      duration_ms: 18.783
+      type: 'test'
+      ...
+    # Subtest: rejects duplicate tokens before modifying stores
+    ok 2 - rejects duplicate tokens before modifying stores
+      ---
+      duration_ms: 12.678417
+      type: 'test'
+      ...
+    # Subtest: fails application startup when a token hash appears in both stores
+    ok 3 - fails application startup when a token hash appears in both stores
+      ---
+      duration_ms: 19.174083
+      type: 'test'
+      ...
+    1..3
+ok 3 - tenant stores
+  ---
+  duration_ms: 51.252
+  type: 'suite'
+  ...
+# (node:59900) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: note CRUD
+    # Subtest: creates, reads, peer-updates, lists, and deletes a note
+    ok 1 - creates, reads, peer-updates, lists, and deletes a note
+      ---
+      duration_ms: 24.441042
+      type: 'test'
+      ...
+    # Subtest: paginates in stable descending creation and id order
+    ok 2 - paginates in stable descending creation and id order
+      ---
+      duration_ms: 23.316375
+      type: 'test'
+      ...
+    1..2
+ok 4 - note CRUD
+  ---
+  duration_ms: 48.275917
+  type: 'suite'
+  ...
+# (node:59901) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: restart and local operations
+    # Subtest: retains a note when the application is reconstructed
+    ok 1 - retains a note when the application is reconstructed
+      ---
+      duration_ms: 22.851709
+      type: 'test'
+      ...
+    # Subtest: reports health only when both configured stores answer
+    ok 2 - reports health only when both configured stores answer
+      ---
+      duration_ms: 13.821833
+      type: 'test'
+      ...
+    # Subtest: logs mutation context without token or note content
+    ok 3 - logs mutation context without token or note content
+      ---
+      duration_ms: 22.091334
+      type: 'test'
+      ...
+    1..3
+ok 5 - restart and local operations
+  ---
+  duration_ms: 59.581416
+  type: 'suite'
+  ...
+# (node:59902) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: known-id tenant isolation
+    # Subtest: omits organization B's note from organization A's list
+    ok 1 - omits organization B's note from organization A's list
+      ---
+      duration_ms: 24.878208
+      type: 'test'
+      ...
+    # Subtest: returns indistinguishable 404 for a known cross-organization id
+    ok 2 - returns indistinguishable 404 for a known cross-organization id
+      ---
+      duration_ms: 16.413666
+      type: 'test'
+      ...
+    # Subtest: denies known-id patch and preserves every organization B field
+    ok 3 - denies known-id patch and preserves every organization B field
+      ---
+      duration_ms: 21.570083
+      type: 'test'
+      ...
+    # Subtest: denies known-id delete and preserves every organization B field
+    ok 4 - denies known-id delete and preserves every organization B field
+      ---
+      duration_ms: 16.06175
+      type: 'test'
+      ...
+    # Subtest: rejects owner and organization injection without creating a note
+    ok 5 - rejects owner and organization injection without creating a note
+      ---
+      duration_ms: 8.112584
+      type: 'test'
+      ...
+    1..5
+ok 6 - known-id tenant isolation
+  ---
+  duration_ms: 87.906417
+  type: 'suite'
+  ...
+1..6
+# tests 20
+# suites 6
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 223.210666
+
+> tenant-notes-api@1.0.0 lint
+> node scripts/check-source-budgets.mjs
