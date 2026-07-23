@@ -21,7 +21,10 @@ produce the right kind of plan for a concrete request?
 
 Every case contains:
 
-- `REQUEST.md`: the user request and any case-specific setup.
+- `REQUEST.md`: the user request and any case-specific setup, phrased for the
+  skill arm (it names godplans and asks for the `.godplans/` artifact set).
+- `REQUEST.baseline.md`: the same task and constraints de-branded for the
+  control arm, with no skill name, no `.godplans/` path, and no format demands.
 - `EXPECTATIONS`: deterministic assertions over the response or PLAN.mdx.
 - Optional `INPUT/`: a repository state the runner must copy into its isolated
   workspace before invoking the skill.
@@ -106,16 +109,25 @@ ends with an `AGGREGATE` row totaling both arms. The control arm is a
 measurement and never a gate: its misses are the point, so they are not
 reported as failures and cannot change the exit code.
 
-A control arm only means something if it is fair. `codex-baseline.sh` holds
-the agent, model, reasoning effort, workspace, `INPUT/` fixture, and
-`REQUEST.md` identical to the skill arm, asks plainly for a thorough plan so
-the control has a real chance at every scored dimension, leaks nothing from
-the skill (no format contract, requirement IDs, validator, or phase method),
-and accepts a plan written at any plausible path. A control that is denied a
-fair attempt at a dimension it is scored on measures the rigging, not the
-skill. When the control produces no plan at all, its final response is scored
-instead and the assertions fail honestly rather than being hidden as a runner
-error.
+A control arm only means something if it is fair, and the case `REQUEST.md`
+files are not fair to it: they are written for the skill arm and say "Use
+godplans" and "produce the godplans artifact set under `.godplans/`". Handing
+that to a skill-less agent tells it to use a tool it does not have; in
+practice the agent spends its whole turn searching for the skill's format and
+writes nothing, so the delta measures "skill installed vs skill named but
+absent" rather than the skill's value. Each case therefore ships a
+`REQUEST.baseline.md`: the same task and constraints, de-branded, asking for a
+plan at a neutral path. `codex-baseline.sh` reads it in place of `REQUEST.md`,
+holds the agent, model, reasoning effort, workspace, and `INPUT/` fixture
+identical to the skill arm, and leaks nothing from the skill (no godplans name,
+no `.godplans` path, no format contract, requirement IDs, validator, or phase
+method). `scripts/eval.sh --check-cases` rejects a `REQUEST.baseline.md` that
+names the skill, and `RUNNER.txt` records `prompt=neutral-baseline-request` so
+a published run proves the control was fair. If a case lacks a baseline
+request the runner warns and falls back to the skill-phrased `REQUEST.md`, and
+that run is explicitly not a fair comparison. When the control produces no
+plan at all, its final response is scored instead and the assertions fail
+honestly rather than being hidden as a runner error.
 
 Expect the control to win some assertions outright. Any case where it scores
 near the skill arm is a case whose expectations test formatting rather than

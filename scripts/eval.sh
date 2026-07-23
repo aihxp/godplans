@@ -181,6 +181,14 @@ while IFS= read -r dir; do
   if [ "$expected_outcome" = "plan" ] && grep -Eiq 'PLAN[.]mdx[^[:alnum:]]+only' "$dir/REQUEST.md"; then
     die "plan case contradicts the required validator companion: $dir"
   fi
+  # The neutral control request must not leak the skill it is meant to omit.
+  # A REQUEST.baseline.md that names godplans, the .godplans path, or the
+  # validator companion would hand the control the very format the delta is
+  # supposed to measure, so reject it here rather than at run time.
+  if [ -f "$dir/REQUEST.baseline.md" ] &&
+     grep -Eiq 'godplans|\.godplans|SKILL\.md|validator companion|PLAN\.mdx' "$dir/REQUEST.baseline.md"; then
+    die "REQUEST.baseline.md leaks the skill (godplans/.godplans/PLAN.mdx/validator): $dir"
+  fi
 done < "$CASE_LIST"
 
 if [ "$CHECK_ONLY" -eq 1 ]; then

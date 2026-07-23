@@ -4,11 +4,18 @@
 #
 # Fairness rules, because a rigged control proves nothing:
 #   - identical agent, model, reasoning effort, workspace, and INPUT fixture
-#   - identical REQUEST.md, unmodified
-#   - the task is stated plainly and asks for a thorough plan, so the baseline
-#     has a real chance at every dimension it is scored on
-#   - nothing from the skill leaks in: no format contract, no requirement IDs,
-#     no validator, no phase method, no vocabulary from PLAN.mdx
+#   - a NEUTRAL request. The case REQUEST.md is written for the skill arm: it
+#     says "Use godplans" and "produce the godplans artifact set under
+#     .godplans/". Handing that to a skill-less agent is not a fair control;
+#     it tells the agent to use a tool it does not have, and in practice the
+#     agent burns its whole turn web-searching for the skill's format and
+#     writes nothing. So the control reads REQUEST.baseline.md when present:
+#     the same task and constraints, de-branded, asking for a plan at a
+#     neutral path. If no baseline request exists, the runner warns and falls
+#     back to REQUEST.md, and that run is not a fair comparison.
+#   - nothing from the skill leaks in: no godplans name, no .godplans path, no
+#     format contract, requirement IDs, validator, phase method, or PLAN.mdx
+#     vocabulary in the preamble
 #   - a missing plan is scored as zero, never hidden as a runner error
 
 set -euo pipefail
@@ -66,12 +73,18 @@ fi
 # No .agents/skills link: that absence is the whole point of this arm.
 mkdir -p "$OUTPUT_DIR"
 
+REQUEST_BASELINE="$CASE_DIR/REQUEST.baseline.md"
+if [ -f "$REQUEST_BASELINE" ]; then
+  PROMPT_SOURCE="$REQUEST_BASELINE"
+else
+  PROMPT_SOURCE="$REQUEST"
+  echo "warning: no REQUEST.baseline.md for $(basename "$CASE_DIR"); the control is running a godplans-phrased request and is NOT a fair comparison" >&2
+fi
+
 set +e
 {
-  printf '%s\n' 'Write a thorough implementation plan for the following request.'
-  printf '%s\n' 'Work entirely inside the current workspace. Do not implement application code.'
-  printf '%s\n\n' 'Write the plan to .godplans/PLAN.mdx. If you decline the request, explain why in your final response and do not write a plan.'
-  sed -n '1,$p' "$REQUEST"
+  printf '%s\n\n' 'Work entirely inside the current workspace. Do not implement application code. Complete the following task.'
+  sed -n '1,$p' "$PROMPT_SOURCE"
 } | HOME="$ISO_HOME" CODEX_HOME="$ISO_CODEX_HOME" codex "${CODEX_ARGS[@]}" - >/dev/null 2>"$CODEX_LOG"
 CODEX_STATUS=$?
 set -e
@@ -80,10 +93,16 @@ if [ "$CODEX_STATUS" -ne 0 ]; then
   exit "$CODEX_STATUS"
 fi
 
+if [ "$PROMPT_SOURCE" = "$REQUEST_BASELINE" ]; then
+  prompt_kind="neutral-baseline-request"
+else
+  prompt_kind="fallback-skill-phrased-request-UNFAIR"
+fi
 printf '%s\n' \
   "runner=codex-baseline" \
   "arm=baseline-no-skill" \
   "global_skills=isolated" \
+  "prompt=$prompt_kind" \
   "codex_version=$(codex --version)" \
   "model=$CODEX_MODEL" \
   "reasoning_effort=$CODEX_EFFORT" \

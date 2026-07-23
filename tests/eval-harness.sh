@@ -32,6 +32,24 @@ if grep -q 'ln -s' "$ROOT/evals/runners/codex-baseline.sh"; then
   fail "baseline runner links a skill into its workspace"
 fi
 
+# Neutral control request. The baseline runner must prefer REQUEST.baseline.md
+# and must not hand the control the skill's own output path.
+grep -q 'REQUEST.baseline.md' "$ROOT/evals/runners/codex-baseline.sh" \
+  || fail "baseline runner does not prefer REQUEST.baseline.md"
+# The prompt handed to the control (the printf preamble lines) must not name
+# the skill's output path. The candidate-search loop may still accept a plan
+# the control happens to write to .godplans/, so scope this to printf lines.
+if grep -E "printf.*\.godplans" "$ROOT/evals/runners/codex-baseline.sh"; then
+  fail "baseline runner names a .godplans path in the prompt handed to the control"
+fi
+for case_dir in "$ROOT"/evals/cases/*/; do
+  base_request="$case_dir/REQUEST.baseline.md"
+  [ -f "$base_request" ] || fail "case $(basename "$case_dir") is missing REQUEST.baseline.md for the control arm"
+  if grep -Eiq 'godplans|\.godplans|SKILL\.md|PLAN\.mdx|validator companion' "$base_request"; then
+    fail "REQUEST.baseline.md leaks the skill in $(basename "$case_dir")"
+  fi
+done
+
 help_output=$("$ROOT/scripts/eval.sh" --help)
 printf '%s\n' "$help_output" | grep -q '^Usage:' || fail "help is missing a Usage line"
 if printf '%s\n' "$help_output" | grep -q 'set -euo pipefail'; then
