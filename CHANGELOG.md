@@ -3,6 +3,31 @@
 All notable changes to godplans are documented here. The format follows
 Keep a Changelog; versioning follows SemVer.
 
+## Unreleased
+
+Evaluation harness only. No change to the skill, the emitted plan, or any
+published version surface.
+
+### Fixed
+
+- The control arm (`scripts/eval.sh --baseline`, introduced in 1.8.0) was
+  contaminated. It withheld the project-local skill but not the global one, so
+  on a machine with godplans installed the control loaded the skill anyway and
+  measured godplans against itself. Both Codex runners now isolate `HOME` and
+  `CODEX_HOME`, so no globally installed skill leaks into either arm.
+- The control was also handed the skill-phrased `REQUEST.md` ("Use godplans...
+  produce the godplans artifact set"), which told a skill-less agent to use a
+  tool it did not have; in practice it spent its turn searching for the format
+  and wrote nothing. Each case now ships a de-branded `REQUEST.baseline.md`
+  that the control runs instead, and `--check-cases` plus the harness
+  regression reject a baseline request that leaks the skill.
+
+### Added
+
+- `evals/baselines/2026-07-22-gpt-5.6-sol-xhigh.md`: the first fair baseline.
+  `gpt-5.6-sol` at xhigh across a three-case subset, skill 35/35, unaided
+  control 12/35, delta +23, with the honest per-case breakdown.
+
 ## [1.8.0] - 2026-07-22
 
 Two defects fixed and one measurement gap closed, all prompted by reading

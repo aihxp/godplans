@@ -85,7 +85,31 @@ GODPLANS_EVAL_RUNNER="$PWD/evals/runners/codex.sh" npm run eval
 bash scripts/eval.sh --score-only
 ```
 
-Model-backed results are release evidence, not a blanket guarantee. The raw outputs, agent and model identifier, validator version, and source commit belong together in any published baseline.
+Conformance is not value. Passing the matrix proves the skill did what it
+promised; it does not prove the promise was worth loading. The control arm
+answers that: `scripts/eval.sh --baseline` runs each case a second time through
+the same agent and model with no skill loaded, on a neutral request, and
+reports the delta. Both arms isolate `HOME` and `CODEX_HOME` so a globally
+installed skill cannot leak into either, and the control reads a de-branded
+`REQUEST.baseline.md` so it is never told to use a skill it does not have.
+
+```bash
+GODPLANS_EVAL_RUNNER="$PWD/evals/runners/codex.sh" \
+GODPLANS_EVAL_BASELINE_RUNNER="$PWD/evals/runners/codex-baseline.sh" \
+bash scripts/eval.sh --baseline
+```
+
+The first published baseline (`gpt-5.6-sol` at xhigh, godplans 1.8.0, a
+three-case subset) is recorded under `evals/baselines/`: skill 35/35, unaided
+control 12/35, delta +23, with the delta concentrated in the validator-passing
+plan, machine-readable provenance, and the explicit domain applicability matrix
+that a strong unaided agent does not produce. On the refusal case the delta is
++1, because a capable aligned model refuses a prohibited project on its own;
+that small delta is the honesty check on the measurement. Model-backed results
+are release evidence, not a blanket guarantee. The raw outputs, agent and model
+identifier, validator version, and source commit belong together in any
+published baseline, and a skill score is never published without the control
+score beside it.
 
 ```mermaid
 graph TD
