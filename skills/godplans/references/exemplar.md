@@ -14,7 +14,7 @@ database with a rich ecosystem and strong community support. It scales
 well and supports our needs.
 ```
 
-Every clause substitutes cleanly ("We will use MySQL because it is a robust, battle-tested..."). Nothing was decided; a vibe was transcribed.
+Every clause substitutes cleanly ("We will use MySQL because it is a robust, battle-tested..."). Nothing was decided; a vibe was transcribed. It also carries no falsifier: nothing in it could ever be wrong, so nothing in it could ever be a bet.
 
 **This is the bar:**
 
@@ -28,6 +28,10 @@ the weekend deploy budget), SQLite (two-region read replicas are a
 stated requirement, R-1.4).
 Hard-to-reverse because: every query, index, and the RLS policy set
 assume the tenancy column; reversing at scale is a full data migration.
+Falsifier:
+- Signal: p95 read latency on the largest workspace and active workspace count
+- Failure boundary: p95 exceeds 250 ms for seven days, or active workspaces exceed 5,000 before Phase 5
+- Replan action: return to planning and evaluate the rejected schema-per-tenant migration
 Hypothesis flagged: Neon cold-start latency under 500ms on the free
 tier is acceptable for the beta. Validation: GP-105 measures p95
 connect latency; if over 500ms, move to a warm instance before Phase 3.
@@ -118,7 +122,7 @@ keys).
 
 1. Name the thing (real files, real numbers, real commands), never the category of the thing.
 2. Show the rejected alternatives; a decision without a loser is a description.
-3. Make failure detectable: every claim carries the check that would catch its violation.
+3. Make failure detectable: every claim carries the check that would catch its violation, and every hard-to-reverse bet carries the falsifier that would kill it.
 4. Flag what is guessed, and attach the task that turns the guess into knowledge.
 
-Score any plan fragment against these four. A fragment that names nothing, rejects nothing, checks nothing, and flags nothing scores zero, no matter how professional it reads.
+Score any plan fragment against these four. A fragment that names nothing, rejects nothing, checks nothing, and flags nothing scores zero, no matter how professional it reads. A hard-to-reverse decision with no falsifier has decided nothing either: a bet you cannot lose is not a bet, it is a posture.

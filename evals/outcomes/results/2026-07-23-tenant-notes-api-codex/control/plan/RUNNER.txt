@@ -1,0 +1,13 @@
+runner=codex-baseline
+arm=baseline-no-skill
+global_skills=isolated
+prompt=neutral-baseline-request
+codex_version=codex-cli 0.145.0
+model=configured-default
+resolved_model=gpt-5.6-sol
+reasoning_effort=configured-default
+usage_source=cli-json
+input_tokens=152557
+cached_input_tokens=114432
+output_tokens=10259
+total_tokens=162816

@@ -24,6 +24,7 @@
 #   official-validator  runs skills-ref when installed, otherwise skips.
 #   tag-release-parity  verifies published tags against package versions and releases.
 #   prompt-fresh         PROMPT.md matches build-prompt.sh without mutation.
+#   context-metrics      published prompt and module cost metrics are current.
 #
 # Usage: bash scripts/lint.sh [check-name | --all] [--verbose]
 # Bash 3.2 compatible (macOS default).
@@ -50,6 +51,9 @@ authored_files() {
     -path "$REPO_DIR/node_modules" -prune -o \
     -path "$REPO_DIR/.venv-skills-ref" -prune -o \
     -path "$REPO_DIR/evals/output" -prune -o \
+    -path "$REPO_DIR/evals/results" -prune -o \
+    -path "$REPO_DIR/evals/external/results" -prune -o \
+    -path "$REPO_DIR/evals/outcomes/results" -prune -o \
     -type f \( -name '*.md' -o -name '*.mdx' -o -name '*.sh' -o -name '*.js' -o -name '*.json' -o -name '*.yml' -o -name 'EXPECTATIONS' -o -name '.gitignore' -o -name 'LICENSE' \) -print
 }
 
@@ -174,7 +178,15 @@ check_json_valid() {
   command -v node >/dev/null 2>&1 || { fail "node not found; cannot parse JSON"; return; }
   bad=0
   file_list=$(mktemp)
-  find "$REPO_DIR" -path "$REPO_DIR/.git" -prune -o -path "$REPO_DIR/node_modules" -prune -o -path "$REPO_DIR/.venv-skills-ref" -prune -o -path "$REPO_DIR/evals/output" -prune -o -type f -name '*.json' -print > "$file_list"
+  find "$REPO_DIR" \
+    -path "$REPO_DIR/.git" -prune -o \
+    -path "$REPO_DIR/node_modules" -prune -o \
+    -path "$REPO_DIR/.venv-skills-ref" -prune -o \
+    -path "$REPO_DIR/evals/output" -prune -o \
+    -path "$REPO_DIR/evals/results" -prune -o \
+    -path "$REPO_DIR/evals/external/results" -prune -o \
+    -path "$REPO_DIR/evals/outcomes/results" -prune -o \
+    -type f -name '*.json' -print > "$file_list"
   while IFS= read -r f; do
     if ! node -e 'JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"))' "$f" 2>/dev/null; then
       fail "invalid JSON: ${f#$REPO_DIR/}"
@@ -216,7 +228,12 @@ check_product_surfaces() {
   bad=0
   for f in \
     "$SKILL_DIR/scripts/validate-plan.sh" \
+    "$SKILL_DIR/scripts/plan-halflife.sh" \
     "$REPO_DIR/scripts/eval.sh" \
+    "$REPO_DIR/scripts/eval-matrix.sh" \
+    "$REPO_DIR/scripts/eval-external.js" \
+    "$REPO_DIR/scripts/eval-outcome.js" \
+    "$REPO_DIR/scripts/outcome-summary.js" \
     "$REPO_DIR/scripts/release-check.sh" \
     "$REPO_DIR/evals/runners/codex.sh" \
     "$REPO_DIR/tests/run.sh"
@@ -227,6 +244,15 @@ check_product_surfaces() {
     fi
   done
   [ "$bad" = "0" ] && pass
+}
+
+check_context_metrics() {
+  CHECK=context-metrics
+  if node "$REPO_DIR/scripts/context-metrics.js" --check >/dev/null; then
+    pass
+  else
+    fail "evals/metrics/context-cost.json is stale"
+  fi
 }
 
 check_action_pins() {
@@ -325,6 +351,7 @@ case "$TARGET" in
     check_action_pins
     check_official_validator
     check_prompt_fresh
+    check_context_metrics
     ;;
   unicode-clean) check_unicode_clean ;;
   version-parity|frontmatter-version) check_version_parity ;;
@@ -341,6 +368,7 @@ case "$TARGET" in
   official-validator) check_official_validator ;;
   tag-release-parity) check_tag_release_parity ;;
   prompt-fresh) check_prompt_fresh ;;
+  context-metrics) check_context_metrics ;;
   *) echo "Unknown check: $TARGET" >&2; exit 1 ;;
 esac
 

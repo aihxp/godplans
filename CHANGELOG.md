@@ -3,10 +3,12 @@
 All notable changes to godplans are documented here. The format follows
 Keep a Changelog; versioning follows SemVer.
 
-## Unreleased
+## [1.9.0] - 2026-07-23
 
-Evaluation harness only. No change to the skill, the emitted plan, or any
-published version surface.
+This release turns the evidence critique into product contracts and publishes
+the first direct build-outcome result. The harnesses run through already
+authenticated host tools; the skill and evaluation coordinator require no
+provider credentials.
 
 ### Fixed
 
@@ -27,6 +29,46 @@ published version surface.
 - `evals/baselines/2026-07-22-gpt-5.6-sol-xhigh.md`: the first fair baseline.
   `gpt-5.6-sol` at xhigh across a three-case subset, skill 35/35, unaided
   control 12/35, delta +23, with the honest per-case breakdown.
+- A full-matrix runner for all ten cases across three host-model profiles,
+  including Codex, Claude, and Gemini adapters, with matched no-skill controls,
+  raw artifact retention, CLI event logs, and actual token usage per plan. The
+  adapters reuse normal host CLI authentication. The historical three-case
+  baseline is retained but no longer meets the publication minimum.
+- A blind external grading harness with six vendor-neutral criteria, at least
+  five plan pairs, at least two isolated no-skill judges, arm unblinding only
+  after grading, and a published mean absolute inter-rater gap.
+- A build-outcome evaluation that gives treatment and control plans to the same
+  fresh no-skill builder, removes plan and arm identity, runs the same static
+  godaudits pass on both built repositories, and compares verifier status plus
+  open Critical and High findings.
+- The first retained build-outcome run, using `gpt-5.6-sol` on
+  `tenant-notes-api`. Both arms passed the verifier. Treatment had 0 Critical
+  and 1 High finding; control had 1 Critical and 4 High findings, for a -4
+  Critical plus High delta. The same evidence publishes the cost:
+  11,236,025 cumulative treatment planning tokens versus 162,816 for control,
+  including cached input.
+- Generated `.godplans/PLAN.json` sidecars with a PLAN.mdx content digest,
+  applicability rows, structured decision falsifiers, active and superseded
+  tasks, dependencies, requirement arrays, and cumulative supersession metrics.
+- `scripts/plan-halflife.sh`, which publishes overall and per-domain task
+  survival and supersession rates before a replan changes the evidence.
+- `--drift-check N` on the portable validator. At each phase boundary it
+  recomputes marked provenance files, reruns a deterministic sample of up to
+  three completed task Verify commands, and reruns the phase checkpoint.
+
+### Changed
+
+- Planning depth is incremental. SEO, launch, observability, UI, and deployment
+  may defer only with an observable trigger and a reversibility argument.
+  Product shape, architecture, stack, data, security, UX, code quality, style,
+  agent memory, repository, build, and roadmap never defer.
+- Every `D<n>` decision now has a machine-checked falsifier block with Signal,
+  Failure boundary, and Replan action fields. The action must explicitly return
+  the plan to planning.
+- `PROMPT.md` is a measured slim core containing discovery, plan format, five
+  load-bearing modules, the exemplar, template, validator, and half-life script.
+  Other domain modules stay lazy. `evals/metrics/context-cost.json` publishes
+  core, generated-full, native-entry, and per-module byte and token estimates.
 
 ## [1.8.0] - 2026-07-22
 

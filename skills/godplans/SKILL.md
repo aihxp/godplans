@@ -3,7 +3,7 @@ name: godplans
 description: "Produce an audit-aware, agent-executable master plan (PLAN.mdx) for a software project before application code is written. One command runs discovery, forces hard-to-reverse decisions, and plans product, architecture, roadmap, stack, repo, build, deploy, observability, launch, security, code quality, style genome, database, LLM integration, SEO, UI, UX, and agent memory upfront. After-the-fact audit checks become plan-time acceptance criteria, and a self-contained validator enforces task structure and approval state. Use when the user says: plan this project, godplans, master plan, plan everything upfront, idea to plan, plan before code, audit-aware plan, replan, or starts a greenfield project or major feature. Refuses plan theater (sections filled, decisions absent), vague tasks without verification, unsupported quality guarantees, and projects whose core purpose violates the Anthropic Usage Policy."
 license: MIT
 metadata:
-  version: "1.8.0"
+  version: "1.9.0"
   author: aihxp
   homepage: https://github.com/hannsxpeter/godplans
 ---
@@ -24,7 +24,7 @@ godplans descends from: hannsxpeter/arc-ready and hannsxpeter/ready-suite (the t
 2. **Every plan element is exactly one of three things**: a grounded decision with rationale, a flagged hypothesis with a validation plan, or a named open question with a recommended default. Anything that is none of the three is theater; rewrite or delete it.
 3. **The substitution test.** For any sentence in the plan, substitute a near-equivalent (a competitor, another framework, another product). If it still reads plausibly, it decides nothing specific and fails. Cut it or make it specific.
 4. **Standalone-plan rule.** No revision language, no chat-context dependencies. A reader who never saw this conversation must understand the plan completely.
-5. **Decide the hard-to-reverse bets first.** Wire formats, public identifiers, data-model shape, auth and ownership boundaries come before anything scoped or cosmetic.
+5. **Decide the hard-to-reverse bets first.** Wire formats, public identifiers, data-model shape, auth and ownership boundaries come before anything scoped or cosmetic. Every hard-to-reverse decision carries a `Falsifier:` block with `Signal`, `Failure boundary`, and `Replan action` fields. The block names what is observed, the event or measurement that proves the decision wrong, and the concrete return-to-planning action. A bet you cannot lose is not a bet.
 6. **Reuse-first.** Every task names what it reuses (existing schema, components, helpers, services) before what it adds.
 7. **Never pad, never stub.** No single-step plans, no filler sections, no placeholder content. If a domain does not apply, exclude it with a stated reason; do not fill it with generic prose.
 8. **Read the module before authoring.** Each domain has a reference module under `references/`. Read it at the moment you author that plan section. Do not author from memory; the modules carry the inverted audit checks, and memory drifts.
@@ -66,7 +66,7 @@ Read `references/discovery.md`. Establish:
 
 1. **Product form**: web application, API or service, CLI or SDK, mobile or desktop, data or ML, or infrastructure or IaC. Pick this before archetype and domain composition because it defines vertical slices and completion evidence. Record secondary forms only when they have independent users, contracts, distribution paths, and deliverables.
 2. **Archetype**: cli-tool, api-service, saas-dashboard, marketing-site, library, mobile-app, ml-pipeline, extension, game, or hybrid (see the module for the detection rules).
-3. **Applicability matrix**: every planning domain in the table below is either applicable or excluded with a stated reason. A CLI tool excludes seo and ui with reasons; it does not get empty SEO sections. The matrix goes into the plan verbatim.
+3. **Applicability matrix**: every planning domain in the table below is applicable, deferred, or excluded. A CLI tool excludes seo and ui with reasons; it does not get empty SEO sections. Deferral is reserved for the deferrable set in the discovery module (seo, launch, observe, ui, deploy): the row names the observable trigger that forces the domain pass and argues reversibility until then. The matrix goes into the plan verbatim.
 4. **Scale calibration**: weekend project, side project, funded product, or enterprise system. Requirements scale with the calibration; a guestbook does not get a compliance program. Weekend plans have at most 3 phases and 8 tasks. Treat that as a hard ceiling, not a target, and fit the total task appetites inside the user's stated capacity.
 
 ### Phase 3: Discovery
@@ -100,11 +100,11 @@ For each applicable domain, in this order, read its module and author that plan 
 
 Each module gives you: the decisions to force, plan requirements, task seeds, a self-audit rubric (used in Phase 6), and anti-patterns. Apply them at the selected scale. Satisfy load-bearing requirements and record a compact module-level disposition for requirements excluded by archetype or scale. Do not instantiate a task seed merely because it exists. Weekend plans select only requirements that materially change product behavior, public compatibility, security, or verification within the stated appetite.
 
-Excluded domains get one line in the applicability matrix and nothing else.
+Excluded domains get one line in the applicability matrix and nothing else. Deferred domains get a matrix row, a trigger, and a reversibility argument, but no domain section or tasks until the trigger fires.
 
 ### Phase 5: Inversion pass
 
-Walk every applicable module's Plan requirements section and give it one of two dispositions: landed somewhere concrete, or excluded with a specific archetype or scale reason in the compact module disposition. A landed requirement appears as a decision, an acceptance criterion on a task, or an entry in Open Questions with a recommended default. Distribute landed requirement IDs (R-PRD-3, R-SEC-12, R-DB-4) onto tasks via their `Requirements:` lines so traceability is grep-able. An applicable requirement with neither disposition is a hole; fix it before Phase 6. Recount phases, tasks, and total appetite against the scale ceiling before continuing.
+Walk every applicable module's Plan requirements section and give it one of three dispositions: landed somewhere concrete, deferred with a named trigger (deferrable set only, with the reversibility argument), or excluded with a specific archetype or scale reason in the compact module disposition. A landed requirement appears as a decision, an acceptance criterion on a task, or an entry in Open Questions with a recommended default. Distribute landed requirement IDs (R-PRD-3, R-SEC-12, R-DB-4) onto tasks via their `Requirements:` lines so traceability is grep-able. An applicable requirement with none of the three dispositions is a hole; fix it before Phase 6. Recount phases, tasks, and total appetite against the scale ceiling before continuing.
 
 ### Phase 6: Independent audit gate
 
@@ -121,17 +121,17 @@ Print the scorecard in chat when done, including whether the critic ran isolated
 ### Phase 7: Emit and hand off
 
 1. Read `references/plan-format.md` and `templates/PLAN.template.mdx`. Assemble `.godplans/PLAN.mdx` per that contract: frontmatter machine state, mermaid visuals where they carry weight, phases and waves, GP-numbered checkbox tasks with Files, Depends on, Reuses, Acceptance, Verify, and Requirements lines, one Open Questions section at the bottom, executor rules, session log.
-2. Complete the two-artifact emission gate before any response: re-copy `scripts/validate-plan.sh` from this skill byte-for-byte to the pre-created `.godplans/validate-plan.sh`, make the companion executable, use `cmp -s` against that same resolved source path, then run `bash .godplans/validate-plan.sh --allow-planning .godplans/PLAN.mdx`. The emission is incomplete if the plan exists without its executable companion. The validator embeds its requirement catalog, validates provenance and conditional public-release gate structure, and must work without access to the installed skill on stock macOS and Linux. It is the machine gate; do not recreate its checks with grep. Fix every failure before presenting.
+2. Complete the three-artifact emission gate before any response: re-copy `scripts/validate-plan.sh` from this skill byte-for-byte to the pre-created `.godplans/validate-plan.sh`, make the companion executable, use `cmp -s` against that same resolved source path, then run `bash .godplans/validate-plan.sh --allow-planning --emit-json .godplans/PLAN.json .godplans/PLAN.mdx`. The emission is incomplete if PLAN.mdx, its executable validator, or PLAN.json is missing. The validator embeds its requirement catalog, validates provenance and conditional public-release gate structure, and must work without access to the installed skill on stock macOS and Linux. It is the machine gate; do not recreate its checks with grep. Fix every failure before presenting. PLAN.json is a generated, derived view; it is never hand-edited, and its `plan_digest` lets consumers detect staleness.
 3. Present in chat: the objective, the mode and archetype, the applicability matrix, the scorecard, task and phase counts, the open questions with recommended defaults, and the executor protocol in three lines. Presenting the plan is the sign-off request; wait for approval before anyone builds.
 4. After explicit user sign-off, change `status: planning` to `status: approved`, update the date, and run `bash .godplans/validate-plan.sh .godplans/PLAN.mdx`. Do not start application work as part of approval.
 
-Final artifact check: `test -f .godplans/PLAN.mdx && test -x .godplans/validate-plan.sh`. Never present a plan until this command and the structural validator both exit zero.
+Final artifact check: `test -f .godplans/PLAN.mdx && test -x .godplans/validate-plan.sh && test -f .godplans/PLAN.json`. Never present a plan until this command and the structural validator both exit zero.
 
 ## Modes
 
 - **Greenfield**: the full method above.
 - **Brownfield**: Phase 0 fingerprints the existing codebase first. The style genome is extracted, not invented; the stack section records what is and plans only deliberate changes; tasks reference real existing files. The plan extends the codebase, never restarts it.
-- **Replan**: `.godplans/PLAN.mdx` exists. Re-derive state from disk: count checked and unchecked tasks, read the session log, and recompute the recorded source and completed-or-imported evidence. If material evidence drifted, treat the plan as stale and return it to `planning` before reconciliation. Completed tasks are never renumbered, reworded, or unchecked. New and changed work gets new task IDs. Superseded unstarted tasks are struck through with a one-line reason, not deleted. Refresh provenance, bump the plan version, record the delta in the session log, and require fresh approval before execution resumes.
+- **Replan**: `.godplans/PLAN.mdx` exists. Re-derive state from disk: count checked and unchecked tasks, read the session log, and recompute the recorded source and completed-or-imported evidence. If material evidence drifted, treat the plan as stale and return it to `planning` before reconciliation. Completed tasks are never renumbered, reworded, or unchecked. New and changed work gets new task IDs. Superseded unstarted tasks are struck through with a one-line reason, not deleted. Before patching, run `scripts/plan-halflife.sh .godplans/PLAN.mdx .godplans/PLAN.metrics.json` on the outgoing plan. The report measures cumulative task survival and per-domain supersession rate; a domain struck repeatedly was over-planned at that scale, so shrink its appetite instead of reseeding the same tasks. Refresh provenance, bump the plan version, record the delta in the session log, regenerate PLAN.json, and require fresh approval before execution resumes.
 
 ## After the plan: execution
 
@@ -145,7 +145,7 @@ godplans plans; it does not build. The status lifecycle is `planning -> approved
 - **Feature laundry lists**: features without prioritization and sequencing are not a roadmap.
 - **Scope leak at plan time**: godplans does not write application code, scaffold repos, or run deploys. It plans them.
 - **Policy-violating projects**: the Phase 1 gate is not advisory. Prohibited purposes get a refusal with the policy category named.
-- **Silent domain skipping**: a domain is either planned or excluded with a reason in the matrix. Never silently absent.
+- **Silent domain skipping**: a domain is planned now, deferred with an observable trigger and reversibility argument, or excluded with a reason in the matrix. Never silently absent.
 
 ## File map
 
@@ -159,5 +159,7 @@ godplans plans; it does not build. The status lifecycle is `planning -> approved
 | `references/<domain>.md` | 18 domain modules (see Phase 4 table) |
 | `templates/PLAN.template.mdx` | The skeleton PLAN.mdx |
 | `scripts/validate-plan.sh` | Self-contained validator copied beside each emitted plan |
+| `scripts/plan-halflife.sh` | Replan metric generator for cumulative and per-domain task supersession |
+| `schemas/PLAN.schema.json` | Published JSON Schema for the generated PLAN.json sidecar |
 
-## Skill version: 1.8.0
+## Skill version: 1.9.0

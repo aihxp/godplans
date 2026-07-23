@@ -1,0 +1,28 @@
+{
+  "name": "tenant-notes-api",
+  "version": "1.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "engines": {
+    "node": ">=22.13 <25"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "node scripts/typecheck.mjs",
+    "format:check": "node scripts/format-check.mjs",
+    "lint": "node scripts/check-source-budgets.mjs",
+    "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "seed": "node --experimental-strip-types src/db/seed.ts",
+    "start": "node --experimental-strip-types dist/src/server.ts",
+    "dev": "node --experimental-strip-types src/server.ts",
+    "openapi:generate": "node --experimental-strip-types scripts/generate-openapi.ts",
+    "contract:check": "node --experimental-strip-types scripts/generate-openapi.ts --check",
+    "pillars:check": "node scripts/validate-pillars.mjs",
+    "hollow:check": "node scripts/hollow-check.mjs",
+    "secrets:check": "node --experimental-strip-types scripts/scan-secrets.ts",
+    "supply-chain": "node scripts/check-dependencies.mjs",
+    "smoke:offline": "node --experimental-strip-types scripts/offline-smoke.ts",
+    "verify": "npm run format:check && npm run lint && npm run typecheck && npm run build && npm run contract:check && npm run test && npm run hollow:check && npm run pillars:check && npm run supply-chain && npm run secrets:check && npm run smoke:offline"
+  }
+}

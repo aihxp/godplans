@@ -31,6 +31,7 @@ ISO_CODEX_HOME="$ISO_HOME/.codex"
 LAST="$WORK/last-message.md"
 OUTPUT_DIR="$(dirname "$OUTPUT")"
 CODEX_LOG="$OUTPUT_DIR/codex.log"
+CODEX_EVENTS="$OUTPUT_DIR/codex-events.jsonl"
 trap 'rm -rf "$WORK" "$ISO_HOME"' EXIT
 
 command -v codex >/dev/null 2>&1 || { echo "codex CLI not found" >&2; exit 2; }
@@ -50,12 +51,18 @@ mkdir -p "$ISO_CODEX_HOME"
 
 CODEX_MODEL=${GODPLANS_EVAL_MODEL:-configured-default}
 CODEX_EFFORT=${GODPLANS_EVAL_REASONING_EFFORT:-configured-default}
+RESOLVED_MODEL=$CODEX_MODEL
+if [ "$RESOLVED_MODEL" = "configured-default" ] && [ -f "$REAL_CODEX_HOME/config.toml" ]; then
+  RESOLVED_MODEL=$(awk -F= '/^[[:space:]]*model[[:space:]]*=/ { value=$2; gsub(/[[:space:]"]/, "", value); print value; exit }' "$REAL_CODEX_HOME/config.toml")
+  RESOLVED_MODEL=${RESOLVED_MODEL:-unavailable}
+fi
 CODEX_ARGS=(
   exec
   --ephemeral
   --sandbox workspace-write
   --skip-git-repo-check
   --color never
+  --json
   -C "$WORK"
   -o "$LAST"
 )
@@ -85,7 +92,7 @@ set +e
 {
   printf '%s\n\n' 'Work entirely inside the current workspace. Do not implement application code. Complete the following task.'
   sed -n '1,$p' "$PROMPT_SOURCE"
-} | HOME="$ISO_HOME" CODEX_HOME="$ISO_CODEX_HOME" codex "${CODEX_ARGS[@]}" - >/dev/null 2>"$CODEX_LOG"
+} | HOME="$ISO_HOME" CODEX_HOME="$ISO_CODEX_HOME" codex "${CODEX_ARGS[@]}" - >"$CODEX_EVENTS" 2>"$CODEX_LOG"
 CODEX_STATUS=$?
 set -e
 if [ "$CODEX_STATUS" -ne 0 ]; then
@@ -105,8 +112,31 @@ printf '%s\n' \
   "prompt=$prompt_kind" \
   "codex_version=$(codex --version)" \
   "model=$CODEX_MODEL" \
+  "resolved_model=$RESOLVED_MODEL" \
   "reasoning_effort=$CODEX_EFFORT" \
   > "$OUTPUT_DIR/RUNNER.txt"
+node - "$CODEX_EVENTS" >> "$OUTPUT_DIR/RUNNER.txt" <<'NODE'
+const fs = require('node:fs');
+let input = 0;
+let cached = 0;
+let output = 0;
+let found = false;
+for (const line of fs.readFileSync(process.argv[2], 'utf8').split('\n')) {
+  if (!line.trim()) continue;
+  let event;
+  try { event = JSON.parse(line); } catch { continue; }
+  if (!event.usage) continue;
+  found = true;
+  input += Number(event.usage.input_tokens || 0);
+  cached += Number(event.usage.cached_input_tokens || 0);
+  output += Number(event.usage.output_tokens || 0);
+}
+process.stdout.write(`usage_source=${found ? 'cli-json' : 'unavailable'}\n`);
+process.stdout.write(`input_tokens=${input}\n`);
+process.stdout.write(`cached_input_tokens=${cached}\n`);
+process.stdout.write(`output_tokens=${output}\n`);
+process.stdout.write(`total_tokens=${input + output}\n`);
+NODE
 
 case "$OUTPUT" in
   */PLAN.mdx)

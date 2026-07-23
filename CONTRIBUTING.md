@@ -10,7 +10,8 @@ contribution rules are about discipline, not build systems.
    `.claude/` directories are symlink projections; never edit through them.
 2. **PROMPT.md is generated.** Change `skills/godplans/SKILL.md` or the
    inlined references, then run `bash scripts/build-prompt.sh` and commit
-   the regenerated file.
+   the regenerated file. The published file is the slim core; use `--full`
+   only for a one-off all-module artifact.
 3. **Style and product contracts are mechanically enforced.** Run
    `npm run check` before pushing. ASCII punctuation only: no em or en dashes, no Unicode
    arrows (write `->`), no emojis, no smart quotes, no box-drawing

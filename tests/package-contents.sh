@@ -18,7 +18,17 @@ node - "$TMP" <<'NODE' || exit 1
 const fs = require('fs');
 const payload = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
 const paths = new Set(payload[0].files.map((entry) => entry.path));
-for (const required of ['scripts/release-check.sh', 'requirements/skills-ref.txt']) {
+for (const required of [
+  'scripts/release-check.sh',
+  'scripts/eval-matrix.sh',
+  'scripts/eval-external.js',
+  'scripts/eval-outcome.js',
+  'scripts/outcome-summary.js',
+  'evals/external/RUBRIC.md',
+  'evals/metrics/context-cost.json',
+  'evals/outcomes/README.md',
+  'requirements/skills-ref.txt'
+]) {
   if (!paths.has(required)) {
     process.stderr.write(`FAIL [package-contents] missing ${required}\n`);
     process.exit(1);

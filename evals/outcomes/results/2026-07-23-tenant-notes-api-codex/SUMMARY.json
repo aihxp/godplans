@@ -1,0 +1,61 @@
+{
+  "format": "godplans/build-outcome@1",
+  "case": "tenant-notes-api",
+  "treatment": {
+    "verify_passed": true,
+    "critical": 0,
+    "high": 1,
+    "critical_or_high": 1,
+    "all_active_findings": 9,
+    "engine_version": "2.12.0",
+    "pack_version": "2.12.0",
+    "verdict": "audit-proof",
+    "usage": {
+      "plan": {
+        "usage_source": "cli-json",
+        "input_tokens": 11186539,
+        "cached_input_tokens": 10933248,
+        "output_tokens": 49486,
+        "total_tokens": 11236025
+      },
+      "build": {
+        "usage_source": "cli-json",
+        "input_tokens": 2189967,
+        "cached_input_tokens": 2082560,
+        "output_tokens": 35232,
+        "total_tokens": 2225199
+      },
+      "reported_total_tokens": 13461224
+    }
+  },
+  "control": {
+    "verify_passed": true,
+    "critical": 1,
+    "high": 4,
+    "critical_or_high": 5,
+    "all_active_findings": 15,
+    "engine_version": "2.12.0",
+    "pack_version": "2.12.0",
+    "verdict": "needs work",
+    "usage": {
+      "plan": {
+        "usage_source": "cli-json",
+        "input_tokens": 152557,
+        "cached_input_tokens": 114432,
+        "output_tokens": 10259,
+        "total_tokens": 162816
+      },
+      "build": {
+        "usage_source": "cli-json",
+        "input_tokens": 691970,
+        "cached_input_tokens": 630272,
+        "output_tokens": 25218,
+        "total_tokens": 717188
+      },
+      "reported_total_tokens": 880004
+    }
+  },
+  "critical_or_high_delta": -4,
+  "reported_total_token_delta": 12581220,
+  "treatment_better": true
+}

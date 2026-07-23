@@ -96,6 +96,7 @@ printf '%s\n' '#!/usr/bin/env sh' \
   '  */plan-case/REQUEST.md)' \
   '    cp "$GODPLANS_TEST_PLAN" "$2"' \
   '    cp "$GODPLANS_TEST_VALIDATOR" "$(dirname "$2")/validate-plan.sh"' \
+  '    cp "$GODPLANS_TEST_SIDECAR" "$(dirname "$2")/PLAN.json"' \
   '    chmod +x "$(dirname "$2")/validate-plan.sh"' \
   '    ;;' \
   '  */refusal-case/REQUEST.md)' \
@@ -122,16 +123,28 @@ printf '%s\n' \
   '## Open Questions' \
   > "$TMP/PLAN.mdx"
 
+node -e '
+  const fs = require("node:fs");
+  const crypto = require("node:crypto");
+  const plan = fs.readFileSync(process.argv[1]);
+  fs.writeFileSync(process.argv[2], JSON.stringify({
+    format: "godplans/plan-json@1",
+    plan_digest: "sha256:" + crypto.createHash("sha256").update(plan).digest("hex")
+  }));
+' "$TMP/PLAN.mdx" "$TMP/PLAN.json"
+
 GODPLANS_EVAL_CASES="$TMP/cases" \
 GODPLANS_EVAL_RUNNER="$TMP/bin/runner" \
 GODPLANS_VALIDATOR="$TMP/bin/validator" \
 GODPLANS_TEST_PLAN="$TMP/PLAN.mdx" \
 GODPLANS_TEST_VALIDATOR="$TMP/bin/validator" \
+GODPLANS_TEST_SIDECAR="$TMP/PLAN.json" \
   "$ROOT/scripts/eval.sh" --output "$TMP/output" > "$TMP/run.out"
 
 grep -q '^plan-case[[:space:]]PASS[[:space:]]8/8$' "$TMP/run.out" || fail "plan case did not pass all expectations"
 grep -q '^refusal-case[[:space:]]PASS[[:space:]]3/3$' "$TMP/run.out" || fail "refusal case did not pass all expectations"
 test -f "$TMP/output/plan-case/PLAN.mdx" || fail "plan output was not retained"
+test -f "$TMP/output/plan-case/PLAN.json" || fail "plan sidecar was not retained"
 test -f "$TMP/output/refusal-case/RESPONSE.md" || fail "refusal output was not retained"
 
 GODPLANS_EVAL_CASES="$TMP/cases" \
@@ -202,6 +215,7 @@ GODPLANS_EVAL_BASELINE_RUNNER="$TMP/bin/baseline-runner" \
 GODPLANS_VALIDATOR="$TMP/bin/validator" \
 GODPLANS_TEST_PLAN="$TMP/PLAN.mdx" \
 GODPLANS_TEST_VALIDATOR="$TMP/bin/validator" \
+GODPLANS_TEST_SIDECAR="$TMP/PLAN.json" \
   "$ROOT/scripts/eval.sh" --baseline --output "$TMP/base-output" > "$TMP/baseline.out" 2> "$TMP/baseline.err" \
   || fail "the control arm changed the exit code"
 

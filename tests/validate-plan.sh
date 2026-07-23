@@ -28,6 +28,7 @@ source_revision: none
 input_digest: sha256:1c7ca1006bb3157ad989c1f1dd1cd1d6e8e2a44d9509821ffa43f3be205a12d5
 validated_at: 2026-07-13T12:00:00Z
 domains_applicable: [product, code-quality]
+domains_deferred: []
 domains_excluded: []
 progress:
   phases_total: 2
@@ -65,11 +66,35 @@ Result: pass.
 | Domain | Status | Reason |
 |---|---|---|
 | product | applicable | fixture requirement |
+| architecture | applicable | shell and embedded Perl boundary |
+| stack | applicable | stock macOS and Linux toolchain |
+| database | excluded | validator stores no data |
+| security | applicable | execution lifecycle is a safety boundary |
+| llm | excluded | validator makes no model calls |
+| ux | excluded | validator has no interactive journey |
+| ui | excluded | validator renders no pixels |
+| seo | excluded | validator has no crawlable surface |
 | code-quality | applicable | validator coverage |
+| style-genome | applicable | portable shell conventions |
+| agent-memory | applicable | execution rules travel with the plan |
+| repo | applicable | validator ships in the skill package |
+| build | applicable | validator is the emitted application artifact |
+| roadmap | applicable | fixture tasks exercise ordering |
+| deploy | excluded | validator has no deployed service |
+| observe | excluded | validator has no running service |
+| launch | excluded | validator has no public activation |
 
 ## Decisions
 
 The fixture uses two ordered phases.
+
+### D1: portable runtime boundary
+
+The validator uses Bash 3.2 plus stock Perl instead of a compiled runtime.
+Falsifier:
+- Signal: Perl availability on every supported platform
+- Failure boundary: any supported platform ships without Perl
+- Replan action: return to planning and replace the embedded parser with a supported runtime
 
 ## Requirements
 
@@ -112,6 +137,7 @@ Goal: validate the core plan contract.
   - Requirements: R-1.1, R-CODE-21
 
 Checkpoint: malformed plans fail with a diagnostic.
+Checkpoint verify: `test -x skills/godplans/scripts/validate-plan.sh`
 
 Must-haves:
 - Truth: invalid plans return nonzero
@@ -133,6 +159,7 @@ Goal: prove the validator contract end to end.
   - Requirements: R-1.1, R-CODE-21
 
 Checkpoint: the portable suite passes from a fresh checkout.
+Checkpoint verify: `test -x tests/validate-plan.sh`
 
 Must-haves:
 - Truth: the validator reports a valid plan
@@ -302,6 +329,10 @@ for field in Files "Depends on" Reuses Acceptance Verify Requirements; do
   FIELD="$field" perl -0pi -e 's/^  - \Q$ENV{FIELD}\E:.*\n//m' "$CASE_FILE"
   expect_fail "missing $field field" "GP-101 missing required field: $field" --allow-planning "$CASE_FILE"
 done
+
+new_case
+perl -0pi -e 's/Verify: `bash tests\/validate-plan\.sh`/Verify: Manual: open the report/' "$CASE_FILE"
+expect_fail "manual task verification" "Verify must be one executable command in backticks" --allow-planning "$CASE_FILE"
 
 new_case
 perl -0pi -e 's/Depends on: GP-101/Depends on: GP-999/' "$CASE_FILE"
@@ -501,6 +532,178 @@ DUPLICATE_ACTIVATION_PLAN="$TMP_DIR/duplicate-public-activation.mdx"
 cp "$PUBLIC_PLAN" "$DUPLICATE_ACTIVATION_PLAN"
 perl -0pi -e 's/R-1\.1, R-ROAD-21/R-1.1, R-ROAD-21, R-LAUNCH-22/' "$DUPLICATE_ACTIVATION_PLAN"
 expect_fail "duplicate public activation markers" "public release requires exactly one first activation task citing R-LAUNCH-22, found 2" --allow-planning "$DUPLICATE_ACTIVATION_PLAN"
+
+DEFERRED_PLAN="$TMP_DIR/valid-deferred-domain.mdx"
+cp "$BASE_PLAN" "$DEFERRED_PLAN"
+perl -0pi -e 's/\| seo \| excluded \| validator has no crawlable surface \|/| seo | deferred | trigger: the first public page task enters the roadmap; reversible until pages ship without metadata |/' "$DEFERRED_PLAN"
+expect_pass "deferred domain with trigger" --allow-planning "$DEFERRED_PLAN"
+
+new_case
+perl -0pi -e 's/\| seo \| excluded \| validator has no crawlable surface \|/| seo | deferred | reversible until pages ship |/' "$CASE_FILE"
+expect_fail "deferred domain without trigger" "applicability matrix defers seo without a trigger" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/\| seo \| excluded \| validator has no crawlable surface \|/| seo | deferred | trigger: first public page ships |/' "$CASE_FILE"
+expect_fail "deferred domain without reversibility" "applicability matrix defers seo without a reversibility argument" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/\| seo \| excluded \| validator has no crawlable surface \|/| seo | deferred | trigger: later; reversible because no pages exist |/' "$CASE_FILE"
+expect_fail "deferred domain with vague trigger" "applicability matrix defers seo with a vague trigger" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/\| seo \| excluded \| validator has no crawlable surface \|/| seo | skipped | nothing to index |/' "$CASE_FILE"
+expect_fail "invalid matrix status" "applicability matrix row for seo has invalid status 'skipped'" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/\| seo \| excluded \| validator has no crawlable surface \|/| seo | excluded |  |/' "$CASE_FILE"
+expect_fail "excluded domain without reason" "applicability matrix excludes seo without a reason" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/(\| product \| applicable \| fixture requirement \|\n)/$1| product | applicable | duplicate row |\n/' "$CASE_FILE"
+expect_fail "duplicate matrix row" "applicability matrix has a duplicate row for product" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/^\| architecture \|.*\n//m' "$CASE_FILE"
+expect_fail "missing matrix domain" "applicability matrix is missing domain architecture" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/\| architecture \| applicable \| shell and embedded Perl boundary \|/| architecture | deferred | trigger: first package; reversible until then |/' "$CASE_FILE"
+expect_fail "load-bearing domain cannot defer" "cannot defer load-bearing domain architecture" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/## Applicability matrix\n/## Domains\n/' "$CASE_FILE"
+expect_fail "missing Applicability matrix" "expected exactly one ## Applicability matrix section, found 0" --allow-planning "$CASE_FILE"
+
+FALSIFIER_PLAN="$TMP_DIR/valid-decision-falsifier.mdx"
+cp "$BASE_PLAN" "$FALSIFIER_PLAN"
+expect_pass "decision with falsifier" --allow-planning "$FALSIFIER_PLAN"
+
+new_case
+perl -0pi -e 's/Falsifier:\n- Signal: Perl availability on every supported platform\n- Failure boundary: any supported platform ships without Perl\n- Replan action: return to planning and replace the embedded parser with a supported runtime\n//' "$CASE_FILE"
+expect_fail "decision missing falsifier" "decision D1 (line " --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/(### D1: portable runtime boundary)/$1\n\n### D1: duplicate/' "$CASE_FILE"
+expect_fail "duplicate decision heading" "duplicate decision heading D1" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/Replan action: return to planning and replace the embedded parser with a supported runtime/Replan action: wait and see/' "$CASE_FILE"
+expect_fail "falsifier must return to planning" "Replan action must explicitly return to planning" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/Failure boundary: any supported platform ships without Perl/Failure boundary: things go badly/' "$CASE_FILE"
+expect_fail "falsifier boundary must be observable" "Failure boundary lacks an observable event or numeric threshold" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/### D1: portable runtime boundary/### D1 portable runtime boundary/' "$CASE_FILE"
+expect_fail "malformed decision heading" "malformed decision heading" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/### D1: portable runtime boundary.*?## Requirements/## Requirements/s' "$CASE_FILE"
+expect_fail "missing decision entries" "Decisions must contain at least one" --allow-planning "$CASE_FILE"
+
+JSON_OUT="$TMP_DIR/plan.json"
+expect_pass "emit JSON sidecar" --allow-planning --emit-json "$JSON_OUT" "$BASE_PLAN"
+node -e '
+  const fs = require("node:fs");
+  const crypto = require("node:crypto");
+  const plan = fs.readFileSync(process.argv[1]);
+  const doc = JSON.parse(fs.readFileSync(process.argv[2], "utf8"));
+  const digest = "sha256:" + crypto.createHash("sha256").update(plan).digest("hex");
+  if (doc.format !== "godplans/plan-json@1") throw new Error("bad format tag");
+  if (doc.plan_digest !== digest) throw new Error("plan_digest mismatch");
+  if (doc.status !== "planning") throw new Error("status mismatch");
+  if (doc.public_release !== false) throw new Error("public_release mismatch");
+  if (doc.tasks.length !== 3) throw new Error("task count mismatch");
+  if (doc.tasks[0].id !== "GP-101" || doc.tasks[0].wave !== "W1.1") throw new Error("task shape mismatch");
+  if (doc.tasks[1].depends_on[0] !== "GP-101") throw new Error("depends_on mismatch");
+  if (doc.tasks[2].requirements.indexOf("R-CODE-21") < 0) throw new Error("requirements mismatch");
+  if (doc.phases.length !== 2 || doc.phases[1].name !== "Verification") throw new Error("phase shape mismatch");
+  if (doc.applicability.length !== 18) throw new Error("applicability mismatch");
+  if (doc.decisions.length !== 1 || doc.decisions[0].falsifier.signal.indexOf("Perl") < 0) throw new Error("decision mismatch");
+  if (doc.metrics.task_history.active !== 3 || doc.metrics.task_history.superseded !== 0) throw new Error("history mismatch");
+' "$BASE_PLAN" "$JSON_OUT" && record_pass "JSON sidecar content" || record_fail "JSON sidecar content" "node assertion failed"
+
+HISTORY_PLAN="$TMP_DIR/plan-with-superseded-task.mdx"
+cp "$BASE_PLAN" "$HISTORY_PLAN"
+perl -0pi -e 's/(Checkpoint: malformed plans fail with a diagnostic\.)/~~- [ ] GP-103 [W1.2] Add crawl metadata~~\n  - Superseded: no public surface remains in scope\n  - Requirements: R-SEO-1\n\n$1/' "$HISTORY_PLAN"
+HISTORY_JSON="$TMP_DIR/history.json"
+expect_pass "emit superseded task metrics" --allow-planning --emit-json "$HISTORY_JSON" "$HISTORY_PLAN"
+node -e '
+  const doc = JSON.parse(require("node:fs").readFileSync(process.argv[1], "utf8"));
+  if (doc.superseded_tasks.length !== 1 || doc.superseded_tasks[0].id !== "GP-103") throw new Error("superseded task missing");
+  if (doc.metrics.task_history.historical !== 4) throw new Error("historical count mismatch");
+  if (doc.metrics.task_history.supersession_rate !== 0.25) throw new Error("supersession rate mismatch");
+  const seo = doc.metrics.domains.find((entry) => entry.domain === "seo");
+  if (!seo || seo.supersession_rate !== 1) throw new Error("domain supersession rate mismatch");
+' "$HISTORY_JSON" && record_pass "superseded task metric content" || record_fail "superseded task metric content" "node assertion failed"
+
+HALFLIFE_OUT="$TMP_DIR/PLAN.metrics.json"
+if "$ROOT_DIR/skills/godplans/scripts/plan-halflife.sh" "$HISTORY_PLAN" "$HALFLIFE_OUT" >/dev/null &&
+   node -e '
+     const doc = JSON.parse(require("node:fs").readFileSync(process.argv[1], "utf8"));
+     if (doc.format !== "godplans/plan-half-life@1") throw new Error("format mismatch");
+     if (doc.metrics.task_history.superseded !== 1) throw new Error("metric mismatch");
+   ' "$HALFLIFE_OUT"; then
+  record_pass "plan half-life report"
+else
+  record_fail "plan half-life report" "report generation failed"
+fi
+
+DRIFT_PLAN="$TMP_DIR/drift-check.mdx"
+cp "$BASE_PLAN" "$DRIFT_PLAN"
+perl -0pi -e '
+  s/status: planning/status: executing/;
+  s/phases_done: 0/phases_done: 1/;
+  s/tasks_done: 0/tasks_done: 2/;
+  s/- \[ \] GP-10/- [x] GP-10/g;
+  s/  - Verify: `bash tests\/validate-plan\.sh`/  - Verify: `test -f package.json`/g;
+  s/Checkpoint verify: `test -x skills\/godplans\/scripts\/validate-plan\.sh`/Checkpoint verify: `test -f package.json`/
+' "$DRIFT_PLAN"
+if "$VALIDATOR" --drift-check 1 "$DRIFT_PLAN" >/dev/null 2>&1; then
+  record_pass "phase-boundary drift check"
+else
+  record_fail "phase-boundary drift check" "completed task or checkpoint recheck failed"
+fi
+
+RECHECK_PLAN="$TMP_DIR/drift-recheck.mdx"
+cp "$DRIFT_PLAN" "$RECHECK_PLAN"
+printf '%s\n' 'stable evidence' > "$TMP_DIR/recheck.txt"
+RECHECK_DIGEST=$(shasum -a 256 "$TMP_DIR/recheck.txt" | awk '{print $1}')
+AGGREGATE_DIGEST=$(node -e '
+  const crypto = require("node:crypto");
+  const entries = {
+    intake: "1111111111111111111111111111111111111111111111111111111111111111",
+    "recheck.txt": process.argv[1],
+  };
+  const input = Object.keys(entries).sort().map((key) => `${key}\t${entries[key]}\n`).join("");
+  process.stdout.write(crypto.createHash("sha256").update(input).digest("hex"));
+' "$RECHECK_DIGEST")
+RECHECK_DIGEST="$RECHECK_DIGEST" AGGREGATE_DIGEST="$AGGREGATE_DIGEST" perl -0pi -e '
+  s/1c7ca1006bb3157ad989c1f1dd1cd1d6e8e2a44d9509821ffa43f3be205a12d5/$ENV{AGGREGATE_DIGEST}/g;
+  s/(- `intake` = `sha256:[0-9a-f]{64}`)/$1\n- [recheck] `recheck.txt` = `sha256:$ENV{RECHECK_DIGEST}`/;
+  s/`test -f package.json`/`test -f recheck.txt`/g
+' "$RECHECK_PLAN"
+if (cd "$TMP_DIR" && "$VALIDATOR" --drift-check 1 "$RECHECK_PLAN" >/dev/null 2>&1); then
+  record_pass "phase-boundary provenance recheck"
+else
+  record_fail "phase-boundary provenance recheck" "stable evidence failed"
+fi
+printf '%s\n' 'drifted evidence' > "$TMP_DIR/recheck.txt"
+output=$(cd "$TMP_DIR" && "$VALIDATOR" --drift-check 1 "$RECHECK_PLAN" 2>&1) && status=0 || status=$?
+if [ "$status" -ne 0 ] && printf '%s\n' "$output" | grep -F "recheck evidence drifted: recheck.txt" >/dev/null; then
+  record_pass "phase-boundary provenance drift fails"
+else
+  record_fail "phase-boundary provenance drift fails" "drift was not rejected: $output"
+fi
+
+new_case
+perl -0pi -e 's/^Checkpoint verify:.*\n//m' "$CASE_FILE"
+expect_fail "missing checkpoint verification" "Phase 1 is missing Checkpoint verify" --allow-planning "$CASE_FILE"
+
+new_case
+perl -0pi -e 's/## Decisions\n/## Choices\n/' "$CASE_FILE"
+expect_fail "missing Decisions section" "expected exactly one ## Decisions section, found 0" --allow-planning "$CASE_FILE"
 
 if [ "$FAIL_COUNT" -ne 0 ]; then
   printf '\n%d passed, %d failed\n' "$PASS_COUNT" "$FAIL_COUNT" >&2

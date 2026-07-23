@@ -239,9 +239,21 @@ while IFS= read -r dir; do
   artifact_set_ok=1
   if [ "$expected_outcome" = "plan" ]; then
     companion="$out_dir/validate-plan.sh"
+    sidecar="$out_dir/PLAN.json"
     [ -s "$artifact" ] || artifact_set_ok=0
     [ -x "$companion" ] || artifact_set_ok=0
+    [ -s "$sidecar" ] || artifact_set_ok=0
     cmp -s "$VALIDATOR" "$companion" || artifact_set_ok=0
+    if [ "$artifact_set_ok" -eq 1 ]; then
+      node -e '
+        const fs = require("node:fs");
+        const crypto = require("node:crypto");
+        const plan = fs.readFileSync(process.argv[1]);
+        const sidecar = JSON.parse(fs.readFileSync(process.argv[2], "utf8"));
+        const digest = "sha256:" + crypto.createHash("sha256").update(plan).digest("hex");
+        if (sidecar.plan_digest !== digest) process.exit(1);
+      ' "$artifact" "$sidecar" || artifact_set_ok=0
+    fi
   else
     [ -s "$artifact" ] || artifact_set_ok=0
     [ ! -e "$out_dir/PLAN.mdx" ] || artifact_set_ok=0
@@ -292,5 +304,7 @@ if [ "$BASELINE" -eq 1 ] && [ "$arm_total" -gt 0 ]; then
   printf 'AGGREGATE\tskill %s/%s\tbaseline %s/%s\tdelta +%s\n' \
     "$skill_points" "$arm_total" "$base_points" "$arm_total" "$((skill_points - base_points))"
 fi
+
+node "$ROOT/scripts/summarize-eval.js" "$OUTPUT"
 
 exit "$failed"

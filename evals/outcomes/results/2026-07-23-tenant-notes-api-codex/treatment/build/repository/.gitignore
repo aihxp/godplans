@@ -1,0 +1,9 @@
+node_modules/
+dist/
+data/
+.env
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+*.token
+artifacts/*.tmp

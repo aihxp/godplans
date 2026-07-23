@@ -1,0 +1,38 @@
+{
+  "organizations": [
+    {
+      "publicId": "10000000-0000-4000-8000-000000000001",
+      "name": "Organization A",
+      "store": "organization-a.sqlite",
+      "users": [
+        {
+          "publicId": "20000000-0000-4000-8000-000000000001",
+          "name": "Avery A",
+          "tokenEnv": "ORG_A_USER_1_TOKEN"
+        },
+        {
+          "publicId": "20000000-0000-4000-8000-000000000002",
+          "name": "Alex A",
+          "tokenEnv": "ORG_A_USER_2_TOKEN"
+        }
+      ]
+    },
+    {
+      "publicId": "10000000-0000-4000-8000-000000000002",
+      "name": "Organization B",
+      "store": "organization-b.sqlite",
+      "users": [
+        {
+          "publicId": "20000000-0000-4000-8000-000000000003",
+          "name": "Bailey B",
+          "tokenEnv": "ORG_B_USER_1_TOKEN"
+        },
+        {
+          "publicId": "20000000-0000-4000-8000-000000000004",
+          "name": "Blair B",
+          "tokenEnv": "ORG_B_USER_2_TOKEN"
+        }
+      ]
+    }
+  ]
+}

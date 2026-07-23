@@ -1,0 +1,14 @@
+[
+  {
+    "task": "Schema change",
+    "loads": ["context", "quality", "repo"]
+  },
+  {
+    "task": "capital allocation",
+    "loads": ["context", "repo"]
+  },
+  {
+    "task": "tenant isolation",
+    "loads": ["context", "quality", "repo"]
+  }
+]

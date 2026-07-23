@@ -1,7 +1,7 @@
 # godplans
 
 [![lint](https://github.com/hannsxpeter/godplans/actions/workflows/lint.yml/badge.svg)](https://github.com/hannsxpeter/godplans/actions/workflows/lint.yml)
-[![version](https://img.shields.io/badge/version-1.8.0-blue)](CHANGELOG.md)
+[![version](https://img.shields.io/badge/version-1.9.0-blue)](CHANGELOG.md)
 [![agent skills](https://img.shields.io/badge/Agent%20Skills-compatible-2f6fed)](skills/godplans/SKILL.md)
 [![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
@@ -32,24 +32,25 @@ Then, in your coding agent, in any project directory:
 /godplans I want to build a shared expense tracker for roommates
 ```
 
-One command. godplans screens the idea against the Anthropic Usage Policy, asks one batch of 3 to 5 high-leverage questions (answer "defaults" to accept the recommendations), makes every hard-to-reverse decision, plans all applicable domains, scores its own plan against each domain rubric until every section clears 85 of 100, and emits `.godplans/PLAN.mdx`.
+One command. godplans screens the idea against the Anthropic Usage Policy, asks one batch of 3 to 5 high-leverage questions (answer "defaults" to accept the recommendations), makes every hard-to-reverse decision, plans all applicable domains, runs an independent critic pass against each applicable domain rubric until every section clears 85 of 100, and emits `.godplans/PLAN.mdx`.
 
 ## What you get
 
 One canonical plan document, `.godplans/PLAN.mdx`, containing:
 
 - An objective with an observable definition of done, scope, and named non-goals.
-- The compliance gate result and the applicability matrix (every domain planned or excluded with a reason).
+- The compliance gate result and the applicability matrix (every domain planned now, deferred with an observable trigger and reversibility argument, or excluded with a reason).
 - A primary product form selected before archetype, with form-specific vertical slices and completion evidence for web, API or service, CLI or SDK, mobile or desktop, data or ML, and infrastructure or IaC work.
 - Plan provenance bound to source revision, a SHA-256 input digest, and a UTC validation timestamp, with stale completed or imported evidence returning the plan to `planning`.
-- Decisions, hard-to-reverse bets first, each with rationale and rejected alternatives; assumptions flagged as hypotheses with validation tasks.
+- Decisions, hard-to-reverse bets first, each with rationale, rejected alternatives, an observable signal, a failure boundary, and a return-to-planning action; assumptions flagged as hypotheses with validation tasks.
 - Numbered requirements with EARS acceptance criteria (WHEN ... THE SYSTEM SHALL ...).
 - Architecture as mermaid diagrams (components with trust boundaries, data model, load-bearing flows) placed next to the claims they support.
 - A style genome so the first commit already matches the intended code DNA, and the agent-memory files (AGENTS.md, pillars) the scaffold will emit.
 - Phases and waves of checkbox tasks. Every task: a stable GP-number, exact files, dependencies, what it reuses, grep-verifiable acceptance criteria, one verify command whose exit code proves it, and requirement traceability.
-- Goal-backward must-haves per phase, a mandatory final verification phase, exactly one Open Questions section with recommended defaults, embedded rules for executing agents, and a session log.
+- Goal-backward must-haves per phase, an executable phase checkpoint, a mandatory final verification phase, exactly one Open Questions section with recommended defaults, embedded rules for executing agents, and a session log.
+- A generated `.godplans/PLAN.json` sidecar carrying decisions, applicability, phases, active and superseded tasks, dependencies, requirements, and plan half-life metrics for tools that should not parse MDX.
 
-The skill also emits `.godplans/validate-plan.sh`, a self-contained companion that validates lifecycle state, provenance formats, product form, conditional public-release gates, counters, phase and task grammar, ordered dependency and requirement references, banned characters, and final-phase structure. The plan remains the only source of product and execution truth; the validator contains no separate decisions.
+The skill also emits `.godplans/validate-plan.sh`, a self-contained companion that validates lifecycle state, provenance formats, product form, conditional public-release gates, counters, phase and task grammar, ordered dependency and requirement references, deferral constraints, falsifier blocks, executable checkpoints, banned characters, and final-phase structure. Its explicit drift mode recomputes marked provenance files, reruns a deterministic sample of completed Verify commands, and reproves the phase checkpoint. The plan remains the only source of product and execution truth; PLAN.json is generated atomically from it.
 
 The plan is the handoff: any coding agent (the same one, or a different tool entirely) executes it checkbox by checkbox. Interrupted work resumes by re-reading the file, not the chat.
 
@@ -63,6 +64,9 @@ bash .godplans/validate-plan.sh --allow-planning .godplans/PLAN.mdx
 
 # validate the execution gate after approval
 bash .godplans/validate-plan.sh .godplans/PLAN.mdx
+
+# reprove a completed phase before the next phase starts
+bash .godplans/validate-plan.sh --drift-check 1 .godplans/PLAN.mdx
 ```
 
 ## Evidence and evaluation
@@ -78,8 +82,8 @@ python3 -m venv .venv-skills-ref
 .venv-skills-ref/bin/pip install -r requirements/skills-ref.txt
 SKILLS_REF_BIN="$PWD/.venv-skills-ref/bin/skills-ref" npm run release:check
 
-# run real cases through an authenticated Codex CLI
-GODPLANS_EVAL_RUNNER="$PWD/evals/runners/codex.sh" npm run eval
+# optional maintainer benchmark using already authenticated host CLIs
+npm run eval:matrix
 
 # rescore retained outputs after expectation changes
 bash scripts/eval.sh --score-only
@@ -89,9 +93,15 @@ Conformance is not value. Passing the matrix proves the skill did what it
 promised; it does not prove the promise was worth loading. The control arm
 answers that: `scripts/eval.sh --baseline` runs each case a second time through
 the same agent and model with no skill loaded, on a neutral request, and
-reports the delta. Both arms isolate `HOME` and `CODEX_HOME` so a globally
-installed skill cannot leak into either, and the control reads a de-branded
+reports the delta. The included Codex runners isolate `HOME` and `CODEX_HOME`.
+The Claude runners use safe mode while retaining normal host authentication.
+The Gemini runners use workspace-scoped skill and hook controls. Every runner
+records its isolation mode, and the control reads a de-branded
 `REQUEST.baseline.md` so it is never told to use a skill it does not have.
+
+Using godplans never requires provider credentials. The optional repository
+benchmarks invoke host CLIs through the runner contract and reuse whatever
+authentication those tools already have.
 
 ```bash
 GODPLANS_EVAL_RUNNER="$PWD/evals/runners/codex.sh" \
@@ -99,17 +109,24 @@ GODPLANS_EVAL_BASELINE_RUNNER="$PWD/evals/runners/codex-baseline.sh" \
 bash scripts/eval.sh --baseline
 ```
 
-The first published baseline (`gpt-5.6-sol` at xhigh, godplans 1.8.0, a
-three-case subset) is recorded under `evals/baselines/`: skill 35/35, unaided
-control 12/35, delta +23, with the delta concentrated in the validator-passing
-plan, machine-readable provenance, and the explicit domain applicability matrix
-that a strong unaided agent does not produce. On the refusal case the delta is
-+1, because a capable aligned model refuses a prohibited project on its own;
-that small delta is the honesty check on the measurement. Model-backed results
-are release evidence, not a blanket guarantee. The raw outputs, agent and model
-identifier, validator version, and source commit belong together in any
-published baseline, and a skill score is never published without the control
-score beside it.
+The historical 1.8.0 baseline under `evals/baselines/` covers one model and
+three cases. It is retained as provenance, but it no longer meets the evidence
+minimum. Publishable release evidence now means all ten cases across Codex,
+Claude, and Gemini, both arms, with raw artifacts and actual token usage. The
+blind external grader adds at least two no-skill judges over five or more plan
+pairs and reports the inter-rater gap. The build-outcome evaluation gives
+matched plans to the same no-skill builder, hides arm identity, runs godaudits
+on both built repositories, and compares open Critical and High findings. A tie
+or loss is published with equal prominence.
+
+The first published build-outcome run is directional and narrow, but it tests
+the actual thesis. On the `tenant-notes-api` case, both `gpt-5.6-sol` arms
+passed the same verifier. The godplans artifact had 0 Critical and 1 High
+finding; the no-skill control had 1 Critical and 4 High findings, a -4 Critical
+plus High delta. The cost was also large: 11,236,025 cumulative
+CLI-reported plan tokens for treatment versus 162,816 for control, including
+cached input. See the [method, limitations, and raw
+artifacts](evals/outcomes/results/2026-07-23-tenant-notes-api-codex/README.md).
 
 ```mermaid
 graph TD
@@ -118,7 +135,7 @@ graph TD
   C --> D[discovery: one question batch]
   D --> E[18 domain passes]
   E --> F[inversion: audit checks -> task acceptance criteria]
-  F --> G[self-audit: every domain scores 85+]
+  F --> G[independent critic and domain audits: every applicable domain scores 85+]
   G --> H[.godplans/PLAN.mdx]
   H --> I[any agent executes, checkbox by checkbox]
 ```
@@ -169,18 +186,20 @@ The canonical skill lives at `skills/godplans/` in the Agent Skills format. `ins
 | Amp | reads `.agents` and `.claude` paths | auto |
 | Factory Droid | `~/.factory/skills/godplans` | `/godplans` |
 | Cline | `~/.cline/skills/godplans` | auto |
-| T3 Chat | no skill support: paste [PROMPT.md](PROMPT.md) into Settings, Customization, or attach it to a chat | manual |
+| T3 Chat | no skill support: paste [PROMPT.md](PROMPT.md), then attach applicable lazy modules from `skills/godplans/references/` | manual |
 | Aider | `aider --read PROMPT.md` | manual |
 | Any chat UI | paste [PROMPT.md](PROMPT.md) as the system prompt | manual |
 
-`PROMPT.md` is the generated full-fidelity fallback: the orchestrator, all reference modules, exemplar, validator, and PLAN template flattened in workflow order. It is intentionally large and should be used only on chat surfaces whose context limit can hold the prompt plus the resulting plan. Regenerate with `bash scripts/build-prompt.sh`.
+`PROMPT.md` is the generated slim core: discovery, plan format, product, architecture, stack, database, security, exemplar, template, validator, and plan half-life script. Remaining domains stay lazy as individual files under `skills/godplans/references/` and are attached only when applicable. Generate the historical all-in-one form for a one-off surface with `bash scripts/build-prompt.sh --full --output PROMPT.full.md`.
+
+`evals/metrics/context-cost.json` records byte counts and an explicitly labeled token estimate for the native skill entry, portable core, generated full prompt, and every lazy module. Real evaluation runners record actual tokens per plan.
 
 ## Anthropic policy awareness
 
 godplans is built to keep accounts clean, per the [Anthropic Usage Policy](https://www.anthropic.com/legal/aup):
 
 - A compliance gate screens every project before planning: prohibited purposes (fake engagement, phishing, scraping that evades safeguards, undisclosed AI passing as human) are refused with the policy category named; legitimate projects with risky components get mandatory mitigation tasks (AI disclosure, robots.txt respect, rate limiting, professional review in high-risk consumer domains).
-- The skill never coaches a model past a refusal and never suggests extracting or reusing subscription credentials. Anything a plan schedules unattended specifies supported API-key or cloud-provider authentication.
+- The skill never coaches a model past a refusal and never suggests extracting or reusing subscription credentials. Anything a plan schedules unattended specifies a supported service account, workload identity, or cloud-provider authentication flow.
 - The same screening logic applies in non-Claude harnesses; every provider has an equivalent policy.
 
 Details in [references/compliance.md](skills/godplans/references/compliance.md).
@@ -193,13 +212,15 @@ Details in [references/compliance.md](skills/godplans/references/compliance.md).
 | `skills/godplans/references/` | 22 modules: 18 domain playbooks plus plan-format, discovery, compliance, exemplar |
 | `skills/godplans/templates/PLAN.template.mdx` | The plan skeleton |
 | `skills/godplans/scripts/validate-plan.sh` | Self-contained PLAN.mdx validator copied beside every plan |
+| `skills/godplans/scripts/plan-halflife.sh` | Cumulative and per-domain task supersession metric generator |
+| `skills/godplans/schemas/PLAN.schema.json` | JSON Schema for generated PLAN.json sidecars |
 | `.agents/skills/`, `.claude/skills/` | Symlink projections of the canonical skill |
 | `install.sh` | Ownership-safe installer; `--project`, `--tools`, `--copy`, `--uninstall`, `--force` |
 | `PROMPT.md` | Generated portable fallback |
 | `scripts/lint.sh` | Meta-linter: unicode cleanliness, version parity, module contracts, PROMPT freshness |
 | `scripts/release-check.sh` | Release-grade checks: pinned official validator, full suite, eval contract, tag/release parity, package dry run |
 | `requirements/skills-ref.txt` | Pinned official Agent Skills validator dependency |
-| `evals/` | Behavioral case matrix and real-agent runner contract |
+| `evals/` | Behavioral, external-grade, context-cost, and build-outcome evaluation contracts |
 | `tests/` | Regression suite for product contracts |
 | `docs/ABOUT.md` | The long-form writeup: why godplans exists and how it was designed |
 
@@ -211,7 +232,7 @@ Details in [references/compliance.md](skills/godplans/references/compliance.md).
 
 **Does audit-aware mean guaranteed audit-clean?** No. The plan moves known audit checks into requirements and task acceptance criteria, which reduces preventable findings. Execution quality, runtime behavior, changing dependencies, and previously unknown risks still require tests and independent review.
 
-**What if my project does not need SEO / a database / a launch?** Every domain is either planned or excluded with a stated reason in the applicability matrix. A CLI tool excludes seo with a reason; it never gets a hollow SEO section.
+**What if my project does not need SEO / a database / a launch?** Every domain is planned now, deferred with an observable trigger when waiting is reversible, or excluded with a stated reason. A CLI tool excludes seo; an internal product can defer launch until public activation planning begins; neither gets a hollow section.
 
 **How is this different from arc-ready?** arc-ready walks the full arc tier by tier, building as it goes. godplans front-loads every decision from all tiers plus all seven auditors into one plan document before anything is built. They compose: plan with godplans, execute with anything, including arc-ready's build tiers.
 

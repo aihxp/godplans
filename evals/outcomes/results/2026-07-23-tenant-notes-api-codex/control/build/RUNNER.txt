@@ -1,0 +1,11 @@
+runner=codex-builder
+global_skills=isolated
+codex_version=codex-cli 0.145.0
+model=configured-default
+resolved_model=gpt-5.6-sol
+reasoning_effort=high
+usage_source=cli-json
+input_tokens=691970
+cached_input_tokens=630272
+output_tokens=25218
+total_tokens=717188

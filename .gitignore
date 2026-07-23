@@ -3,5 +3,6 @@ node_modules/
 .venv-skills-ref/
 *.tgz
 *.log
+PROMPT.full.md
 /.godplans/
 evals/output/
