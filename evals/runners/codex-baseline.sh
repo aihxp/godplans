@@ -19,12 +19,27 @@ REQUEST=$1
 OUTPUT=$2
 CASE_DIR="$(cd "$(dirname "$REQUEST")" && pwd)"
 WORK="$(mktemp -d)"
+ISO_HOME="$(mktemp -d)"
+ISO_CODEX_HOME="$ISO_HOME/.codex"
 LAST="$WORK/last-message.md"
 OUTPUT_DIR="$(dirname "$OUTPUT")"
 CODEX_LOG="$OUTPUT_DIR/codex.log"
-trap 'rm -rf "$WORK"' EXIT
+trap 'rm -rf "$WORK" "$ISO_HOME"' EXIT
 
 command -v codex >/dev/null 2>&1 || { echo "codex CLI not found" >&2; exit 2; }
+
+# Isolate the globally installed skill set, identically to runners/codex.sh.
+# This is the load-bearing line of the whole control arm: Codex discovers
+# skills in $CODEX_HOME/skills and $HOME/.agents/skills, so on a machine where
+# godplans is installed globally (the common case, since a maintainer runs the
+# evals), the control would silently load it and measure godplans against
+# itself. Both arms isolate the same way; the ONLY difference between them is
+# that this runner never links the skill into its workspace.
+REAL_CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
+mkdir -p "$ISO_CODEX_HOME"
+[ -f "$REAL_CODEX_HOME/auth.json" ] && cp "$REAL_CODEX_HOME/auth.json" "$ISO_CODEX_HOME/auth.json"
+[ -f "$REAL_CODEX_HOME/config.toml" ] && cp "$REAL_CODEX_HOME/config.toml" "$ISO_CODEX_HOME/config.toml"
+[ -e "$ISO_CODEX_HOME/skills" ] && { echo "isolated CODEX_HOME must not carry skills" >&2; exit 2; }
 
 CODEX_MODEL=${GODPLANS_EVAL_MODEL:-configured-default}
 CODEX_EFFORT=${GODPLANS_EVAL_REASONING_EFFORT:-configured-default}
@@ -57,7 +72,7 @@ set +e
   printf '%s\n' 'Work entirely inside the current workspace. Do not implement application code.'
   printf '%s\n\n' 'Write the plan to .godplans/PLAN.mdx. If you decline the request, explain why in your final response and do not write a plan.'
   sed -n '1,$p' "$REQUEST"
-} | codex "${CODEX_ARGS[@]}" - >/dev/null 2>"$CODEX_LOG"
+} | HOME="$ISO_HOME" CODEX_HOME="$ISO_CODEX_HOME" codex "${CODEX_ARGS[@]}" - >/dev/null 2>"$CODEX_LOG"
 CODEX_STATUS=$?
 set -e
 if [ "$CODEX_STATUS" -ne 0 ]; then
@@ -68,6 +83,7 @@ fi
 printf '%s\n' \
   "runner=codex-baseline" \
   "arm=baseline-no-skill" \
+  "global_skills=isolated" \
   "codex_version=$(codex --version)" \
   "model=$CODEX_MODEL" \
   "reasoning_effort=$CODEX_EFFORT" \

@@ -58,6 +58,18 @@ the runner must retain the emitted executable validator beside the plan as
 to `GODPLANS_VALIDATOR`. The runner must return nonzero when the agent fails or
 an expected artifact is absent.
 
+The runner must also isolate the agent from any globally installed skills.
+Codex discovers skills in `$CODEX_HOME/skills` and `$HOME/.agents/skills`
+independent of the workspace, so on a maintainer's machine (where godplans is
+almost always installed globally) an unisolated runner loads the skill no
+matter what, and the control arm ends up measuring godplans against itself.
+`codex.sh` and `codex-baseline.sh` handle this by running Codex with a
+throwaway `HOME` and a throwaway `CODEX_HOME` that carries only the copied
+`auth.json` and `config.toml`, never a `skills/` directory. The skill arm then
+links the project-local skill into its workspace; the control arm never does.
+That single link is the only intended difference between the two arms, and the
+`tests/eval-harness.sh` regression asserts it.
+
 `scripts/eval.sh` validates plan structure with the shipped plan validator,
 then applies every semantic expectation. Outputs are retained under
 `evals/output/<case>/` by default for inspection. CI runs `--check-cases` and
