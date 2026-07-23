@@ -8,7 +8,7 @@ domain|ui|applicable
 domain|observe|applicable
 domain|stack|applicable
 domain|llm|excluded
-contains|workspace_id|
+contains-ci|tenant|
 contains|R-DB-|
 contains|R-SEC-|
 contains|R-STACK-21|
